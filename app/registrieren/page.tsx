@@ -1,16 +1,35 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 
 export default function Registrieren() {
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [message, setMessage] = useState("")
+  const [loading, setLoading] = useState(false)
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    setMessage("Registrierung wird vorbereitet... (Datenbank-Anbindung folgt)")
+    setLoading(true)
+    setMessage("")
+
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, name }),
+    })
+    const data = await res.json()
+    setLoading(false)
+
+    if (data.error) {
+      setMessage(data.error)
+    } else {
+      setMessage("Registrierung erfolgreich! Leite weiter...")
+      setTimeout(() => router.push("/dashboard"), 1500)
+    }
   }
 
   return (
@@ -21,7 +40,7 @@ export default function Registrieren() {
           <div><label className="block text-lg mb-2">Name</label><input type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full p-4 rounded-lg bg-black border border-gray-700 text-white text-lg" placeholder="Ihr Name" required /></div>
           <div><label className="block text-lg mb-2">E-Mail</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 rounded-lg bg-black border border-gray-700 text-white text-lg" placeholder="ihre@email.de" required /></div>
           <div><label className="block text-lg mb-2">Passwort</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-4 rounded-lg bg-black border border-gray-700 text-white text-lg" placeholder="••••••••" required /></div>
-          <button type="submit" className="w-full bg-white text-black text-xl font-semibold py-4 rounded-lg hover:bg-gray-200 transition">Konto erstellen</button>
+          <button type="submit" disabled={loading} className="w-full bg-white text-black text-xl font-semibold py-4 rounded-lg hover:bg-gray-200 transition disabled:opacity-50">{loading ? "Wird registriert..." : "Konto erstellen"}</button>
         </form>
         {message && <p className="mt-4 text-center text-gray-400">{message}</p>}
         <p className="mt-6 text-center text-gray-400 text-lg">Bereits registriert? <Link href="/login" className="text-white underline">Jetzt anmelden</Link></p>
