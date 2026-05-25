@@ -1,23 +1,24 @@
 import { NextResponse } from "next/server"
 
+const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
+const SUPABASE_KEY = "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij"
+
 export async function POST(request: Request) {
   try {
     const { email, password, name } = await request.json()
     
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/signup`, {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
-        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""}`,
+        "apikey": SUPABASE_KEY,
       },
       body: JSON.stringify({ email, password, data: { name } }),
     })
     
     const data = await res.json()
-    console.log("REGISTER RESPONSE:", data)
     
-    if (!res.ok) return NextResponse.json({ error: data.msg || data.message || "Registrierung fehlgeschlagen" }, { status: 400 })
+    if (!res.ok) return NextResponse.json({ error: data.msg || "Registrierung fehlgeschlagen" }, { status: 400 })
     
     return NextResponse.json({ message: "Registrierung erfolgreich!" })
   } catch (err: any) {

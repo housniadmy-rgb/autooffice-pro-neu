@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server"
 
+const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
+const SUPABASE_KEY = "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij"
+
 export async function POST(request: Request) {
   try {
     const { email, password } = await request.json()
     
-    const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+        "apikey": SUPABASE_KEY,
       },
       body: JSON.stringify({ email, password }),
     })
@@ -18,7 +21,7 @@ export async function POST(request: Request) {
     if (!res.ok) return NextResponse.json({ error: data.error_description || "Login fehlgeschlagen" }, { status: 400 })
     
     return NextResponse.json({ message: "Login erfolgreich!" })
-  } catch {
-    return NextResponse.json({ error: "Server-Fehler" }, { status: 500 })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Server-Fehler" }, { status: 500 })
   }
 }
