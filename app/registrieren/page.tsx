@@ -3,6 +3,9 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
+const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
+const SUPABASE_KEY = "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij"
+
 export default function Registrieren() {
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -16,19 +19,20 @@ export default function Registrieren() {
     setLoading(true)
     setMessage("")
 
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, name }),
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
+      body: JSON.stringify({ email, password, data: { name } }),
     })
     const data = await res.json()
     setLoading(false)
 
-    if (data.error) {
-      setMessage(data.error)
+    if (!res.ok) {
+      setMessage(data.msg || "Registrierung fehlgeschlagen")
     } else {
-      setMessage("Registrierung erfolgreich! Leite weiter...")
-      setTimeout(() => router.push("/dashboard"), 1500)
+      if (data.access_token) localStorage.setItem("supabase_token", data.access_token)
+      setMessage("Registrierung erfolgreich!")
+      setTimeout(() => router.push("/dashboard"), 1000)
     }
   }
 

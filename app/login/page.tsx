@@ -3,6 +3,9 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 
+const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
+const SUPABASE_KEY = "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij"
+
 export default function Login() {
   const router = useRouter()
   const [email, setEmail] = useState("")
@@ -15,19 +18,20 @@ export default function Login() {
     setLoading(true)
     setMessage("")
 
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY },
       body: JSON.stringify({ email, password }),
     })
     const data = await res.json()
     setLoading(false)
 
-    if (data.error) {
-      setMessage(data.error)
+    if (!res.ok) {
+      setMessage(data.error_description || "Login fehlgeschlagen")
     } else {
-      setMessage("Login erfolgreich! Leite weiter...")
-      setTimeout(() => router.push("/dashboard"), 1500)
+      if (data.access_token) localStorage.setItem("supabase_token", data.access_token)
+      setMessage("Login erfolgreich!")
+      setTimeout(() => router.push("/dashboard"), 1000)
     }
   }
 
