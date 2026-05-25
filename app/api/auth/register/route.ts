@@ -9,16 +9,18 @@ export async function POST(request: Request) {
       headers: {
         "Content-Type": "application/json",
         "apikey": process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "",
+        "Authorization": `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""}`,
       },
       body: JSON.stringify({ email, password, data: { name } }),
     })
     
     const data = await res.json()
+    console.log("REGISTER RESPONSE:", data)
     
-    if (!res.ok) return NextResponse.json({ error: data.msg || "Registrierung fehlgeschlagen" }, { status: 400 })
+    if (!res.ok) return NextResponse.json({ error: data.msg || data.message || "Registrierung fehlgeschlagen" }, { status: 400 })
     
     return NextResponse.json({ message: "Registrierung erfolgreich!" })
-  } catch {
-    return NextResponse.json({ error: "Server-Fehler" }, { status: 500 })
+  } catch (err: any) {
+    return NextResponse.json({ error: err.message || "Server-Fehler" }, { status: 500 })
   }
 }
