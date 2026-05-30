@@ -1,20 +1,59 @@
 import "./globals.css"
 
 export const metadata = {
-  title: "AutoOffice Pro - DSGVO-sichere Automatisierung",
-  description: "Automatisieren Sie Ihre Praxis mit Termin-Erinnerungen, E-Mails und Kundenportal.",
+  title: "PraxisOnline - DSGVO-sichere Praxis-Automatisierung",
+  description: "Automatisieren Sie Ihre Praxis mit Online-Terminbuchung, Erinnerungen und Bewertungsmanagement.",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de" className="dark">
-      <body className="bg-black text-white text-lg min-h-screen antialiased flex flex-col">
+    <html lang="de">
+      <body className="bg-white text-gray-900 text-sm md:text-base lg:text-lg min-h-screen antialiased flex flex-col">
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var p=new URLSearchParams(window.location.search);var lang=p.get("setLang");if(lang){localStorage.setItem("lang",lang);var u=new URL(window.location);u.searchParams.delete("setLang");window.history.replaceState({},"",u.toString())}})()` }} />
         <main className="flex-1">{children}</main>
-        <footer className="text-center text-gray-500 text-lg py-6 border-t border-gray-800">
-          <a href="/datenschutz" className="underline mr-4">Datenschutz</a>
-          <a href="/impressum" className="underline mr-4">Impressum</a>
-          <a href="/admin" className="underline">Admin</a>
+        <footer className="bg-gray-100 border-t border-gray-200 mt-12 sm:mt-20" id="page-footer">
+          <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 text-center text-gray-600 text-xs sm:text-sm">
+            <p className="font-semibold text-gray-800 mb-3">PraxisOnline</p>
+            <div id="footer-links" className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4"></div>
+            <p className="text-gray-500">© 2026 PraxisOnline. Alle Rechte vorbehalten.</p>
+          </div>
         </footer>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function(){
+            var texts={
+  de:["Über uns","Kontakt","Blog","FAQ","AGB","Datenschutz","Impressum","Admin"],
+  en:["About","Contact","Blog","FAQ","Terms","Privacy","Imprint","Admin"],
+  fr:["À propos","Contact","Blog","FAQ","CGV","Confidentialité","Mentions légales","Admin"],
+  es:["Sobre nosotros","Contacto","Blog","FAQ","Términos","Privacidad","Aviso legal","Admin"],
+  it:["Chi siamo","Contatto","Blog","FAQ","Termini","Privacy","Note legali","Admin"],
+  pt:["Sobre nós","Contato","Blog","FAQ","Termos","Privacidade","Aviso legal","Admin"],
+  nl:["Over ons","Contact","Blog","FAQ","Voorwaarden","Privacy","Colofon","Admin"],
+  pl:["O nas","Kontakt","Blog","FAQ","Warunki","Prywatność","Nota prawna","Admin"],
+  tr:["Hakkımızda","İletişim","Blog","SSS","Şartlar","Gizlilik","Künye","Admin"],
+  ja:["会社概要","お問い合わせ","ブログ","FAQ","利用規約","プライバシー","法的情報","管理"],
+  zh:["关于我们","联系我们","博客","常见问题","条款","隐私","法律声明","管理"],
+  cs:["O nás","Kontakt","Blog","FAQ","Podmínky","Ochrana údajů","Impressum","Admin"],
+  sk:["O nás","Kontakt","Blog","FAQ","Podmienky","Ochrana údajov","Impressum","Admin"],
+  sl:["O nas","Kontakt","Blog","FAQ","Pogoji","Zasebnost","Impressum","Admin"],
+  sv:["Om oss","Kontakt","Blogg","FAQ","Villkor","Integritet","Impressum","Admin"],
+  no:["Om oss","Kontakt","Blogg","FAQ","Vilkår","Personvern","Impressum","Admin"],
+  da:["Om os","Kontakt","Blog","FAQ","Vilkår","Privatliv","Impressum","Admin"]
+};
+            var hrefs=["/ueber-uns","/kontakt","/blog","/faq","/agb","/datenschutz","/impressum","/admin"];
+            function renderFooter(){
+              var lang=localStorage.getItem("lang")||"de";
+              if(!texts[lang])lang="en";
+              var t=texts[lang];
+              var html='';
+              for(var i=0;i<t.length;i++){
+                html+='<a href="'+hrefs[i]+'?setLang='+lang+'" class="underline hover:text-gray-900 whitespace-nowrap">'+t[i]+'</a>';
+              }
+              document.getElementById("footer-links").innerHTML=html;
+            }
+            renderFooter();
+            setInterval(renderFooter,2000);
+          })();
+        ` }} />
       </body>
     </html>
   )

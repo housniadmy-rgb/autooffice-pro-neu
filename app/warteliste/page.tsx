@@ -15,30 +15,30 @@ export default function Warteliste() {
   }
 
   return (
-    <main className="min-h-screen p-8 flex items-center justify-center">
-      <div className="bg-gray-900 border border-gray-700 p-10 rounded-xl max-w-lg w-full">
+    <main className="min-h-screen p-4 sm:p-8 flex items-center justify-center">
+      <div className="bg-white border border-blue-200 p-6 sm:p-10 rounded-lg sm:rounded-xl max-w-full sm:max-w-lg w-full">
         {!eingetragen ? (
           <>
-            <h1 className="text-3xl font-bold mb-6 text-center">Warteliste</h1>
-            <p className="text-lg text-gray-400 mb-6 text-center">Tragen Sie sich ein – wir benachrichtigen Sie, sobald ein Termin frei wird.</p>
+            <h1 className="text-xl sm:text-2xl sm:text-3xl font-bold mb-6 text-center">Warteliste</h1>
+            <p className="text-lg text-gray-500 mb-6 text-center">Tragen Sie sich ein – wir benachrichtigen Sie, sobald ein Termin frei wird.</p>
             <form onSubmit={handleEintrag} className="space-y-5">
               <div>
                 <label className="block text-lg mb-2">Ihre E-Mail</label>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 rounded-lg bg-black border border-gray-700 text-white text-lg" placeholder="ihre@email.de" required />
+                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 rounded-lg bg-white border border-blue-200 text-gray-900 text-lg" placeholder="ihre@email.de" required />
               </div>
               <div>
                 <label className="block text-lg mb-2">Bevorzugte Uhrzeit (optional)</label>
-                <input type="text" value={wuensche} onChange={(e) => setWuensche(e.target.value)} className="w-full p-4 rounded-lg bg-black border border-gray-700 text-white text-lg" placeholder="z.B. Vormittags" />
+                <input type="text" value={wuensche} onChange={(e) => setWuensche(e.target.value)} className="w-full p-4 rounded-lg bg-white border border-blue-200 text-gray-900 text-lg" placeholder="z.B. Vormittags" />
               </div>
-              <button type="submit" className="w-full bg-white text-black text-xl font-semibold py-4 rounded-lg hover:bg-gray-200 transition">Auf Warteliste setzen</button>
+              <button type="submit" className="w-full bg-[#1E40AF] text-white text-xl font-semibold py-3 sm:py-4 rounded-lg hover:bg-green-600 transition">Auf Warteliste setzen</button>
             </form>
           </>
         ) : (
           <div className="text-center">
-            <h2 className="text-3xl font-bold mb-4 text-green-400">Sie sind auf der Warteliste!</h2>
-            <p className="text-2xl font-bold text-white mb-4">Position: {position}</p>
-            <p className="text-lg text-gray-300 mb-6">Sobald ein Termin frei wird, bekommen Sie automatisch eine E-Mail. Sie können den Termin dann mit einem Klick übernehmen.</p>
-            <Link href="/" className="inline-block bg-white text-black text-lg font-semibold px-6 py-3 rounded-lg hover:bg-gray-200 transition">Zurück zur Startseite</Link>
+            <h2 className="text-xl sm:text-2xl sm:text-3xl font-bold mb-4 text-green-400">Sie sind auf der Warteliste!</h2>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 mb-4">Position: {position}</p>
+            <p className="text-lg text-gray-600 mb-6">Sobald ein Termin frei wird, bekommen Sie automatisch eine E-Mail. Sie können den Termin dann mit einem Klick übernehmen.</p>
+            <Link href="/" className="inline-block bg-[#1E40AF] text-white text-lg font-semibold px-4 sm:px-6 py-3 rounded-lg hover:bg-green-600 transition">Zurück zur Startseite</Link>
           </div>
         )}
       </div>

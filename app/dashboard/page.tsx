@@ -35,12 +35,12 @@ export default function Dashboard() {
     <main className="min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
-        <div className="bg-gray-900 border border-gray-700 p-8 rounded-xl mb-8">
+        <div className="bg-white border border-blue-200 p-8 rounded-xl mb-8">
           <h2 className="text-2xl font-semibold mb-4">Willkommen, {user.user_metadata?.name || user.email}!</h2>
-          <p className="text-lg text-gray-400 mb-2">E-Mail: {user.email}</p>
+          <p className="text-lg text-gray-500 mb-2">E-Mail: {user.email}</p>
         </div>
-        <button onClick={() => { localStorage.removeItem("supabase_token"); router.push("/") }} className="bg-red-600 text-white px-6 py-3 rounded-lg text-lg hover:bg-red-700 transition">Abmelden</button>
-        <div className="mt-6"><Link href="/" className="text-white underline text-lg">← Zurück</Link></div>
+        <button onClick={() => { localStorage.removeItem("supabase_token"); router.push("/") }} className="bg-red-600 text-gray-900 px-6 py-3 rounded-lg text-lg hover:bg-red-700 transition">Abmelden</button>
+        <div className="mt-6"><Link href="/" className="text-gray-900 underline text-lg">← Zurück</Link></div>
       </div>
     </main>
   )
