@@ -5,6 +5,26 @@ export const metadata = {
   description: "Automatisieren Sie Ihre Praxis mit Online-Terminbuchung, Erinnerungen und Bewertungsmanagement.",
 }
 
+const copyrightTexts: Record<string, string> = {
+  de: "© 2026 PraxisOnline. Alle Rechte vorbehalten.",
+  en: "© 2026 PraxisOnline. All rights reserved.",
+  fr: "© 2026 PraxisOnline. Tous droits réservés.",
+  es: "© 2026 PraxisOnline. Todos los derechos reservados.",
+  it: "© 2026 PraxisOnline. Tutti i diritti riservati.",
+  pt: "© 2026 PraxisOnline. Todos os direitos reservados.",
+  nl: "© 2026 PraxisOnline. Alle rechten voorbehouden.",
+  pl: "© 2026 PraxisOnline. Wszelkie prawa zastrzeżone.",
+  tr: "© 2026 PraxisOnline. Tüm hakları saklıdır.",
+  ja: "© 2026 PraxisOnline. 無断複写・転載を禁じます。",
+  zh: "© 2026 PraxisOnline. 版权所有。",
+  cs: "© 2026 PraxisOnline. Všechna práva vyhrazena.",
+  sk: "© 2026 PraxisOnline. Všetky práva vyhradené.",
+  sl: "© 2026 PraxisOnline. Vse pravice pridržane.",
+  sv: "© 2026 PraxisOnline. Alla rättigheter förbehållna.",
+  no: "© 2026 PraxisOnline. Alle rettigheter forbeholdt.",
+  da: "© 2026 PraxisOnline. Alle rettigheder forbeholdes.",
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="de">
@@ -15,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 text-center text-gray-600 text-xs sm:text-sm">
             <p className="font-semibold text-gray-800 mb-3">PraxisOnline</p>
             <div id="footer-links" className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4"></div>
-            <p className="text-gray-500">© 2026 PraxisOnline. Alle Rechte vorbehalten.</p>
+            <p id="footer-copyright" className="text-gray-500"></p>
           </div>
         </footer>
         <script dangerouslySetInnerHTML={{ __html: `
@@ -39,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   no:["Om oss","Kontakt","Blogg","FAQ","Vilkår","Personvern","Impressum","Admin"],
   da:["Om os","Kontakt","Blog","FAQ","Vilkår","Privatliv","Impressum","Admin"]
 };
+            var copyrights=${JSON.stringify(copyrightTexts)};
             var hrefs=["/ueber-uns","/kontakt","/blog","/faq","/agb","/datenschutz","/impressum","/admin"];
             function renderFooter(){
               var lang=localStorage.getItem("lang")||"de";
@@ -49,6 +70,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 html+='<a href="'+hrefs[i]+'?setLang='+lang+'" class="underline hover:text-gray-900 whitespace-nowrap">'+t[i]+'</a>';
               }
               document.getElementById("footer-links").innerHTML=html;
+              document.getElementById("footer-copyright").textContent=copyrights[lang]||copyrights.en;
             }
             renderFooter();
             setInterval(renderFooter,2000);
