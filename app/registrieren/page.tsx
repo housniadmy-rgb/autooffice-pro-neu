@@ -49,7 +49,7 @@ export default function Registrieren() {
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!dsgvo) { setMessage(t.dsgvo + " " + t.dsgvoLink); return }
+        if (!dsgvo) { setMessage("Bitte akzeptieren Sie die Datenschutzerklärung."); return }
     setLoading(true); setMessage("")
     const res = await fetch(`${SUPABASE_URL}/auth/v1/signup`, { method: "POST", headers: { "Content-Type": "application/json", "apikey": SUPABASE_KEY }, body: JSON.stringify({ email, password, data: { name } }) })
     const data = await res.json()
