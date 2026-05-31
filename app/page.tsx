@@ -22,7 +22,7 @@ export default function Home() {
       else setLang(detectLanguage())
     }
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setShowLangs(false)if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setShowLangs(false) !dropdownRef.current.contains(e.target as Node) if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setShowLangs(false)if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setShowLangs(false) e.type === "mousedown") setShowLangs(false)
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) setShowLangs(false)
     }
     document.addEventListener("mousedown", handleClickOutside)
     return () => document.removeEventListener("mousedown", handleClickOutside)
@@ -39,29 +39,26 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white">
-      <header className="bg-white border-b border-gray-100 py-2 sm:py-4 px-3 sm:px-6">
-        <div className="max-w-6xl mx-auto flex justify-between items-center">
-          <a href="/" className="text-base sm:text-2xl font-bold text-[#1E40AF]">Praxis<span className="text-[#3B82F6]">Online</span></a>
-          <div className="hidden sm:flex gap-3 items-center">
-            <a href="/" className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.home}</a>
-            <a href={l("login")} className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.login}</a>
-            <a href={l("registrieren")} className="bg-[#1E40AF] text-white text-lg px-5 py-2 rounded-lg hover:bg-blue-800 transition">{t.register}</a>
-            <div ref={dropdownRef}><button onClick={() => setShowLangs(!showLangs)} className="text-lg text-gray-500 hover:text-[#3B82F6]">{t.switchLang} ▼</button>
-              {showLangs && <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 w-44 max-h-60 overflow-y-auto">{languages.map(li => <button key={li.code} onTouchEnd={(e) => { e.preventDefault(); switchLang(li.code); }} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
-            </div>
+      <header className="bg-white border-b border-gray-100 py-2 sm:py-4 px-3 sm:px-6"><div className="max-w-6xl mx-auto flex justify-between items-center">
+        <a href="/" className="text-base sm:text-2xl font-bold text-[#1E40AF]">Praxis<span className="text-[#3B82F6]">Online</span></a>
+        <div className="hidden sm:flex gap-3 items-center">
+          <a href="/" className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.home}</a>
+          <a href={l("login")} className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.login}</a>
+          <a href={l("registrieren")} className="bg-[#1E40AF] text-white text-lg px-5 py-2 rounded-lg hover:bg-blue-800 transition">{t.register}</a>
+          <div ref={dropdownRef}><button onClick={() => setShowLangs(!showLangs)} className="text-lg text-gray-500 hover:text-[#3B82F6]">{t.switchLang} ▼</button>
+            {showLangs && <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 w-44 max-h-60 overflow-y-auto">{languages.map(li => <button key={li.code} onMouseDown={(e) => { e.stopPropagation(); switchLang(li.code); }} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
           </div>
-          <button onClick={() => setMobileMenu(!mobileMenu)} className="sm:hidden text-2xl text-gray-700">{mobileMenu?"✕":"☰"}</button>
         </div>
-        {mobileMenu && (
-          <div className="sm:hidden mt-2 pb-2 border-t border-gray-100 pt-2">
-            <a href="/" className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.home}</a>
-            <a href={l("login")} className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.login}</a>
-            <a href={l("registrieren")} className="block bg-[#1E40AF] text-white text-sm px-4 py-2 rounded-lg text-center mt-1" onClick={() => setMobileMenu(false)}>{t.register}</a>
-            <div className="mt-2"><button onClick={() => setShowLangs(!showLangs)} className="text-sm text-gray-500 py-1">{t.switchLang} ▼</button>
-              {showLangs && <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">{languages.map(li => <button key={li.code} onTouchEnd={(e) => { e.preventDefault(); switchLang(li.code); }} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1 text-xs hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
-            </div>
-          </div>
-        )}
+        <button onClick={() => setMobileMenu(!mobileMenu)} className="sm:hidden text-2xl text-gray-700">{mobileMenu?"✕":"☰"}</button>
+      </div>
+      {mobileMenu && <div className="sm:hidden mt-2 pb-2 border-t border-gray-100 pt-2">
+        <a href="/" className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.home}</a>
+        <a href={l("login")} className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.login}</a>
+        <a href={l("registrieren")} className="block bg-[#1E40AF] text-white text-sm px-4 py-2 rounded-lg text-center mt-1" onClick={() => setMobileMenu(false)}>{t.register}</a>
+        <div className="mt-2"><button onClick={() => setShowLangs(!showLangs)} className="text-sm text-gray-500 py-1">{t.switchLang} ▼</button>
+          {showLangs && <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">{languages.map(li => <button key={li.code} onMouseDown={(e) => { e.stopPropagation(); switchLang(li.code); }} className={`block w-full text-left px-3 py-1 text-xs hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
+        </div>
+      </div>}
       </header>
 
       <section className="relative text-center py-10 sm:py-20 px-3 sm:px-6 bg-gradient-to-r from-[#1E40AF] via-[#3B82F6] to-[#1E40AF] text-white"><div className="max-w-4xl mx-auto"><h1 className="text-lg sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-3 leading-snug">{t.hero}</h1><p className="text-sm sm:text-lg text-blue-100 mb-3 sm:mb-6 max-w-2xl mx-auto">{t.subtitle}</p><div className="flex flex-wrap justify-center gap-2 sm:gap-4"><a href={l("registrieren")} className="bg-white text-[#1E40AF] text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.start}</a><a href={l("termin-buchen")} className="border-2 border-white text-white text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-white hover:text-[#1E40AF] transition">{demo.btn}</a></div></div></section>
