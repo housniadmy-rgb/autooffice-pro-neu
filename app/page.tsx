@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <header className="bg-white border-b border-gray-100 py-2 sm:py-4 px-3 sm:px-6"><div className="max-w-6xl mx-auto flex justify-between items-center">
-        <a href="/" className="text-base sm:text-2xl font-bold text-[#1E40AF]">Praxis<span className="text-[#3B82F6]">Online</span></a>
+        <a href="/" className="text-base sm:text-2xl font-bold text-[#1E40AF]">Praxis<span className="text-[#3B82F6]">Online24</span></a>
         <div className="hidden sm:flex gap-3 items-center"><a href="/" className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.home}</a><a href={l("login")} className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.login}</a><a href={l("registrieren")} className="bg-[#1E40AF] text-white text-lg px-5 py-2 rounded-lg hover:bg-blue-800 transition">{t.register}</a>
         <div ref={dropdownRef}><button onClick={() => setShowLangs(!showLangs)} className="text-lg text-gray-500 hover:text-[#3B82F6]">{t.switchLang} ▼</button>
           {showLangs && <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 w-44 max-h-60 overflow-y-auto">{languages.map(li => <button key={li.code} onMouseDown={(e) => { e.stopPropagation(); switchLang(li.code); }} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
