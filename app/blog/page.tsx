@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 
 const texts: Record<string, any> = {
-  de: { title: "📝 PraxisOnline Blog", subtitle: "Tipps & Wissen", readMore: "Weiterlesen →", back: "← Zurück" },
+  de: { title: "📝 PraxisOnline24 Blog", subtitle: "Tipps & Wissen", readMore: "Weiterlesen →", back: "← Zurück" },
   en: { title: "📝 Blog", subtitle: "Tips & Knowledge", readMore: "Read more →", back: "← Back" },
   fr: { title: "📝 Blog", subtitle: "Conseils", readMore: "Lire la suite →", back: "← Retour" },
   es: { title: "📝 Blog", subtitle: "Consejos", readMore: "Leer más →", back: "← Volver" },

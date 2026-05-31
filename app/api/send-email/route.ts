@@ -13,7 +13,7 @@ export async function POST(request: Request) {
         "accept": "application/json",
       },
       body: JSON.stringify({
-        sender: { email: "housniadmy@yahoo.de", name: "PraxisOnline" },
+        sender: { email: "housniadmy@yahoo.de", name: "PraxisOnline24" },
         to: [{ email: to }],
         subject,
         htmlContent: html,

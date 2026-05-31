@@ -77,7 +77,7 @@ export default function Admin() {
     <main className="min-h-screen p-4 sm:p-8 bg-gradient-to-b from-blue-50 to-white">
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-6 sm:mb-8">
-          <div><h1 className="text-2xl sm:text-4xl font-bold text-gray-900">🏢 PraxisOnline</h1><p className="text-gray-500 text-sm sm:text-lg">{t.dashboard}</p></div>
+          <div><h1 className="text-2xl sm:text-4xl font-bold text-gray-900">🏢 PraxisOnline24</h1><p className="text-gray-500 text-sm sm:text-lg">{t.dashboard}</p></div>
           <button onClick={() => { localStorage.removeItem("admin_auth"); setAuthenticated(false) }} className="bg-red-500 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-sm sm:text-lg hover:bg-red-600 transition">{t.logout}</button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
