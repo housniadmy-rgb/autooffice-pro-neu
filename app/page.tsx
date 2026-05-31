@@ -47,7 +47,7 @@ export default function Home() {
             <a href={l("login")} className="text-lg text-gray-600 hover:text-[#3B82F6]">{t.login}</a>
             <a href={l("registrieren")} className="bg-[#1E40AF] text-white text-lg px-5 py-2 rounded-lg hover:bg-blue-800 transition">{t.register}</a>
             <div ref={dropdownRef}><button onClick={() => setShowLangs(!showLangs)} className="text-lg text-gray-500 hover:text-[#3B82F6]">{t.switchLang} ▼</button>
-              {showLangs && <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 w-44 max-h-60 overflow-y-auto">{languages.map(li => <button key={li.code} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
+              {showLangs && <div className="absolute right-0 top-10 bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-2 w-44 max-h-60 overflow-y-auto">{languages.map(li => <button key={li.code} onTouchEnd={(e) => { e.preventDefault(); switchLang(li.code); }} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
             </div>
           </div>
           <button onClick={() => setMobileMenu(!mobileMenu)} className="sm:hidden text-2xl text-gray-700">{mobileMenu?"✕":"☰"}</button>
@@ -58,7 +58,7 @@ export default function Home() {
             <a href={l("login")} className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.login}</a>
             <a href={l("registrieren")} className="block bg-[#1E40AF] text-white text-sm px-4 py-2 rounded-lg text-center mt-1" onClick={() => setMobileMenu(false)}>{t.register}</a>
             <div className="mt-2"><button onClick={() => setShowLangs(!showLangs)} className="text-sm text-gray-500 py-1">{t.switchLang} ▼</button>
-              {showLangs && <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">{languages.map(li => <button key={li.code} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1 text-xs hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
+              {showLangs && <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">{languages.map(li => <button key={li.code} onTouchEnd={(e) => { e.preventDefault(); switchLang(li.code); }} onClick={() => switchLang(li.code)} className={`block w-full text-left px-3 py-1 text-xs hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}</div>}
             </div>
           </div>
         )}
