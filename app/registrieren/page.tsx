@@ -69,7 +69,7 @@ export default function Registrieren() {
           <button type="submit" disabled={loading} className="w-full bg-[#1E40AF] text-white text-lg sm:text-xl font-semibold py-3 sm:py-4 rounded-lg hover:bg-blue-800 transition disabled:opacity-50">{loading ? t.loading : t.registerBtn}</button>
         </form>
         {message && <p className="mt-4 text-center text-red-600 font-medium">{message}</p>}
-        <p className="mt-4 sm:mt-6 text-center text-gray-500 text-base sm:text-lg">{t.hasAccount} <Link href="/login" className="text-[#1E40AF] hover:text-blue-800 underline">{t.login}</Link></p>
+        <p className="mt-4 sm:mt-6 text-center text-gray-500 text-base sm:text-lg">{t.hasAccount} <Link href="/login" className="text-[#1E40AF] hover:text-blue-800 underline">{t.login}</Link></p><div className="mt-4 text-center"><Link href="/" className="text-gray-500 hover:text-[#1E40AF] underline text-sm">{t.back}</Link></div>
       </div>
     </main>
   )
