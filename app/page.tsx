@@ -79,7 +79,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-gray-100 border-t border-gray-200 py-6 sm:py-8 text-center text-gray-500 text-xs sm:text-sm"><div className="max-w-6xl mx-auto px-4"><p className="font-semibold text-gray-700 mb-2">PraxisOnline24</p><div className="flex flex-wrap justify-center gap-4 mb-4"><a href="/ueber-uns" className="underline hover:text-gray-900">Über uns</a><a href="/kontakt" className="underline hover:text-gray-900">Kontakt</a><a href="/blog" className="underline hover:text-gray-900">Blog</a><a href="/faq" className="underline hover:text-gray-900">FAQ</a><a href="/agb" className="underline hover:text-gray-900">AGB</a><a href="/datenschutz" className="underline hover:text-gray-900">Datenschutz</a><a href="/impressum" className="underline hover:text-gray-900">Impressum</a></div><p>© 2026 PraxisOnline24</p></div></footer>
+      
     </main>
   )
 }
