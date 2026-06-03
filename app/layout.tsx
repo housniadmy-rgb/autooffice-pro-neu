@@ -12,7 +12,69 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="de">
       <body className="bg-white text-gray-900 text-sm md:text-base lg:text-lg min-h-screen antialiased flex flex-col">
         <script dangerouslySetInnerHTML={{ __html: `(function(){var p=new URLSearchParams(window.location.search);var lang=p.get("setLang");if(lang){localStorage.setItem("lang",lang);var u=new URL(window.location);u.searchParams.delete("setLang");window.history.replaceState({},"",u.toString())}})()` }} />
-        <main className="flex-1">{children}</main>      </body>
+        <main className="flex-1">{children}</main>        <footer className="bg-gray-100 border-t border-gray-200 mt-12 sm:mt-20" id="page-footer">
+          <div className="max-w-6xl mx-auto px-4 py-6 sm:py-8 text-center text-gray-600 text-xs sm:text-sm">
+            <p className="font-semibold text-gray-800 mb-3">PraxisOnline24</p>
+            <div id="footer-links" className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4"></div>
+            <p id="footer-copyright" className="text-gray-500"></p>
+          </div>
+        </footer>
+        <script dangerouslySetInnerHTML={{ __html: `
+          (function(){
+            var texts={
+  de:["Über uns","Kontakt","Blog","FAQ","AGB","Datenschutz","Impressum"],
+  en:["About","Contact","Blog","FAQ","Terms","Privacy","Imprint"],
+  fr:["À propos","Contact","Blog","FAQ","CGV","Confidentialité","Mentions légales"],
+  es:["Sobre nosotros","Contacto","Blog","FAQ","Términos","Privacidad","Aviso legal"],
+  it:["Chi siamo","Contatto","Blog","FAQ","Termini","Privacy","Note legali"],
+  pt:["Sobre nós","Contato","Blog","FAQ","Termos","Privacidade","Aviso legal"],
+  nl:["Over ons","Contact","Blog","FAQ","Voorwaarden","Privacy","Colofon"],
+  pl:["O nas","Kontakt","Blog","FAQ","Warunki","Prywatność","Nota prawna"],
+  tr:["Hakkımızda","İletişim","Blog","SSS","Şartlar","Gizlilik","Künye"],
+  sv:["Om oss","Kontakt","Blogg","FAQ","Villkor","Integritet","Impressum"],
+  no:["Om oss","Kontakt","Blogg","FAQ","Vilkår","Personvern","Impressum"],
+  da:["Om os","Kontakt","Blog","FAQ","Vilkår","Privatliv","Impressum"],
+  sl:["O nas","Kontakt","Blog","FAQ","Pogoji","Zasebnost","Impressum"],
+  cs:["O nás","Kontakt","Blog","FAQ","Podmínky","Ochrana údajů","Impressum"],
+  sk:["O nás","Kontakt","Blog","FAQ","Podmienky","Ochrana údajov","Impressum"],
+  ja:["会社概要","お問い合わせ","ブログ","FAQ","利用規約","プライバシー","インプリント"],
+  zh:["关于我们","联系我们","博客","常见问题","服务条款","隐私政策","版权信息"]
+};
+            var copyrights={
+  de:"© 2026 PraxisOnline24. Alle Rechte vorbehalten.",
+  en:"© 2026 PraxisOnline24. All rights reserved.",
+  fr:"© 2026 PraxisOnline24. Tous droits réservés.",
+  es:"© 2026 PraxisOnline24. Todos los derechos reservados.",
+  it:"© 2026 PraxisOnline24. Tutti i diritti riservati.",
+  pt:"© 2026 PraxisOnline24. Todos os direitos reservados.",
+  nl:"© 2026 PraxisOnline24. Alle rechten voorbehouden.",
+  pl:"© 2026 PraxisOnline24. Wszelkie prawa zastrzeżone.",
+  tr:"© 2026 PraxisOnline24. Tüm hakları saklıdır.",
+  sv:"© 2026 PraxisOnline24. Alla rättigheter förbehållna.",
+  no:"© 2026 PraxisOnline24. Alle rettigheter forbeholdt.",
+  da:"© 2026 PraxisOnline24. Alle rettigheder forbeholdes.",
+  sl:"© 2026 PraxisOnline24. Vse pravice pridržane.",
+  cs:"© 2026 PraxisOnline24. Všechna práva vyhrazena.",
+  sk:"© 2026 PraxisOnline24. Všetky práva vyhradené.",
+  ja:"© 2026 PraxisOnline24. 無断複写・転載を禁じます。",
+  zh:"© 2026 PraxisOnline24. 版权所有。"
+};
+            var hrefs=["/ueber-uns","/kontakt","/blog","/faq","/agb","/datenschutz","/impressum"];
+            function renderFooter(){
+              var lang=localStorage.getItem("lang")||"de";
+              if(!texts[lang])lang="en";
+              var t=texts[lang];
+              var html='';
+              for(var i=0;i<t.length;i++){
+                html+='<a href="'+hrefs[i]+'?setLang='+lang+'" class="underline hover:text-gray-900 whitespace-nowrap">'+t[i]+'</a>';
+              }
+              document.getElementById("footer-links").innerHTML=html;
+              document.getElementById("footer-copyright").textContent=copyrights[lang]||copyrights.en;
+            }
+            renderFooter();
+            setInterval(renderFooter,2000);
+          })();
+        ` }} /></body>
     </html>
   )
 }
