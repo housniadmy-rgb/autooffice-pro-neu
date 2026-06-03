@@ -54,6 +54,21 @@ export default function Home() {
         <a href={l("registrieren")} className="inline-block bg-[#1E40AF] text-white text-sm sm:text-base font-semibold px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-blue-800 transition">{demo.cta}</a></div></section>
       <section className="py-3 sm:py-8 px-3 sm:px-6 max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 bg-[#F8FAFC]"><div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h2 className="text-base sm:text-lg font-semibold mb-2">🖥️ {t.feat1title}</h2><p className="text-sm text-gray-500">{t.feat1desc}</p></div><div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h2 className="text-base sm:text-lg font-semibold mb-2">🔔 {t.feat2title}</h2><p className="text-sm text-gray-500">{t.feat2desc}</p></div><div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h2 className="text-base sm:text-lg font-semibold mb-2">⭐ {t.feat3title}</h2><p className="text-sm text-gray-500">{t.feat3desc}</p></div></section>
       <section className="py-4 sm:py-10 px-3 sm:px-6 text-center bg-[#F5F9FF]"><h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-8">{t.prices}</h2><div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-8 max-w-5xl mx-auto"><div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.basic}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">49€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.basic1}</li><li>{t.basic2}</li><li>{t.basic3}</li></ul><button onClick={() => handleCheckout(prices.basic)} className="block w-full bg-[#1E40AF] text-white font-semibold py-2 rounded-full hover:bg-blue-800 transition text-sm">{t.start}</button></div><div className="bg-[#1E40AF] text-white p-4 sm:p-6 rounded-xl shadow-lg sm:scale-105"><h3 className="text-base sm:text-lg font-semibold mt-2 mb-1">{t.pro}</h3><p className="text-xl sm:text-2xl font-bold mb-2">89€<span className="text-xs text-blue-200">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-white space-y-1 mb-4"><li>{t.pro1}</li><li>{t.pro2}</li><li>{t.pro3}</li></ul><button onClick={() => handleCheckout(prices.pro)} className="block w-full bg-white text-[#1E40AF] font-semibold py-2 rounded-full hover:bg-gray-100 transition text-sm">{t.start}</button></div><div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.business}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">199€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.bus1}</li><li>{t.bus2}</li><li>{t.bus3}</li></ul><button onClick={() => handleCheckout(prices.business)} className="block w-full bg-[#3B82F6] text-white font-semibold py-2 rounded-full hover:bg-blue-600 transition text-sm">{t.start}</button></div></div></section>
-    </main>
+      <footer className="bg-gray-100 border-t border-gray-200 py-6 sm:py-8 text-center text-gray-500 text-xs sm:text-sm">
+        <div className="max-w-6xl mx-auto px-4">
+          <p className="font-semibold text-gray-700 mb-2">PraxisOnline24</p>
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
+            <a href="/ueber-uns" className="underline hover:text-gray-900">Über uns</a>
+            <a href="/kontakt" className="underline hover:text-gray-900">Kontakt</a>
+            <a href="/blog" className="underline hover:text-gray-900">Blog</a>
+            <a href="/faq" className="underline hover:text-gray-900">FAQ</a>
+            <a href="/agb" className="underline hover:text-gray-900">AGB</a>
+            <a href="/datenschutz" className="underline hover:text-gray-900">Datenschutz</a>
+            <a href="/impressum" className="underline hover:text-gray-900">Impressum</a>
+          </div>
+          <p>© 2026 PraxisOnline24</p>
+        </div>
+      </footer>    
+</main>
   )
 }
