@@ -56,18 +56,18 @@ export default function Home() {
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3>
             <p className="text-sm text-gray-500">{t.feat3desc}</p>
           </div>
-          <Link href="/anamnese" className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition block">
+                   <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/anamnese'}>
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Anamnese-Bogen</h3>
             <p className="text-sm text-gray-500">Patienten-Fragebogen online</p>
-          </Link>
-          <Link href="/erezept" className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition block">
+          </div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/erezept'}>
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">E-Rezept</h3>
             <p className="text-sm text-gray-500">Medikamenten-Erinnerung</p>
-          </Link>
-          <Link href="/statistiken" className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition block">
+          </div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/statistiken'}>
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Statistiken</h3>
             <p className="text-sm text-gray-500">Patientenzahlen & Umsatz</p>
-          </Link>
+          </div>
         </div>
       </section>
 
