@@ -21,7 +21,7 @@ export default function Home() {
   const t = translations[lang] || translations.de
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
-    const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
+  const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
   const handleCheckout = async (pid: string) => { try { const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ priceId: pid }) }); const d = await r.json(); if (d.url) window.location.href = d.url } catch (e) {} }
 
   return (
@@ -38,23 +38,8 @@ export default function Home() {
         </div>
         <button onClick={() => setMobileMenu(!mobileMenu)} className="sm:hidden text-2xl text-gray-700">{mobileMenu?"✕":"☰"}</button>
       </div></header>
-      {mobileMenu && <div className="sm:hidden mt-2 pb-2 border-t border-gray-100 pt-2">
-        <a href="/" className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.home}</a>
-        <a href={l("login")} className="block text-sm text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.login}</a>
-        <a href={l("registrieren")} className="block bg-[#1E40AF] text-white text-sm px-4 py-2 rounded-lg text-center mt-1" onClick={() => setMobileMenu(false)}>{t.register}</a>
-        <div className="mt-3 pt-2 border-t border-gray-100">
-          <div className="relative">
-            <button onClick={() => setShowLangs(!showLangs)} className="text-sm text-gray-500 py-1 w-full text-left">{t.switchLang} ▼</button>
-            {showLangs && <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">
-              {languages.map(li => <button key={li.code} onMouseDown={(e) => { e.stopPropagation(); switchLang(li.code); setMobileMenu(false); }} className={`block w-full text-left px-3 py-1 text-xs hover:bg-blue-50 ${lang===li.code?"text-[#3B82F6] font-semibold":"text-gray-700"}`}>{li.label}</button>)}
-            </div>}
-          </div>
-        </div>
-      </div>}
-      <section className="relative text-center py-10 sm:py-20 px-3 sm:px-6 bg-gradient-to-r from-[#1E40AF] via-[#3B82F6] to-[#1E40AF] text-white"><div className="max-w-4xl mx-auto"><h1 className="text-lg sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-3">{t.hero}</h1><p className="text-sm sm:text-lg text-blue-100 mb-3 sm:mb-6 max-w-2xl mx-auto">{t.subtitle}</p><div className="flex flex-wrap justify-center gap-2 sm:gap-4">
-  <a href={l("registrieren")} className="bg-white text-[#1E40AF] text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.start}</a>
-  <a href={l("demo")} className="border-2 border-white text-white text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-white hover:text-[#1E40AF] transition">{t.demo}</a>
-</div></div></section>
+
+      <section className="relative text-center py-10 sm:py-20 px-3 sm:px-6 bg-gradient-to-r from-[#1E40AF] via-[#3B82F6] to-[#1E40AF] text-white"><div className="max-w-4xl mx-auto"><h1 className="text-lg sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-3">{t.hero}</h1><p className="text-sm sm:text-lg text-blue-100 mb-3 sm:mb-6 max-w-2xl mx-auto">{t.subtitle}</p><div className="flex flex-wrap justify-center gap-2 sm:gap-4"><a href={l("registrieren")} className="bg-white text-[#1E40AF] text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.start}</a><a href={l("demo")} className="border-2 border-white text-white text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-white hover:text-[#1E40AF] transition">{t.demo}</a></div></div></section>
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 max-w-6xl mx-auto">
         <h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10 text-center text-gray-900">Features</h2>
@@ -81,7 +66,6 @@ export default function Home() {
         </div>
       </section>
 
-           {/* Integrationen */}
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-gray-50">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">Integrationen</h2>
@@ -93,7 +77,9 @@ export default function Home() {
             <span className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm">✓ E-Rezept-Fachdienst</span>
           </div>
         </div>
-      </section><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
+      </section>
+
+      <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-[#F5F9FF]"><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-5xl mx-auto">
           <div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.basic}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">39€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.basic1}</li><li>{t.basic2}</li><li>{t.basic3}</li></ul><button onClick={() => handleCheckout(prices.basic)} className="block w-full bg-[#1E40AF] text-white font-semibold py-2 rounded-full hover:bg-blue-800 transition text-sm">{t.start}</button></div>
           <div className="bg-[#1E40AF] text-white p-4 sm:p-6 rounded-xl shadow-lg sm:scale-105"><h3 className="text-base sm:text-lg font-semibold mt-2 mb-1">{t.pro}</h3><p className="text-xl sm:text-2xl font-bold mb-2">79€<span className="text-xs text-blue-200">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-white space-y-1 mb-4"><li>{t.pro1}</li><li>{t.pro2}</li><li>{t.pro3}</li></ul><button onClick={() => handleCheckout(prices.pro)} className="block w-full bg-white text-[#1E40AF] font-semibold py-2 rounded-full hover:bg-gray-100 transition text-sm">{t.start}</button></div>
