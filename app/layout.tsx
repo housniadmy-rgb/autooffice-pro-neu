@@ -17,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <p className="font-semibold text-gray-800 mb-3">PraxisOnline24</p>
             <div id="footer-links" className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4"></div>
             <p id="footer-copyright" className="text-gray-500"></p>
+            <div className="flex flex-wrap justify-center gap-4 mt-4 text-xs"><span className="text-gray-500">🔒 DSGVO-konform</span><span className="text-gray-500">🔐 SSL-verschlüsselt</span><span className="text-gray-500">🇩🇪 Hosted in Germany</span></div>
           </div>
         </footer>
         <script dangerouslySetInnerHTML={{ __html: `
