@@ -47,21 +47,21 @@ export default function Home() {
           <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
           <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
           <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Anamnese-Bogen</h3><p className="text-sm text-gray-500">Patienten-Fragebogen online</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">E-Rezept</h3><p className="text-sm text-gray-500">Medikamenten-Erinnerung</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Statistiken</h3><p className="text-sm text-gray-500">Patientenzahlen & Umsatz</p></div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
         </div>
       </section>
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-white">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">So einfach funktioniert's</h2>
-          <p className="text-sm sm:text-base text-gray-500 mb-10">In 4 Schritten zur automatisierten Praxis</p>
+          <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">{t.howTitle}</h2>
+          <p className="text-sm sm:text-base text-gray-500 mb-10">{t.howSub}</p>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div><h3 className="font-semibold text-gray-900">Terminbuchung</h3><p className="text-sm text-gray-500">Patient bucht online</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div><h3 className="font-semibold text-gray-900">Bestätigung</h3><p className="text-sm text-gray-500">Automatische E-Mail/SMS</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div><h3 className="font-semibold text-gray-900">Stornierung</h3><p className="text-sm text-gray-500">Patient kann absagen</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div><h3 className="font-semibold text-gray-900">Nachrücken</h3><p className="text-sm text-gray-500">Warteliste rückt nach</p></div>
+            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div><h3 className="font-semibold text-gray-900">{t.step1}</h3><p className="text-sm text-gray-500">{t.step1Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
+            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div><h3 className="font-semibold text-gray-900">{t.step2}</h3><p className="text-sm text-gray-500">{t.step2Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
+            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div><h3 className="font-semibold text-gray-900">{t.step3}</h3><p className="text-sm text-gray-500">{t.step3Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
+            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div><h3 className="font-semibold text-gray-900">{t.step4}</h3><p className="text-sm text-gray-500">{t.step4Desc}</p></div>
           </div>
         </div>
       </section>
