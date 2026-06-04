@@ -55,11 +55,39 @@ export default function Home() {
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-white">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-lg sm:text-2xl font-bold mb-6 text-gray-900">Alle Funktionen auf einen Blick</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
-            <div className="flex items-center gap-2 text-gray-700">📅 Online-Terminbuchung <span className="text-green-500 ml-auto">✅</span></div>
-            <div className="flex items-center gap-2 text-gray-700">⭐ Bewertungssteuerung <span className="text-green-500 ml-auto">✅</span></div>
-            <div className="flex items-center gap-2 text-gray-700">❌ Storno + Warteliste <span className="text-green-500 ml-auto">✅</span></div>
+                {/* Ablauf - Wie es funktioniert */}
+      <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-white">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">So einfach funktioniert's</h2>
+          <p className="text-sm sm:text-base text-gray-500 mb-10">In 4 Schritten zur automatisierten Praxis</p>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
+            <div className="text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div>
+              <h3 className="font-semibold text-gray-900">Terminbuchung</h3>
+              <p className="text-sm text-gray-500">Patient bucht online</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div>
+              <h3 className="font-semibold text-gray-900">Bestätigung</h3>
+              <p className="text-sm text-gray-500">Automatische E-Mail/SMS</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div>
+              <h3 className="font-semibold text-gray-900">Stornierung</h3>
+              <p className="text-sm text-gray-500">Patient kann absagen</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            
+            <div className="text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div>
+              <h3 className="font-semibold text-gray-900">Nachrücken</h3>
+              <p className="text-sm text-gray-500">Warteliste rückt nach</p>
+            </div>
           </div>
         </div>
       </section>
