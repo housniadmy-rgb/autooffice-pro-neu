@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import StaticMap from "../components/StaticMap"
 import Link from "next/link"
 
 type Step = "search" | "doctor" | "time" | "account" | "confirm"
@@ -135,7 +136,17 @@ export default function TerminBuchen() {
                     )}
                   </div>
                 )}
-                {!searchTerm && (
+                               {selectedPractice && (
+                  <div className="mt-4 space-y-4">
+                    <StaticMap address={selectedPractice.name} name={selectedPractice.name} />
+                    <button
+                      onClick={() => { setStep("doctor") }}
+                      className="w-full bg-[#1E40AF] text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition"
+                    >
+                      Weiter zur Arztauswahl →
+                    </button>
+                  </div>
+                )} {!searchTerm && (
                   <div className="bg-blue-50 rounded-lg p-4">
                     <p className="text-sm text-blue-700">🔍 Beispiele: "Berlin", "Hausarzt", "Zahnarzt", "München"</p>
                   </div>
@@ -257,13 +268,27 @@ export default function TerminBuchen() {
                       Ich möchte ein Konto erstellen
                     </button>
                   </div>
-                  {hasAccount !== null && (
-                    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                      <p className="text-sm text-gray-600">
-                        {hasAccount 
-                          ? "🔐 Sie werden auf die Login-Seite weitergeleitet. Nach dem Einloggen geht es weiter." 
-                          : "📝 Sie werden zur Registrierung weitergeleitet. Nach der Erstellung Ihres Kontos geht es weiter."}
-                      </p>
+                                   {hasAccount !== null && (
+                    <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                      {hasAccount ? (
+                        <div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            🔐 Sie werden zum Login weitergeleitet...
+                          </p>
+                          {typeof window !== 'undefined' && setTimeout(() => {
+                            window.location.href = '/login'
+                          }, 1500)}
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="text-sm text-gray-600 mb-2">
+                            📝 Sie werden zur Registrierung weitergeleitet...
+                          </p>
+                          {typeof window !== 'undefined' && setTimeout(() => {
+                            window.location.href = '/registrieren'
+                          }, 1500)}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
