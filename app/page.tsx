@@ -81,7 +81,19 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-[#F5F9FF]"><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
+           {/* Integrationen */}
+      <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">Integrationen</h2>
+          <p className="text-sm text-gray-500 mb-8">PraxisOnline24 funktioniert mit allen gängigen Systemen</p>
+          <div className="flex flex-wrap justify-center gap-3">
+            <span className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm">✓ Praxisverwaltungssysteme</span>
+            <span className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm">✓ Kassenärztliche Vereinigung</span>
+            <span className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm">✓ TI-Konnektor</span>
+            <span className="bg-white border border-gray-200 rounded-full px-4 py-2 text-sm">✓ E-Rezept-Fachdienst</span>
+          </div>
+        </div>
+      </section><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-5xl mx-auto">
           <div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.basic}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">39€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.basic1}</li><li>{t.basic2}</li><li>{t.basic3}</li></ul><button onClick={() => handleCheckout(prices.basic)} className="block w-full bg-[#1E40AF] text-white font-semibold py-2 rounded-full hover:bg-blue-800 transition text-sm">{t.start}</button></div>
           <div className="bg-[#1E40AF] text-white p-4 sm:p-6 rounded-xl shadow-lg sm:scale-105"><h3 className="text-base sm:text-lg font-semibold mt-2 mb-1">{t.pro}</h3><p className="text-xl sm:text-2xl font-bold mb-2">79€<span className="text-xs text-blue-200">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-white space-y-1 mb-4"><li>{t.pro1}</li><li>{t.pro2}</li><li>{t.pro3}</li></ul><button onClick={() => handleCheckout(prices.pro)} className="block w-full bg-white text-[#1E40AF] font-semibold py-2 rounded-full hover:bg-gray-100 transition text-sm">{t.start}</button></div>
