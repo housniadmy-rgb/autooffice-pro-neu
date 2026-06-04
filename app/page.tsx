@@ -78,8 +78,22 @@ export default function Home() {
           <div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.business}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">199€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.bus1}</li><li>{t.bus2}</li><li>{t.bus3}</li></ul><button onClick={() => handleCheckout(prices.business)} className="block w-full bg-[#3B82F6] text-white font-semibold py-2 rounded-full hover:bg-blue-600 transition text-sm">{t.start}</button></div>
         </div>
       </section>
+      </section>
 
-     
+      {/* Demo - Alle Funktionen auf einen Blick */}
+      <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-white">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-lg sm:text-2xl font-bold mb-6 text-gray-900">Alle Funktionen auf einen Blick</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+            <div className="flex items-center gap-2 text-gray-700">📅 Online-Terminbuchung <span className="text-green-500 ml-auto">✅</span></div>
+            <div className="flex items-center gap-2 text-gray-700">⭐ Bewertungssteuerung <span className="text-green-500 ml-auto">✅</span></div>
+            <div className="flex items-center gap-2 text-gray-700">❌ Storno + Warteliste <span className="text-green-500 ml-auto">✅</span></div>
+          </div>
+        </div>
+      </section>
+
     </main>
   )
 }
+     
+    
