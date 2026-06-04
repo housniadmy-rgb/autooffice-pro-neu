@@ -54,21 +54,30 @@ export default function Home() {
           </div>
           <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3>
+            <p className="text-sm text-gray-500">          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3>
+            <p className="text-sm text-gray-500">{t.feat1desc}</p>
+          </div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3>
+            <p className="text-sm text-gray-500">{t.feat2desc}</p>
+          </div>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3>
             <p className="text-sm text-gray-500">{t.feat3desc}</p>
           </div>
-                   <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/anamnese'}>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Anamnese-Bogen</h3>
             <p className="text-sm text-gray-500">Patienten-Fragebogen online</p>
           </div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/erezept'}>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">E-Rezept</h3>
             <p className="text-sm text-gray-500">Medikamenten-Erinnerung</p>
           </div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm hover:shadow-md transition cursor-pointer" onClick={() => window.location.href='/statistiken'}>
+          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">Statistiken</h3>
             <p className="text-sm text-gray-500">Patientenzahlen & Umsatz</p>
           </div>
-        </div>
       </section>
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-[#F5F9FF]"><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
