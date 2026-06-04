@@ -5,15 +5,11 @@ import { translations, detectLanguage } from "../lib/i18n"
 
 export default function Dashboard() {
   const [lang, setLang] = useState("de")
-  const [user, setUser] = useState(null)
 
   useEffect(() => {
     const s = localStorage.getItem("lang")
     if (s && translations[s]) setLang(s)
     else setLang(detectLanguage())
-    
-    // Hier kommt später die echte Benutzerdaten-Logik rein
-    setUser({ name: "Testpraxis München", email: "test@praxis.de" })
   }, [])
 
   const t = translations[lang] || translations.de
@@ -32,7 +28,7 @@ export default function Dashboard() {
       <header className="bg-white border-b border-gray-200 py-4 px-6">
         <div className="max-w-6xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-xl font-bold text-[#1E40AF]">Praxis<span className="text-[#3B82F6]">Online24</span></Link>
-          <Link href="/" className="text-sm text-gray-500 hover:text-[#1E40AF]">{t.back}</Link>
+          <Link href="/" className="text-sm text-gray-500 hover:text-[#1E40AF]">{t.back || "← Zurück"}</Link>
         </div>
       </header>
 
@@ -40,7 +36,7 @@ export default function Dashboard() {
         {/* Begrüßung */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-          <p className="text-gray-500">Willkommen, {user?.name || "Praxis"}!</p>
+          <p className="text-gray-500">Willkommen, Testpraxis!</p>
         </div>
 
         {/* KPI-Karten */}
@@ -97,24 +93,6 @@ export default function Dashboard() {
             <p className="text-sm text-gray-500 mt-1">Alle Kennzahlen im Überblick</p>
           </Link>
         </div>
-      </div>
-    </main>
-  )
-}
-
-  if (loading) return <main className="min-h-screen p-8 flex items-center justify-center"><p className="text-2xl">Lade...</p></main>
-  if (!user) return <main className="min-h-screen p-8 flex items-center justify-center"><p className="text-2xl">Bitte anmelden.</p></main>
-
-  return (
-    <main className="min-h-screen p-8">
-      <div className="max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Dashboard</h1>
-        <div className="bg-white border border-blue-200 p-8 rounded-xl mb-8">
-          <h2 className="text-2xl font-semibold mb-4">Willkommen, {user.user_metadata?.name || user.email}!</h2>
-          <p className="text-lg text-gray-500 mb-2">E-Mail: {user.email}</p>
-        </div>
-        <button onClick={() => { localStorage.removeItem("supabase_token"); router.push("/") }} className="bg-red-600 text-gray-900 px-6 py-3 rounded-lg text-lg hover:bg-red-700 transition">Abmelden</button>
-        <div className="mt-6"><Link href="/" className="text-gray-900 underline text-lg">← Zurück</Link></div>
       </div>
     </main>
   )
