@@ -170,7 +170,7 @@ export default function TerminBuchen() {
                       onChange={(e) => setSelectedReason(e.target.value)}
                     >
                       <option value="">Bitte wählen</option>
-                      {selectedDoctor.reasons.map(reason => (
+                      {selectedDoctor.reasons.map((reason: string) => (
                         <option key={reason} value={reason}>{reason}</option>
                       ))}
                     </select>
