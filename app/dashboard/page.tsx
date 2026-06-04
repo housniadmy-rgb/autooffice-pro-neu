@@ -14,7 +14,6 @@ export default function Dashboard() {
 
   const t = translations[lang] || translations.de
 
-  // Demo-Termine für heute
   const todayAppointments = [
     { time: "09:00", patient: "Anna Schmidt", type: "Hausarzt" },
     { time: "10:30", patient: "Thomas Weber", type: "Vorsorge" },
@@ -76,15 +75,15 @@ export default function Dashboard() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <Link href="/anamnese" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+          <Link href="/dashboard/anamnese" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
             <h3 className="font-semibold text-gray-900">📋 Anamnese-Bögen</h3>
             <p className="text-sm text-gray-500 mt-1">Ausgefüllte Fragebögen einsehen</p>
           </Link>
-          <Link href="/erezept" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+          <Link href="/dashboard/erezept" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
             <h3 className="font-semibold text-gray-900">💊 E-Rezept</h3>
             <p className="text-sm text-gray-500 mt-1">Neue Rezepte ausstellen</p>
           </Link>
-          <Link href="/statistiken" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
+          <Link href="/dashboard/statistiken" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
             <h3 className="font-semibold text-gray-900">📊 Statistiken</h3>
             <p className="text-sm text-gray-500 mt-1">Alle Kennzahlen im Überblick</p>
           </Link>
