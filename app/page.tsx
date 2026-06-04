@@ -21,7 +21,7 @@ export default function Home() {
   const t = translations[lang] || translations.de
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
-  const prices = { basic: "price_1Tcn1FJXpW5OGkcsCIwC7D3i", pro: "price_1Tcn3AJXpW5OGkcs8LtJgV3D", business: "price_1Tcn4HJXpW5OGkcsqILnNtZN" }
+    const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
   const handleCheckout = async (pid: string) => { try { const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ priceId: pid }) }); const d = await r.json(); if (d.url) window.location.href = d.url } catch (e) {} }
 
   return (
