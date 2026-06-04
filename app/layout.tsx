@@ -22,23 +22,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: `
           (function(){
             var texts={
-  de:["Über uns","Kontakt","Blog","FAQ","AGB","Datenschutz","Impressum"],
-  en:["About","Contact","Blog","FAQ","Terms","Privacy","Imprint"],
-  fr:["À propos","Contact","Blog","FAQ","CGV","Confidentialité","Mentions légales"],
-  es:["Sobre nosotros","Contacto","Blog","FAQ","Términos","Privacidad","Aviso legal"],
-  it:["Chi siamo","Contatto","Blog","FAQ","Termini","Privacy","Note legali"],
-  pt:["Sobre nós","Contato","Blog","FAQ","Termos","Privacidade","Aviso legal"],
-  nl:["Over ons","Contact","Blog","FAQ","Voorwaarden","Privacy","Colofon"],
-  pl:["O nas","Kontakt","Blog","FAQ","Warunki","Prywatność","Nota prawna"],
-  tr:["Hakkımızda","İletişim","Blog","SSS","Şartlar","Gizlilik","Künye"],
-  sv:["Om oss","Kontakt","Blogg","FAQ","Villkor","Integritet","Impressum"],
-  no:["Om oss","Kontakt","Blogg","FAQ","Vilkår","Personvern","Impressum"],
-  da:["Om os","Kontakt","Blog","FAQ","Vilkår","Privatliv","Impressum"],
-  sl:["O nas","Kontakt","Blog","FAQ","Pogoji","Zasebnost","Impressum"],
-  cs:["O nás","Kontakt","Blog","FAQ","Podmínky","Ochrana údajů","Impressum"],
-  sk:["O nás","Kontakt","Blog","FAQ","Podmienky","Ochrana údajov","Impressum"],
-  ja:["会社概要","お問い合わせ","ブログ","FAQ","利用規約","プライバシー","インプリント"],
-  zh:["关于我们","联系我们","博客","常见问题","服务条款","隐私政策","版权信息"]
+de: ["Über uns","Kontakt","Blog","FAQ","AGB","Datenschutz","Impressum","Admin"],
+en: ["About","Contact","Blog","FAQ","Terms","Privacy","Imprint","Admin"],
+fr: ["À propos","Contact","Blog","FAQ","CGV","Confidentialité","Mentions légales","Admin"],
+es: ["Sobre nosotros","Contacto","Blog","FAQ","Términos","Privacidad","Aviso legal","Admin"],
+it: ["Chi siamo","Contatto","Blog","FAQ","Termini","Privacy","Note legali","Admin"],
+pt: ["Sobre nós","Contato","Blog","FAQ","Termos","Privacidade","Aviso legal","Admin"],
+nl: ["Over ons","Contact","Blog","FAQ","Voorwaarden","Privacy","Colofon","Admin"],
+pl: ["O nas","Kontakt","Blog","FAQ","Warunki","Prywatność","Nota prawna","Admin"],
+tr: ["Hakkımızda","İletişim","Blog","SSS","Şartlar","Gizlilik","Künye","Admin"],
+sv:["Om oss","Kontakt","Blogg","FAQ","Villkor","Integritet","Impressum","Admin"],
+no:["Om oss","Kontakt","Blogg","FAQ","Vilkår","Personvern","Impressum","Admin"],
+da:["Om os","Kontakt","Blog","FAQ","Vilkår","Privatliv","Impressum","Admin"],
+sl:["O nas","Kontakt","Blog","FAQ","Pogoji","Zasebnost","Impressum","Admin"],
+cs:["O nás","Kontakt","Blog","FAQ","Podmínky","Ochrana údajů","Impressum","Admin"],
+sk:["O nás","Kontakt","Blog","FAQ","Podmienky","Ochrana údajov","Impressum","Admin"],
+ja:["会社概要","お問い合わせ","ブログ","FAQ","利用規約","プライバシー","インプリント","Admin"],
+zh:["关于我们","联系我们","博客","常见问题","服务条款","隐私政策","版权信息","Admin"]
 };
             var copyrights={
   de:"© 2026 PraxisOnline24. Alle Rechte vorbehalten.",
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   ja:"© 2026 PraxisOnline24. 無断複写・転載を禁じます。",
   zh:"© 2026 PraxisOnline24. 版权所有。"
 };
-            var hrefs=["/ueber-uns","/kontakt","/blog","/faq","/agb","/datenschutz","/impressum"];
+            var hrefs=["/ueber-uns","/kontakt","/blog","/faq","/agb","/datenschutz","/impressum","/admin"];
             function renderFooter(){
               var lang=localStorage.getItem("lang")||"de";
               if(!texts[lang])lang="en";
