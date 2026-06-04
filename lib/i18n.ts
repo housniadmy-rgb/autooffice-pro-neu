@@ -94,6 +94,22 @@ export const translations: Record<string, Record<string, string>> = {
 export const languages = [
   { code: "de", name: "Deutsch", label: "Deutsch" },
   { code: "en", name: "English", label: "English" },
+  { code: "fr", name: "Français", label: "Français" },
+  { code: "es", name: "Español", label: "Español" },
+  { code: "it", name: "Italiano", label: "Italiano" },
+  { code: "pt", name: "Português", label: "Português" },
+  { code: "nl", name: "Nederlands", label: "Nederlands" },
+  { code: "pl", name: "Polski", label: "Polski" },
+  { code: "tr", name: "Türkçe", label: "Türkçe" },
+  { code: "sv", name: "Svenska", label: "Svenska" },
+  { code: "no", name: "Norsk", label: "Norsk" },
+  { code: "da", name: "Dansk", label: "Dansk" },
+  { code: "sl", name: "Slovenščina", label: "Slovenščina" },
+  { code: "cs", name: "Čeština", label: "Čeština" },
+  { code: "sk", name: "Slovenčina", label: "Slovenčina" },
+  { code: "ja", name: "日本語", label: "日本語" },
+  { code: "zh", name: "中文", label: "中文" },
+]
 ]
 
 export function detectLanguage(): string {
