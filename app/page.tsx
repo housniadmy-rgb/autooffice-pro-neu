@@ -48,12 +48,12 @@ export default function Home() {
       <section className="py-8 sm:py-16 px-3 sm:px-6 max-w-6xl mx-auto">
         <h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10 text-center text-gray-900">Features</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
-          <div className="bg-white border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
+          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
         </div>
       </section>
 
