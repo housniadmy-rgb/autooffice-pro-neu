@@ -40,20 +40,20 @@ export default function Home() {
       </div></header>
 
       <section className="relative text-center py-10 sm:py-20 px-3 sm:px-6 bg-gradient-to-r from-[#1E40AF] via-[#3B82F6] to-[#1E40AF] text-white"><div className="max-w-4xl mx-auto"><h1 className="text-lg sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-3">{t.hero}</h1><p className="text-sm sm:text-lg text-blue-100 mb-3 sm:mb-6 max-w-2xl mx-auto">{t.subtitle}</p><div className="flex flex-wrap justify-center gap-2 sm:gap-4">
-  <a href={l("registrieren")} className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.start}</a>
-<a href={l("demo")} className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.demo}</a>
-<a href="/termin-buchen" className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.bookAppointment}</a>
-</div></div></section>
+        <a href={l("registrieren")} className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.start}</a>
+        <a href={l("demo")} className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.demo}</a>
+        <a href="/termin-buchen" className="bg-white text-[#1E40AF] border border-gray-200 text-sm sm:text-lg font-semibold px-6 sm:px-10 py-3 sm:py-4 rounded-full hover:bg-gray-100 transition shadow-lg">{t.bookAppointment}</a>
+      </div></div></section>
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 max-w-6xl mx-auto">
         <h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10 text-center text-gray-900">Features</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
-          <div className="bg-blue-50 border border-gray-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
+          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
         </div>
       </section>
 
@@ -62,10 +62,29 @@ export default function Home() {
           <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">{t.howTitle}</h2>
           <p className="text-sm sm:text-base text-gray-500 mb-10">{t.howSub}</p>
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 sm:gap-6">
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div><h3 className="font-semibold text-gray-900">{t.step1}</h3><p className="text-sm text-gray-500">{t.step1Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div><h3 className="font-semibold text-gray-900">{t.step2}</h3><p className="text-sm text-gray-500">{t.step2Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div><h3 className="font-semibold text-gray-900">{t.step3}</h3><p className="text-sm text-gray-500">{t.step3Desc}</p><div className="text-[#1E40AF] text-2xl mt-2">→</div></div>
-            <div className="text-center"><div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div><h3 className="font-semibold text-gray-900">{t.step4}</h3><p className="text-sm text-gray-500">{t.step4Desc}</p></div>
+            <div className="bg-blue-50 rounded-xl p-4 text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">1</div>
+              <h3 className="font-semibold text-gray-900">{t.step1}</h3>
+              <p className="text-sm text-gray-500">{t.step1Desc}</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            <div className="bg-blue-50 rounded-xl p-4 text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">2</div>
+              <h3 className="font-semibold text-gray-900">{t.step2}</h3>
+              <p className="text-sm text-gray-500">{t.step2Desc}</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            <div className="bg-blue-50 rounded-xl p-4 text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">3</div>
+              <h3 className="font-semibold text-gray-900">{t.step3}</h3>
+              <p className="text-sm text-gray-500">{t.step3Desc}</p>
+              <div className="text-[#1E40AF] text-2xl mt-2">→</div>
+            </div>
+            <div className="bg-blue-50 rounded-xl p-4 text-center">
+              <div className="w-12 h-12 bg-[#1E40AF] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-3">4</div>
+              <h3 className="font-semibold text-gray-900">{t.step4}</h3>
+              <p className="text-sm text-gray-500">{t.step4Desc}</p>
+            </div>
           </div>
         </div>
       </section>
