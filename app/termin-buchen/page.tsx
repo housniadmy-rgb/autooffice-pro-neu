@@ -31,13 +31,17 @@ export default function TerminBuchen() {
   const [patientEmail, setPatientEmail] = useState("")
   const [patientPhone, setPatientPhone] = useState("")
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
+  const [bookingId, setBookingId] = useState("")
+  const [bookingId, setBookingId] = useState("")
 
   const filteredPractices = practices.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.type.toLowerCase().includes(searchTerm.toLowerCase())
   )
-
+  const generateBookingId = () => {
+    return 'TERM-' + Math.random().toString(36).substring(2, 10).toUpperCase()
+  }
   const resetBooking = () => {
     setStep("search")
     setSelectedPractice(null)
@@ -60,6 +64,12 @@ export default function TerminBuchen() {
             <span className="text-2xl">✅</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Buchung bestätigt!</h1>
+          <p className="text-sm text-gray-500 mb-2">
+            Ihre Termin-ID: <strong>{bookingId}</strong>
+          </p>
+          <p className="text-xs text-gray-400 mb-4">
+            Bitte notieren Sie diese ID für eine eventuelle Stornierung.
+          </p>
           <p className="text-gray-500 mb-4">
             Ihr Termin bei {selectedDoctor?.name} am {selectedDate} um {selectedTime} Uhr wurde reserviert.
           </p>
@@ -334,7 +344,11 @@ export default function TerminBuchen() {
                 <div className="flex justify-between mt-6">
                   <button onClick={() => setStep("guest")} className="text-gray-500">← Zurück</button>
                   <button
-                    onClick={() => setBookingConfirmed(true)}
+                    onClick={() => {
+  const newId = generateBookingId()
+  setBookingId(newId)
+  setBookingConfirmed(true)
+}}
                     className="px-6 py-2 rounded-lg bg-[#1E40AF] text-white hover:bg-blue-800 transition"
                   >
                     Buchung bestätigen →
