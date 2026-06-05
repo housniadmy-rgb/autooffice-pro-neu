@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { translations, detectLanguage } from "../lib/i18n"
+import { translations, detectLanguage } from "../../lib/i18n"
 
 type Step = "search" | "doctor" | "time" | "guest" | "confirm"
 
