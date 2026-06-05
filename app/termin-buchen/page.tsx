@@ -75,6 +75,9 @@ export default function TerminBuchen() {
           )}
           <div>
             <button onClick={resetBooking} className="text-sm text-[#1E40AF] underline">Neue Buchung</button>
+          <Link href="/termin-stornieren" className="text-sm text-gray-500 underline mt-2 inline-block">
+            Termin stornieren
+          </Link>
           </div>
           <div className="mt-4">
             <Link href="/" className="text-sm text-gray-500 underline">← Zurück zur Startseite</Link>
