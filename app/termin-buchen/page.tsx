@@ -1,7 +1,6 @@
 "use client"
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import Link from "next/link"
-import { translations, detectLanguage } from "../lib/i18n"
 
 type Step = "search" | "doctor" | "time" | "guest" | "confirm"
 
@@ -20,7 +19,6 @@ const doctors = [
 const timeSlots = ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30"]
 
 export default function TerminBuchen() {
-  const [lang, setLang] = useState("de")
   const [step, setStep] = useState<Step>("search")
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedPractice, setSelectedPractice] = useState<any>(null)
@@ -34,14 +32,6 @@ export default function TerminBuchen() {
   const [patientPhone, setPatientPhone] = useState("")
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
   const [bookingId, setBookingId] = useState("")
-
-  useEffect(() => {
-    const s = localStorage.getItem("lang")
-    if (s && translations[s]) setLang(s)
-    else setLang(detectLanguage())
-  }, [])
-
-  const t = translations[lang] || translations.de
 
   const generateBookingId = () => {
     return 'TERM-' + Math.random().toString(36).substring(2, 10).toUpperCase()
@@ -101,7 +91,7 @@ export default function TerminBuchen() {
               Zum Login
             </Link>
           )}
-          <div className="flex flex-col items-center gap-3">
+                    <div className="flex flex-col items-center gap-3">
             <a href="/termin-buchen" className="bg-[#1E40AF] text-white px-6 py-2 rounded-lg hover:bg-blue-800 transition cursor-pointer">
               Neue Buchung
             </a>
@@ -123,13 +113,13 @@ export default function TerminBuchen() {
     <main className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-4xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
-          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">← {t.back || "Zurück"}</Link>
+          <Link href="/" className="text-sm text-gray-500 hover:text-gray-700">← Zurück</Link>
           <div className="text-sm text-gray-400">Demo-Buchung • keine echten Daten</div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
           <div className="bg-gradient-to-r from-[#1E40AF] to-[#3B82F6] px-6 py-4">
-            <h1 className="text-xl font-bold text-white">{t.bookAppointment || "Termin buchen"}</h1>
+            <h1 className="text-xl font-bold text-white">Termin buchen</h1>
             <p className="text-blue-100 text-sm mt-1">In wenigen Schritten zum Wunschtermin</p>
           </div>
 
@@ -218,7 +208,7 @@ export default function TerminBuchen() {
                   </div>
                 )}
                 <div className="flex justify-between mt-6">
-                  <button onClick={() => setStep("search")} className="text-gray-500">← {t.back || "Zurück"}</button>
+                  <button onClick={() => setStep("search")} className="text-gray-500">← Zurück</button>
                   <button
                     onClick={() => selectedDoctor && selectedReason && setStep("time")}
                     disabled={!selectedDoctor || !selectedReason}
@@ -226,7 +216,7 @@ export default function TerminBuchen() {
                       selectedDoctor && selectedReason ? "bg-[#1E40AF] text-white hover:bg-blue-800" : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {t.next || "Weiter"} →
+                    Weiter →
                   </button>
                 </div>
               </div>
@@ -264,7 +254,7 @@ export default function TerminBuchen() {
                   </div>
                 )}
                 <div className="flex justify-between mt-6">
-                  <button onClick={() => setStep("doctor")} className="text-gray-500">← {t.back || "Zurück"}</button>
+                  <button onClick={() => setStep("doctor")} className="text-gray-500">← Zurück</button>
                   <button
                     onClick={() => selectedDate && selectedTime && setStep("guest")}
                     disabled={!selectedDate || !selectedTime}
@@ -272,7 +262,7 @@ export default function TerminBuchen() {
                       selectedDate && selectedTime ? "bg-[#1E40AF] text-white hover:bg-blue-800" : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {t.next || "Weiter"} →
+                    Weiter →
                   </button>
                 </div>
               </div>
@@ -338,7 +328,7 @@ export default function TerminBuchen() {
                   </div>
                 </div>
                 <div className="flex justify-between mt-6">
-                  <button onClick={() => setStep("time")} className="text-gray-500">← {t.back || "Zurück"}</button>
+                  <button onClick={() => setStep("time")} className="text-gray-500">← Zurück</button>
                   <button
                     onClick={() => patientName && patientEmail && bookingType && setStep("confirm")}
                     disabled={!patientName || !patientEmail || !bookingType}
@@ -346,7 +336,7 @@ export default function TerminBuchen() {
                       patientName && patientEmail && bookingType ? "bg-[#1E40AF] text-white hover:bg-blue-800" : "bg-gray-200 text-gray-400 cursor-not-allowed"
                     }`}
                   >
-                    {t.next || "Weiter"} →
+                    Weiter →
                   </button>
                 </div>
               </div>
@@ -364,7 +354,7 @@ export default function TerminBuchen() {
                   <p><strong>Buchungsart:</strong> {bookingType === "guest" ? "Als Gast" : "Mit Konto"}</p>
                 </div>
                 <div className="flex justify-between mt-6">
-                  <button onClick={() => setStep("guest")} className="text-gray-500">← {t.back || "Zurück"}</button>
+                  <button onClick={() => setStep("guest")} className="text-gray-500">← Zurück</button>
                   <button
                     onClick={handleConfirm}
                     className="px-6 py-2 rounded-lg bg-[#1E40AF] text-white hover:bg-blue-800 transition"
