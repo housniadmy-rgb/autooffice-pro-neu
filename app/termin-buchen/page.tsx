@@ -92,7 +92,9 @@ export default function TerminBuchen() {
             </Link>
           )}
           <div className="flex flex-col items-center gap-2">
-            <button onClick={resetBooking} className="text-sm text-[#1E40AF] underline">Neue Buchung</button>
+            <Link href="/termin-buchen" className="text-sm text-[#1E40AF] underline">
+  Neue Buchung
+</Link>
             <Link href="/termin-stornieren" className="text-sm text-gray-500 underline">
               Termin stornieren
             </Link>
