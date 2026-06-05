@@ -32,16 +32,17 @@ export default function TerminBuchen() {
   const [patientPhone, setPatientPhone] = useState("")
   const [bookingConfirmed, setBookingConfirmed] = useState(false)
   const [bookingId, setBookingId] = useState("")
-  const [bookingId, setBookingId] = useState("")
+
+  const generateBookingId = () => {
+    return 'TERM-' + Math.random().toString(36).substring(2, 10).toUpperCase()
+  }
 
   const filteredPractices = practices.filter(p => 
     p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.city.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.type.toLowerCase().includes(searchTerm.toLowerCase())
   )
-  const generateBookingId = () => {
-    return 'TERM-' + Math.random().toString(36).substring(2, 10).toUpperCase()
-  }
+
   const resetBooking = () => {
     setStep("search")
     setSelectedPractice(null)
@@ -54,6 +55,13 @@ export default function TerminBuchen() {
     setPatientEmail("")
     setPatientPhone("")
     setBookingConfirmed(false)
+    setBookingId("")
+  }
+
+  const handleConfirm = () => {
+    const newId = generateBookingId()
+    setBookingId(newId)
+    setBookingConfirmed(true)
   }
 
   if (bookingConfirmed) {
@@ -83,7 +91,7 @@ export default function TerminBuchen() {
               Zum Login
             </Link>
           )}
-                   <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2">
             <button onClick={resetBooking} className="text-sm text-[#1E40AF] underline">Neue Buchung</button>
             <Link href="/termin-stornieren" className="text-sm text-gray-500 underline">
               Termin stornieren
@@ -344,11 +352,7 @@ export default function TerminBuchen() {
                 <div className="flex justify-between mt-6">
                   <button onClick={() => setStep("guest")} className="text-gray-500">← Zurück</button>
                   <button
-                    onClick={() => {
-  const newId = generateBookingId()
-  setBookingId(newId)
-  setBookingConfirmed(true)
-}}
+                    onClick={handleConfirm}
                     className="px-6 py-2 rounded-lg bg-[#1E40AF] text-white hover:bg-blue-800 transition"
                   >
                     Buchung bestätigen →
