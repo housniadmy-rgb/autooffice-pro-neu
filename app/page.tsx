@@ -51,9 +51,8 @@ export default function Home() {
           <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat1title}</h3><p className="text-sm text-gray-500">{t.feat1desc}</p></div>
           <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat2title}</h3><p className="text-sm text-gray-500">{t.feat2desc}</p></div>
           <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.feat3title}</h3><p className="text-sm text-gray-500">{t.feat3desc}</p></div>
-          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.anamnese}</h3><p className="text-sm text-gray-500">{t.anamneseDesc}</p></div>
-          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.erezept}</h3><p className="text-sm text-gray-500">{t.erezeptDesc}</p></div>
-          <div className="bg-blue-50 border border-blue-100 p-4 sm:p-5 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1 text-gray-900">{t.statistiken}</h3><p className="text-sm text-gray-500">{t.statistikenDesc}</p></div>
+         
+          
         </div>
       </section>
 
