@@ -1,7 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
-import { translations, detectLanguage } from "../lib/i18n"
+import { translations, detectLanguage } from "../../lib/i18n"
 
 export default function DemoPage() {
   const [lang, setLang] = useState("de")
