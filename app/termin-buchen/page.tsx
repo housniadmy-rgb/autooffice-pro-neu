@@ -92,9 +92,9 @@ export default function TerminBuchen() {
             </Link>
           )}
           <div className="flex flex-col items-center gap-2">
-            <Link href="/termin-buchen" className="text-sm text-[#1E40AF] underline">
+            <a href="/termin-buchen" className="text-sm text-[#1E40AF] underline">
   Neue Buchung
-</Link>
+</a>
             <Link href="/termin-stornieren" className="text-sm text-gray-500 underline">
               Termin stornieren
             </Link>
