@@ -109,7 +109,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Mit Konto",
     demoInfo: "💡 Das ist eine interaktive Demo. Es werden keine echten Daten gespeichert.",
     clock: "Uhr",
-  },
+      gdpr: "🔒 DSGVO-konform",
+    ssl: "🔐 SSL-verschlüsselt",
+    hosted: "🇩🇪 Hosted in Germany",},
   en: {
     home: "Home",
     login: "Login",
@@ -219,7 +221,9 @@ export const translations: Record<string, Record<string, string>> = {
     guestBooking: "Guest",
     accountBooking: "With account",
     demoInfo: "💡 This is an interactive demo. No real data is saved.",
-    clock: "o'clock",
+    gdpr: "🔒 GDPR compliant",
+    ssl: "🔐 SSL encrypted",
+    hosted: "🇩🇪 Hosted in Germany",clock: "o'clock",
   },
   fr: {
     home: "Accueil",
@@ -331,7 +335,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Avec compte",
     demoInfo: "💡 Ceci est une démo interactive. Aucune donnée réelle n'est enregistrée.",
     clock: "heure",
-  },
+      gdpr: "🔒 Conforme au RGPD",
+    ssl: "🔐 Chiffré SSL",
+    hosted: "🇩🇪 Hébergé en Allemagne",},
   es: {
     home: "Inicio",
     login: "Iniciar sesión",
@@ -442,7 +448,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Con cuenta",
     demoInfo: "💡 Esta es una demo interactiva. No se guardan datos reales.",
     clock: "hora",
-  },
+      gdpr: "🔒 Conforme al RGPD",
+    ssl: "🔐 Cifrado SSL",
+    hosted: "🇩🇪 Alojado en Alemania",},
   it: {
     home: "Home",
     login: "Accedi",
@@ -553,7 +561,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Con account",
     demoInfo: "💡 Questa è una demo interattiva. Nessun dato reale viene salvato.",
     clock: "ora",
-  },
+      gdpr: "🔒 Conforme al GDPR",
+    ssl: "🔐 Crittografato SSL",
+    hosted: "🇩🇪 Ospitato in Germania",},
   pt: {
     home: "Início",
     login: "Entrar",
@@ -664,7 +674,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Com conta",
     demoInfo: "💡 Esta é uma demonstração interativa. Não são guardados dados reais.",
     clock: "hora",
-  },
+      gdpr: "🔒 Conforme com o RGPD",
+    ssl: "🔐 Criptografado SSL",
+    hosted: "🇩🇪 Hospedado na Alemanha",},
   nl: {
     home: "Home",
     login: "Inloggen",
@@ -775,7 +787,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Met account",
     demoInfo: "💡 Dit is een interactieve demo. Er worden geen echte gegevens opgeslagen.",
     clock: "uur",
-  },
+      gdpr: "🔒 AVG-conform",
+    ssl: "🔐 SSL-versleuteld",
+    hosted: "🇩🇪 Gehost in Duitsland",},
   pl: {
     home: "Strona główna",
     login: "Zaloguj",
@@ -886,7 +900,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Z kontem",
     demoInfo: "💡 To jest interaktywne demo. Żadne rzeczywiste dane nie są zapisywane.",
     clock: "godzina",
-  },
+      gdpr: "🔒 Zgodny z RODO",
+    ssl: "🔐 Szyfrowanie SSL",
+    hosted: "🇩🇪 Hostowane w Niemczech",},
   tr: {
     home: "Ana Sayfa",
     login: "Giriş",
@@ -997,7 +1013,9 @@ export const translations: Record<string, Record<string, string>> = {
     accountBooking: "Hesap ile",
     demoInfo: "💡 Bu etkileşimli bir demodur. Gerçek veri kaydedilmez.",
     clock: "saat",
-  },
+      gdpr: "🔒 KVKK uyumlu",
+    ssl: "🔐 SSL şifreli",
+    hosted: "🇩🇪 Almanya'da barındırılır",},
 }
 
 export const languages = [
