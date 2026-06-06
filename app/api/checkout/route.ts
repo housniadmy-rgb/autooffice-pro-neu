@@ -7,8 +7,8 @@ export async function POST(req: Request) {
   try {
     const { priceId, lang } = await req.json();
     
-    // Stripe unterstützt: de, en, fr, es, it, pt, nl, pl, tr (teilweise)
-    let stripeLocale: Stripe.Checkout.SessionCreateParams.Locale = "en";
+    // Stripe unterstützt diese Sprachen offiziell
+    let stripeLocale: any = "en";
     if (lang === "de") stripeLocale = "de";
     if (lang === "fr") stripeLocale = "fr";
     if (lang === "es") stripeLocale = "es";
@@ -22,8 +22,8 @@ export async function POST(req: Request) {
       mode: "subscription",
       payment_method_types: ["card"],
       line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
+      success_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://praxisonline24.com"}/dashboard?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://praxisonline24.com"}/`,
       locale: stripeLocale,
       metadata: { lang },
     });
