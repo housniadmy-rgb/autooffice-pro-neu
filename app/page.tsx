@@ -38,12 +38,19 @@ export default function Home() {
         </div>
         <button onClick={() => setMobileMenu(!mobileMenu)} className="sm:hidden text-2xl text-gray-700">{mobileMenu?"✕":"☰"}</button>
       </div></header>
-      {/* Mobile Menu */}
+            {/* Mobile Menu */}
       {mobileMenu && (
         <div className="sm:hidden bg-white border-b border-gray-100 px-4 py-3 space-y-3">
-          <a href="/" className="block text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.home}</a>
-          <a href={l("login")} className="block text-gray-700 py-2" onClick={() => setMobileMenu(false)}>{t.login}</a>
-          <a href={l("registrieren")} className="block bg-[#1E40AF] text-white text-center px-4 py-2 rounded-lg" onClick={() => setMobileMenu(false)}>{t.register}</a>
+          <button onClick={() => { setMobileMenu(false); }} className="block w-full text-left text-gray-700 py-2">
+            {t.home}
+          </button>
+          <button onClick={() => { window.location.href = l("login"); }} className="block w-full text-left text-gray-700 py-2">
+            {t.login}
+          </button>
+          <button onClick={() => { window.location.href = l("registrieren"); }} className="block w-full bg-[#1E40AF] text-white text-center px-4 py-2 rounded-lg">
+            {t.register}
+          </button>
+          
           <div className="pt-2 border-t border-gray-100">
             <div className="relative">
               <button onClick={() => setShowLangs(!showLangs)} className="text-gray-700 py-1 w-full text-left">
@@ -52,17 +59,20 @@ export default function Home() {
               {showLangs && (
                 <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">
                   {languages.map(li => (
-  <a
-    key={li.code}
-    href={`/?setLang=${li.code}`}
-    onClick={() => setMobileMenu(false)}
-    className={`block w-full text-left px-3 py-1 text-sm ${
-      lang === li.code ? "text-[#1E40AF] font-semibold" : "text-gray-700"
-    }`}
-  >
-    {li.label}
-  </a>
-))}
+                    <button
+                      key={li.code}
+                      onClick={() => {
+                        switchLang(li.code);
+                        setMobileMenu(false);
+                        setShowLangs(false);
+                      }}
+                      className={`block w-full text-left px-3 py-1 text-sm ${
+                        lang === li.code ? "text-[#1E40AF] font-semibold" : "text-gray-700"
+                      }`}
+                    >
+                      {li.label}
+                    </button>
+                  ))}
                 </div>
               )}
             </div>
