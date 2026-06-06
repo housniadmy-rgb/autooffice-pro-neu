@@ -7,6 +7,7 @@ export default function Home() {
   const [lang, setLang] = useState("de")
   const [showLangs, setShowLangs] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
+  const [showMobileLangs, setShowMobileLangs] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -53,10 +54,10 @@ export default function Home() {
           
           <div className="pt-2 border-t border-gray-100">
             <div className="relative">
-              <button onClick={() => setShowLangs(!showLangs)} className="text-gray-700 py-1 w-full text-left">
+              <button onClick={() => setShowMobileLangs(!showMobileLangs)} className="...">
                 {t.switchLang} ▼
               </button>
-              {showLangs && (
+              {showMobileLangs && (
                 <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">
                   {languages.map(li => (
                     <button
@@ -64,7 +65,7 @@ export default function Home() {
                       onClick={() => {
                         switchLang(li.code);
                         setMobileMenu(false);
-                        setShowLangs(false);
+                        setShowMobileLangs(false);
                       }}
                       className={`block w-full text-left px-3 py-1 text-sm ${
                         lang === li.code ? "text-[#1E40AF] font-semibold" : "text-gray-700"
