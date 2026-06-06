@@ -52,19 +52,17 @@ export default function Home() {
               {showLangs && (
                 <div className="bg-white border border-gray-200 rounded-lg shadow-lg z-50 py-1 w-full max-h-40 overflow-y-auto mt-1">
                   {languages.map(li => (
-                    <button
-                      key={li.code}
-                      onClick={() => {
-                        switchLang(li.code);
-                        setMobileMenu(false);
-                      }}
-                      className={`block w-full text-left px-3 py-1 text-sm ${
-                        lang === li.code ? "text-[#1E40AF] font-semibold" : "text-gray-700"
-                      }`}
-                    >
-                      {li.label}
-                    </button>
-                  ))}
+  <a
+    key={li.code}
+    href={`/?setLang=${li.code}`}
+    onClick={() => setMobileMenu(false)}
+    className={`block w-full text-left px-3 py-1 text-sm ${
+      lang === li.code ? "text-[#1E40AF] font-semibold" : "text-gray-700"
+    }`}
+  >
+    {li.label}
+  </a>
+))}
                 </div>
               )}
             </div>
