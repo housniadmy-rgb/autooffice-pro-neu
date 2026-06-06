@@ -23,7 +23,14 @@ export default function Home() {
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
   const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
-  const handleCheckout = async (pid: string) => { try { const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ priceId: pid, lang: lang }) }); const d = await r.json(); if (d.url) window.location.href = d.url } catch (e) {} }
+  const handleCheckout = (pid: string) => {
+  const stripeLinks = {
+    basic: "https://buy.stripe.com/4gM3cw0iB3yH7oxcw98N200",
+    pro: "https://buy.stripe.com/00w14o3uN9X59wF9jX8N201",
+    business: "https://buy.stripe.com/4gM28sc1jedl9wF1Rv8N202",
+  };
+  window.location.href = stripeLinks[pid as keyof typeof stripeLinks];
+}
 
   return (
     <main className="min-h-screen bg-white">
