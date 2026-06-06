@@ -23,7 +23,7 @@ export default function Home() {
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
   const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
-  const handleCheckout = async (pid: string) => { try { const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ priceId: pid }) }); const d = await r.json(); if (d.url) window.location.href = d.url } catch (e) {} }
+  const handleCheckout = async (pid: string) => { try { const r = await fetch("/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ priceId: pid, lang: lang }) }); const d = await r.json(); if (d.url) window.location.href = d.url } catch (e) {} }
 
   return (
     <main className="min-h-screen bg-white">
