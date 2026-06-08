@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Link from "next/link"
+import GoogleMap from "../components/GoogleMap"
 
 const doctors = [
   { id: 1, name: "Hausarztpraxis Dr. Schmidt", specialty: "Hausarzt", address: "Hauptstraße 15, 10115 Berlin", city: "Berlin", zip: "10115" },
@@ -15,6 +16,7 @@ export default function ArztSuche() {
   const [location, setLocation] = useState("")
   const [results, setResults] = useState<any[]>([])
   const [hasSearched, setHasSearched] = useState(false)
+  const [selectedDoctor, setSelectedDoctor] = useState<any>(null)
 
   const handleSearch = () => {
     const filtered = doctors.filter(doctor => {
@@ -30,6 +32,7 @@ export default function ArztSuche() {
     })
     setResults(filtered)
     setHasSearched(true)
+    setSelectedDoctor(null)
   }
 
   return (
@@ -88,30 +91,32 @@ export default function ArztSuche() {
               {results.length > 0 ? (
                 <div className="space-y-4">
                   {results.map((doctor) => (
-                    <div key={doctor.id} className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h4 className="font-semibold text-gray-900">{doctor.name}</h4>
-                          <p className="text-sm text-gray-600">{doctor.specialty}</p>
-                          <p className="text-sm text-gray-500 mt-1">{doctor.address}</p>
-                          <div className="mt-2">
-                            <a
-                              href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(doctor.address)}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-sm text-[#1E40AF] hover:underline"
-                            >
-                              📍 In Google Maps öffnen
-                            </a>
+                    <div key={doctor.id} className="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition">
+                      <div 
+                        className="p-4 cursor-pointer hover:bg-gray-50"
+                        onClick={() => setSelectedDoctor(selectedDoctor?.id === doctor.id ? null : doctor)}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h4 className="font-semibold text-gray-900">{doctor.name}</h4>
+                            <p className="text-sm text-gray-600">{doctor.specialty}</p>
+                            <p className="text-sm text-gray-500 mt-1">{doctor.address}</p>
                           </div>
+                          <Link
+                            href={`/termin-buchen?doctor=${doctor.id}`}
+                            className="bg-[#1E40AF] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Termin buchen
+                          </Link>
                         </div>
-                        <Link
-                          href={`/termin-buchen?doctor=${doctor.id}`}
-                          className="bg-[#1E40AF] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition"
-                        >
-                          Termin buchen
-                        </Link>
                       </div>
+                      
+                      {selectedDoctor?.id === doctor.id && (
+                        <div className="border-t border-gray-100 p-4 bg-gray-50">
+                          <GoogleMap address={doctor.address} name={doctor.name} />
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
