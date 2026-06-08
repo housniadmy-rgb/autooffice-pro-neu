@@ -14,13 +14,7 @@ export default function Dashboard() {
 
   const t = translations[lang] || translations.de
 
-  const todayAppointments = [
-    { time: "09:00", patient: "Anna Schmidt", type: "Hausarzt" },
-    { time: "10:30", patient: "Thomas Weber", type: "Vorsorge" },
-    { time: "11:00", patient: "Lisa Müller", type: "Impfung" },
-    { time: "14:00", patient: "Klaus Richter", type: "Folgetermin" },
-    { time: "15:30", patient: "Maria Bauer", type: "Ersttermin" },
-  ]
+  
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -40,39 +34,26 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Heutige Termine</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">{todayAppointments.length}</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">0</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Patienten (Monat)</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">147</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">0</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Bewertungen</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">4.8 ★</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">0 ★</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Umsatz (Monat)</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">4.230 €</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">0 €</p>
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Heutige Termine</h2>
-          <div className="space-y-3">
-            {todayAppointments.map((apt, i) => (
-              <div key={i} className="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
-                <div className="flex items-center gap-4">
-                  <span className="text-sm font-semibold text-[#1E40AF] w-16">{apt.time}</span>
-                  <div>
-                    <p className="font-medium text-gray-900">{apt.patient}</p>
-                    <p className="text-xs text-gray-500">{apt.type}</p>
-                  </div>
-                </div>
-                <button className="text-xs text-gray-400 hover:text-[#1E40AF]">Details</button>
-              </div>
-            ))}
-          </div>
-        </div>
+       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+  <h2 className="text-lg font-semibold text-gray-900 mb-4">Heutige Termine</h2>
+  <p className="text-gray-500 text-center py-4">Keine Termine für heute</p>
+</div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <Link href="/dashboard/anamnese" className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
