@@ -7,7 +7,6 @@ interface GoogleMapProps {
 
 export default function GoogleMap({ address, name }: GoogleMapProps) {
   const encodedAddress = encodeURIComponent(`${address}, Deutschland`)
-  // OpenStreetMap static image (kostenlos, kein API-Key)
   const osmUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${encodedAddress}&zoom=14&size=600x300&markers=${encodedAddress}`
 
   return (
