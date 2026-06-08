@@ -7,31 +7,24 @@ interface GoogleMapProps {
 
 export default function GoogleMap({ address, name }: GoogleMapProps) {
   const encodedAddress = encodeURIComponent(`${address}, Deutschland`)
-  const osmUrl = `https://staticmap.openstreetmap.de/staticmap.php?center=${encodedAddress}&zoom=14&size=600x300&markers=${encodedAddress}`
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`
 
   return (
-    <div className="w-full h-64 md:h-80 rounded-xl shadow-md border border-gray-200 overflow-hidden bg-gray-100 mt-4">
-      <img
-        src={osmUrl}
-        alt={`Karte: ${name}`}
-        className="w-full h-full object-cover"
-        onError={(e) => {
-          e.currentTarget.src = "https://placehold.co/600x300/e2e8f0/64748b?text=Karte+nicht+verfügbar"
-        }}
-      />
-      <div className="text-center mt-2">
+    <div className="w-full rounded-xl shadow-md border border-gray-200 overflow-hidden bg-gray-50 mt-4">
+      <div className="p-4 text-center">
+        <p className="text-gray-600 mb-2">📍 {address}</p>
         <a
-          href={`https://www.openstreetmap.org/search?query=${encodedAddress}`}
+          href={googleMapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-[#1E40AF] hover:underline"
+          className="inline-block bg-[#1E40AF] text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-800 transition"
         >
-          📍 In OpenStreetMap öffnen
+          📍 In Google Maps öffnen
         </a>
+        <p className="text-xs text-gray-400 mt-2">
+          Klicken Sie auf den Button, um die Karte in einem neuen Fenster zu öffnen
+        </p>
       </div>
-      <p className="text-xs text-center text-gray-400 mt-1 p-1">
-        📍 {address}
-      </p>
     </div>
   )
 }
