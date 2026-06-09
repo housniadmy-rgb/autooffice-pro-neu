@@ -25,10 +25,10 @@ export default function Home() {
   const prices = { basic: "price_1TeYmcJXpW5OGkcsq13z201p", pro: "price_1TeYikJXpW5OGkcs0ZUTVvV3", business: "price_1TeYlJJXpW5OGkcsKUpto8QO" }
   const handleCheckout = (pid: string) => {
   const stripeLinks = {
-    basic: "https://buy.stripe.com/4gM3cw0iB3yH7oxcw98N200",
-    pro: "https://buy.stripe.com/00w14o3uN9X59wF9jX8N201",
-    business: "https://buy.stripe.com/4gM28sc1jedl9wF1Rv8N202",
-  };
+  basic: "https://buy.stripe.com/DEIN-NEUER-BASIC-LINK",
+  pro: "https://buy.stripe.com/DEIN-NEUER-PRO-LINK",
+  business: "https://buy.stripe.com/DEIN-NEUER-BUSINESS-LINK",
+};
   window.location.href = stripeLinks[pid as keyof typeof stripeLinks];
 }
 
