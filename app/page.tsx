@@ -23,10 +23,10 @@ export default function Home() {
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
   const stripeLinks = {
-    basic: process.env.NEXT_PUBLIC_STRIPE_BASIC_LINK || "https://buy.stripe.com/REPLACE_BASIC_LINK",
-    pro: process.env.NEXT_PUBLIC_STRIPE_PRO_LINK || "https://buy.stripe.com/REPLACE_PRO_LINK",
-    business: process.env.NEXT_PUBLIC_STRIPE_BUSINESS_LINK || "https://buy.stripe.com/REPLACE_BUSINESS_LINK",
-  }
+  basic: "https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c",
+  pro: "https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d",
+  business: "https://buy.stripe.com/8x28wRdCo0im0eneSUfAc0e",
+};
   const handleCheckout = (plan: keyof typeof stripeLinks) => {
     window.location.href = stripeLinks[plan]
   }
