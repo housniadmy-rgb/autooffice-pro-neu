@@ -61,7 +61,7 @@ export default function Login() {
         <form onSubmit={handleLogin} className="space-y-5">
           <div><label className="block text-lg mb-2 text-gray-700">{t.email}</label><input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full p-4 rounded-lg bg-white border border-blue-200 text-gray-900 text-lg" placeholder={t.email} required /></div>
           <div><label className="block text-lg mb-2 text-gray-700">{t.password}</label><input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-4 rounded-lg bg-white border border-blue-200 text-gray-900 text-lg" placeholder="••••••••" required /></div>
-          <button type="submit" disabled={loading} className="w-full bg-[#1E40AF] text-white text-xl font-semibold py-3 sm:py-4 rounded-lg hover:bg-green-600 transition disabled:opacity-50 cursor-pointer">{loading ? t.loading : t.loginBtn}</button>
+          <button type="submit" disabled={loading} className="w-full bg-[#1E40AF] text-white text-xl font-semibold py-3 sm:py-4 rounded-lg hover:bg-blue-800 transition disabled:opacity-50 cursor-pointer">{loading ? t.loading : t.loginBtn}</button>
         </form>
         <div className="mt-6 text-center"><Link href="/" className="text-gray-500 hover:text-[#3B82F6] underline text-lg">{t.back}</Link></div>
         {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
