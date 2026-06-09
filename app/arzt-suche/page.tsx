@@ -5,7 +5,6 @@ import Link from "next/link"
 export default function ArztSuche() {
   const [searchTerm, setSearchTerm] = useState("")
   const [location, setLocation] = useState("")
-  const [loading, setLoading] = useState(false)
 
   const handleSearch = () => {
     if (!searchTerm && !location) return

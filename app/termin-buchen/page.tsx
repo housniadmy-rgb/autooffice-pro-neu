@@ -351,7 +351,7 @@ export default function TerminBuchen() {
                     onClick={handleConfirm}
                     className="px-6 py-2 rounded-lg bg-[#1E40AF] text-white hover:bg-blue-800 transition"
                   >
-                    {t.confirmBooking} →
+                    {t.confirm}
                   </button>
                 </div>
               </div>
