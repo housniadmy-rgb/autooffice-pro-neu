@@ -69,7 +69,7 @@ export default function ArztSuche() {
 
             <button
               onClick={handleSearch}
-              className="w-full bg-[#1E40AF] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition mt-4"
+              className="w-full bg-[#1E40AF] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition cursor-pointer mt-4"
             >
               🔍 Bei Google Maps suchen
             </button>
