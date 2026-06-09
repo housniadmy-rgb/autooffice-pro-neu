@@ -23,9 +23,9 @@ export default function Home() {
   const switchLang = (c: string) => { localStorage.setItem("lang", c); window.location.href = "/?setLang=" + c }
   const l = (p: string) => `/${p}?setLang=${lang}`
   const stripeLinks = {
-  basic: "https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c",
-  pro: "https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d",
-  business: "https://buy.stripe.com/8x28wRdCo0im0eneSUfAc0e",
+  basic: `https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c?locale=${lang}`,
+  pro: `https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d?locale=${lang}`,
+  business: `https://buy.stripe.com/8x28wRdCo0im0eneSUfAc0e?locale=${lang}`,
 };
   const handleCheckout = (plan: keyof typeof stripeLinks) => {
     window.location.href = stripeLinks[plan]
