@@ -87,7 +87,7 @@ export default function DemoPage() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">{t.demoPhoneLabel}</label>
                 <input type="tel" className="w-full p-3 border border-gray-300 rounded-lg" />
               </div>
-              <button type="submit" className="w-full bg-[#1E40AF] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition">{t.demoSubmit}</button>
+              <button type="submit" className="w-full bg-[#1E40AF] text-white py-3 rounded-lg font-semibold hover:bg-blue-800 transition cursor-pointer">{t.demoSubmit}</button>
             </form>
           )}
         </div>
