@@ -66,7 +66,7 @@ export default function Login() {
         <div className="mt-6 text-center"><Link href="/" className="text-gray-500 hover:text-[#3B82F6] underline text-lg">{t.back}</Link></div>
         {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
         <p className="mt-4 text-center text-gray-500"><Link href="/passwort-vergessen" className="text-[#3B82F6] hover:text-blue-600 underline">{t.forgot}</Link></p>
-        <p className="mt-4 text-center text-gray-500 text-lg">{t.noAccount} <Link href="/registrieren" className="text-[#1E40AF] hover:text-green-600 underline">{t.register}</Link></p>
+        <p className="mt-4 text-center text-gray-500 text-lg">{t.noAccount} <Link href="/registrieren" className="text-[#1E40AF] hover:text-blue-800 underline">{t.register}</Link></p>
       </div>
     </main>
   )
