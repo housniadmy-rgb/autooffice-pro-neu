@@ -59,8 +59,8 @@ export default function Kontakt() {
           )}
           <div className="mt-8 sm:mt-10 pt-6 sm:pt-8 border-t border-blue-100 text-center text-gray-500 text-sm sm:text-base">
             <p className="mb-2">{t.info}</p>
-            <p>📞 +49 123 456789</p>
-            <p>✉️ info@praxisonline.de</p>
+            <p>📞 +49 (0) 6721 9875872</p>
+            <p>✉️ info@praxisonline.com</p>
           </div>
         </div>
         <div className="mt-6 text-center"><Link href="/" className="text-[#3B82F6] hover:text-blue-600 underline text-base sm:text-lg">{t.back}</Link></div>
