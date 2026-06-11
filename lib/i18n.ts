@@ -117,6 +117,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Deutschland",
     owner: "Housni Admy",
+    btnPatient: "👤 Für Patienten",
+    btnPractice: "🏥 Für Praxen / Einrichtungen",
   },
   en: {
     home: "Home",
@@ -236,6 +238,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Germany",
     owner: "Housni Admy",
+    btnPatient: "👤 For Patients",
+    btnPractice: "🏥 For Practices / Institutions",
   },
   fr: {
     home: "Accueil",
@@ -355,6 +359,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Allemagne",
     owner: "Housni Admy",
+    btnPatient: "👤 Pour les patients",
+    btnPractice: "🏥 Pour les cabinets / Institutions",
   },
   es: {
     home: "Inicio",
@@ -474,6 +480,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Alemania",
     owner: "Housni Admy",
+    btnPatient: "👤 Para pacientes",
+    btnPractice: "🏥 Para consultorios / Instituciones",
   },
   it: {
     home: "Home",
@@ -593,6 +601,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Germania",
     owner: "Housni Admy",
+    btnPatient: "👤 Per i pazienti",
+    btnPractice: "🏥 Per studi / Istituzioni",
   },
   pt: {
     home: "Início",
@@ -712,6 +722,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Alemanha",
     owner: "Housni Admy",
+    btnPatient: "👤 Para pacientes",
+    btnPractice: "🏥 Para clínicas / Instituições",
   },
   nl: {
     home: "Home",
@@ -831,6 +843,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Duitsland",
     owner: "Housni Admy",
+    btnPatient: "👤 Voor patiënten",
+    btnPractice: "🏥 Voor praktijken / Instellingen",
   },
   pl: {
     home: "Strona główna",
@@ -950,6 +964,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Niemcy",
     owner: "Housni Admy",
+    btnPatient: "👤 Dla pacjentów",
+    btnPractice: "🏥 Dla praktyk / Instytucji",
   },
   tr: {
     home: "Ana Sayfa",
@@ -1069,6 +1085,8 @@ export const translations: Record<string, Record<string, string>> = {
     city: "55411 Bingen am Rhein",
     country: "Almanya",
     owner: "Housni Admy",
+    btnPatient: "👤 Hastalar için",
+    btnPractice: "🏥 Muayenehaneler / Kurumlar için",
   },
 }
 
