@@ -4,7 +4,7 @@ export const metadata = {
   title: "PraxisOnline24 - DSGVO-sichere Praxis-Automatisierung",
   description: "Automatisieren Sie Ihre Praxis mit Online-Terminbuchung, Erinnerungen und Bewertungsmanagement.",
   verification: {
-    google: "<meta name="google-site-verification" content="zeKM1yk5V9ZXAtJUYvTqn9jWXpki7Ruaj1PLoMDqyxc" />",
+    google: "zeKM1yk5V9ZXAtJUYvTqn9jWXpki7Ruaj1PLoMDqyxc",
   },
 }
 
