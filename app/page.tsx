@@ -106,7 +106,7 @@ export default function Home() {
           
         </div>
       </section>
-
+)
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-white">
         <div className="max-w-6xl mx-auto">
           <h2 className="text-lg sm:text-2xl font-bold mb-4 text-gray-900">{t.howTitle}</h2>
@@ -151,7 +151,8 @@ export default function Home() {
           </div>
         </div>
       </section>
-
+{/* Preise-Bereich ausgeblendet – jetzt unter /prices */}
+{false && (
       <section className="py-8 sm:py-16 px-3 sm:px-6 text-center bg-[#F5F9FF]"><h2 className="text-lg sm:text-2xl font-bold mb-6 sm:mb-10">{t.prices}</h2>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-8 max-w-5xl mx-auto">
           <div className="bg-white border border-gray-100 p-4 sm:p-6 rounded-xl shadow-sm"><h3 className="text-base sm:text-lg font-semibold mb-1">{t.basic}</h3><p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">39€<span className="text-xs text-gray-400">{t.perMonth}</span></p><ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4"><li>{t.basic1}</li><li>{t.basic2}</li><li>{t.basic3}</li></ul><button onClick={() => handleCheckout("basic")} className="block w-full bg-[#1E40AF] text-white font-semibold py-2 rounded-full hover:bg-blue-800 transition text-sm cursor-pointer">{t.start}</button></div>
