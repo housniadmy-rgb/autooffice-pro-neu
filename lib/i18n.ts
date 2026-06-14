@@ -1214,7 +1214,6 @@ export const translations: Record<string, Record<string, string>> = {
     streetLabel: "Adres",
     contactLabel: "İletişim",
   },
-}
   sl: {
     home: "Domov",
     login: "Prijava",
