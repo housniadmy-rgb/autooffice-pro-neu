@@ -521,12 +521,12 @@ export default function PreisePage() {
           </div>
         </div>
 
-        {/* Trust Badges */}
+                {/* Trust Badges */}
         <div className="mt-12 text-center">
           <h3 className="text-lg font-bold mb-4">{t.trustTitle}</h3>
           <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-gray-500">
-            <span className="bg-blue-50 px-4 py-2 rounded-full">🔒 DSGVO-konform</span>
-            <span className="bg-blue-50 px-4 py-2 rounded-full">🔐 SSL-verschlüsselt</span>
+            <span className="bg-blue-50 px-4 py-2 rounded-full">🔒 {t.include3}</span>
+            <span className="bg-blue-50 px-4 py-2 rounded-full">🔐 {t.include4}</span>
             <span className="bg-blue-50 px-4 py-2 rounded-full">🇩🇪 Hosted in Germany</span>
           </div>
         </div>
