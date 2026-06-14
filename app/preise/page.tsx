@@ -219,7 +219,7 @@ export default function PreisePage() {
           {/* Basic */}
           <div className="bg-white border border-gray-200 p-4 sm:p-6 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1">{t.basic}</h3>
-            <p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">39€<span className="text-xs text-gray-400">{t.perMonth}</span></p>
+            <p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">19€<span className="text-xs text-gray-400">{t.perMonth}</span></p>
             <p className="text-xs text-green-600 font-semibold mb-2">✅ {t.freeMonth}</p>
             <ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4">
               <li>✓ {t.basic1}</li>
@@ -234,7 +234,7 @@ export default function PreisePage() {
           {/* Pro */}
           <div className="bg-[#1E40AF] text-white p-4 sm:p-6 rounded-xl shadow-lg sm:scale-105">
             <h3 className="text-base sm:text-lg font-semibold mt-2 mb-1">{t.pro}</h3>
-            <p className="text-xl sm:text-2xl font-bold mb-2">79€<span className="text-xs text-blue-200">{t.perMonth}</span></p>
+            <p className="text-xl sm:text-2xl font-bold mb-2">49€<span className="text-xs text-blue-200">{t.perMonth}</span></p>
             <p className="text-xs text-green-300 font-semibold mb-2">✅ {t.freeMonth}</p>
             <ul className="text-left text-xs sm:text-sm text-blue-100 space-y-1 mb-4">
               <li>✓ {t.pro1}</li>
@@ -249,7 +249,7 @@ export default function PreisePage() {
           {/* Business */}
           <div className="bg-white border border-gray-200 p-4 sm:p-6 rounded-xl shadow-sm">
             <h3 className="text-base sm:text-lg font-semibold mb-1">{t.business}</h3>
-            <p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">149€<span className="text-xs text-gray-400">{t.perMonth}</span></p>
+            <p className="text-xl sm:text-2xl font-bold mb-2 text-[#1E40AF]">89€<span className="text-xs text-gray-400">{t.perMonth}</span></p>
             <p className="text-xs text-green-600 font-semibold mb-2">✅ {t.freeMonth}</p>
             <ul className="text-left text-xs sm:text-sm text-gray-500 space-y-1 mb-4">
               <li>✓ {t.bus1}</li>
