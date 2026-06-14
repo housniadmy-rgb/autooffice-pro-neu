@@ -21,6 +21,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Für größere Praxen",
     start: "Kostenlos starten",
     freeMonth: "1 Monat kostenlos",
+    allInclude: "Alle Tarife enthalten:",
+    include1: "Unbegrenzte Terminbuchungen",
+    include2: "E-Mail-Erinnerungen",
+    include3: "DSGVO-konform",
+    include4: "SSL-Verschlüsselung",
+    include5: "Kostenlose Updates",
+    faqTitle: "Häufige Fragen",
+    faq1q: "Ist der erste Monat wirklich kostenlos?",
+    faq1a: "Ja! Sie können alle Funktionen 1 Monat lang unverbindlich testen. Keine versteckten Kosten.",
+    faq2q: "Kann ich jederzeit kündigen?",
+    faq2a: "Ja, die Kündigung ist monatlich möglich. Es gibt keine langen Vertragslaufzeiten.",
+    faq3q: "Welche Praxis-Software wird unterstützt?",
+    faq3a: "PraxisOnline24 funktioniert mit allen gängigen Praxisverwaltungssystemen in Deutschland.",
+    trustTitle: "Ihre Daten sind sicher",
     back: "← Zurück zur Startseite",
   },
   en: {
@@ -41,6 +55,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "For larger practices",
     start: "Start free",
     freeMonth: "1 month free",
+    allInclude: "All plans include:",
+    include1: "Unlimited bookings",
+    include2: "Email reminders",
+    include3: "GDPR compliant",
+    include4: "SSL encryption",
+    include5: "Free updates",
+    faqTitle: "Frequently Asked Questions",
+    faq1q: "Is the first month really free?",
+    faq1a: "Yes! You can test all features for 1 month with no obligation. No hidden costs.",
+    faq2q: "Can I cancel at any time?",
+    faq2a: "Yes, cancellation is possible monthly. There are no long contract terms.",
+    faq3q: "Which practice software is supported?",
+    faq3a: "PraxisOnline24 works with all common practice management systems.",
+    trustTitle: "Your data is safe",
     back: "← Back to home",
   },
   fr: {
@@ -61,6 +89,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Pour grands cabinets",
     start: "Démarrer gratuitement",
     freeMonth: "1 mois gratuit",
+    allInclude: "Tous les tarifs incluent :",
+    include1: "Réservations illimitées",
+    include2: "Rappels par e-mail",
+    include3: "Conforme RGPD",
+    include4: "Cryptage SSL",
+    include5: "Mises à jour gratuites",
+    faqTitle: "Questions fréquentes",
+    faq1q: "Le premier mois est-il vraiment gratuit ?",
+    faq1a: "Oui ! Vous pouvez tester toutes les fonctions pendant 1 mois sans engagement. Pas de frais cachés.",
+    faq2q: "Puis-je annuler à tout moment ?",
+    faq2a: "Oui, l'annulation est possible mensuellement. Il n'y a pas de longs termes contractuels.",
+    faq3q: "Quel logiciel médical est supporté ?",
+    faq3a: "PraxisOnline24 fonctionne avec tous les systèmes de gestion de cabinet courants.",
+    trustTitle: "Vos données sont en sécurité",
     back: "← Retour à l'accueil",
   },
   es: {
@@ -81,6 +123,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Para grandes consultorios",
     start: "Comenzar gratis",
     freeMonth: "1 mes gratis",
+    allInclude: "Todos los planes incluyen:",
+    include1: "Reservas ilimitadas",
+    include2: "Recordatorios por email",
+    include3: "Conforme RGPD",
+    include4: "Cifrado SSL",
+    include5: "Actualizaciones gratuitas",
+    faqTitle: "Preguntas frecuentes",
+    faq1q: "¿El primer mes es realmente gratis?",
+    faq1a: "¡Sí! Puede probar todas las funciones durante 1 mes sin compromiso. Sin costes ocultos.",
+    faq2q: "¿Puedo cancelar en cualquier momento?",
+    faq2a: "Sí, la cancelación es posible mensualmente. No hay plazos contractuales largos.",
+    faq3q: "¿Qué software médico es compatible?",
+    faq3a: "PraxisOnline24 funciona con todos los sistemas de gestión de consultorios habituales.",
+    trustTitle: "Sus datos están seguros",
     back: "← Volver al inicio",
   },
   it: {
@@ -101,6 +157,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Per grandi studi",
     start: "Inizia gratis",
     freeMonth: "1 mese gratis",
+    allInclude: "Tutti i piani includono:",
+    include1: "Prenotazioni illimitate",
+    include2: "Promemoria email",
+    include3: "Conforme GDPR",
+    include4: "Crittografia SSL",
+    include5: "Aggiornamenti gratuiti",
+    faqTitle: "Domande frequenti",
+    faq1q: "Il primo mese è davvero gratis?",
+    faq1a: "Sì! Puoi testare tutte le funzioni per 1 mese senza impegno. Nessun costo nascosto.",
+    faq2q: "Posso cancellare in qualsiasi momento?",
+    faq2a: "Sì, la cancellazione è possibile mensilmente. Non ci sono lunghi termini contrattuali.",
+    faq3q: "Quale software medico è supportato?",
+    faq3a: "PraxisOnline24 funziona con tutti i comuni sistemi di gestione degli studi medici.",
+    trustTitle: "I vostri dati sono al sicuro",
     back: "← Torna alla home",
   },
   pt: {
@@ -121,6 +191,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Para grandes clínicas",
     start: "Começar grátis",
     freeMonth: "1 mês grátis",
+    allInclude: "Todos os planos incluem:",
+    include1: "Reservas ilimitadas",
+    include2: "Lembretes por email",
+    include3: "Conforme RGPD",
+    include4: "Criptografia SSL",
+    include5: "Atualizações gratuitas",
+    faqTitle: "Perguntas frequentes",
+    faq1q: "O primeiro mês é mesmo grátis?",
+    faq1a: "Sim! Pode testar todas as funções durante 1 mês sem compromisso. Sem custos ocultos.",
+    faq2q: "Posso cancelar a qualquer momento?",
+    faq2a: "Sim, o cancelamento é possível mensalmente. Não há prazos contratuais longos.",
+    faq3q: "Que software médico é compatível?",
+    faq3a: "O PraxisOnline24 funciona com todos os sistemas de gestão de consultórios comuns.",
+    trustTitle: "Os seus dados estão seguros",
     back: "← Voltar ao início",
   },
   nl: {
@@ -141,6 +225,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Voor grote praktijken",
     start: "Gratis starten",
     freeMonth: "1 maand gratis",
+    allInclude: "Alle tarieven zijn inclusief:",
+    include1: "Onbeperkt boekingen",
+    include2: "E-mail herinneringen",
+    include3: "AVG-conform",
+    include4: "SSL-versleuteling",
+    include5: "Gratis updates",
+    faqTitle: "Veelgestelde vragen",
+    faq1q: "Is de eerste maand echt gratis?",
+    faq1a: "Ja! U kunt alle functies 1 maand zonder verplichtingen testen. Geen verborgen kosten.",
+    faq2q: "Kan ik op elk moment annuleren?",
+    faq2a: "Ja, opzegging is maandelijks mogelijk. Er zijn geen lange contractvoorwaarden.",
+    faq3q: "Welke praktijksoftware wordt ondersteund?",
+    faq3a: "PraxisOnline24 werkt met alle gangbare praktijkbeheersystemen.",
+    trustTitle: "Uw gegevens zijn veilig",
     back: "← Terug naar home",
   },
   pl: {
@@ -161,6 +259,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Dla dużych praktyk",
     start: "Zacznij za darmo",
     freeMonth: "1 miesiąc za darmo",
+    allInclude: "Wszystkie plany obejmują:",
+    include1: "Nieograniczone rezerwacje",
+    include2: "Przypomnienia e-mail",
+    include3: "Zgodność z RODO",
+    include4: "Szyfrowanie SSL",
+    include5: "Bezpłatne aktualizacje",
+    faqTitle: "Często zadawane pytania",
+    faq1q: "Czy pierwszy miesiąc jest naprawdę darmowy?",
+    faq1a: "Tak! Możesz testować wszystkie funkcje przez 1 miesiąc bez zobowiązań. Żadnych ukrytych kosztów.",
+    faq2q: "Czy mogę zrezygnować w dowolnym momencie?",
+    faq2a: "Tak, rezygnacja jest możliwa co miesiąc. Nie ma długich terminów umownych.",
+    faq3q: "Jakie oprogramowanie medyczne jest obsługiwane?",
+    faq3a: "PraxisOnline24 działa ze wszystkimi popularnymi systemami zarządzania praktyką.",
+    trustTitle: "Twoje dane są bezpieczne",
     back: "← Powrót do strony głównej",
   },
   tr: {
@@ -181,6 +293,20 @@ const texts: Record<string, Record<string, string>> = {
     bus3: "Büyük pratikler için",
     start: "Ücretsiz başla",
     freeMonth: "1 ay ücretsiz",
+    allInclude: "Tüm planlar şunları içerir:",
+    include1: "Sınırsız randevu",
+    include2: "E-posta hatırlatmaları",
+    include3: "KVKK uyumlu",
+    include4: "SSL şifreleme",
+    include5: "Ücretsiz güncellemeler",
+    faqTitle: "Sık Sorulan Sorular",
+    faq1q: "İlk ay gerçekten ücretsiz mi?",
+    faq1a: "Evet! Tüm özellikleri 1 ay boyunca yükümlülük olmadan test edebilirsiniz. Gizli maliyet yok.",
+    faq2q: "İstediğim zaman iptal edebilir miyim?",
+    faq2a: "Evet, iptal aylık olarak mümkündür. Uzun sözleşme koşulları yoktur.",
+    faq3q: "Hangi muayenehane yazılımı destekleniyor?",
+    faq3a: "PraxisOnline24 tüm yaygın muayenehane yönetim sistemleriyle çalışır.",
+    trustTitle: "Verileriniz güvende",
     back: "← Ana sayfaya dön",
   },
 }
@@ -259,6 +385,47 @@ export default function PreisePage() {
             <button onClick={() => handleCheckout("business")} className="block w-full bg-[#3B82F6] text-white font-semibold py-2 rounded-full hover:bg-blue-600 transition text-sm cursor-pointer">
               {t.start}
             </button>
+          </div>
+        </div>
+
+                {/* Alle Tarife enthalten */}
+        <div className="mt-12 bg-[#F5F9FF] rounded-xl p-6 sm:p-8">
+          <h3 className="text-lg font-bold text-center mb-4">{t.allInclude}</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm text-gray-600">
+            <div className="flex items-center gap-2">✅ {t.include1}</div>
+            <div className="flex items-center gap-2">✅ {t.include2}</div>
+            <div className="flex items-center gap-2">✅ {t.include3}</div>
+            <div className="flex items-center gap-2">✅ {t.include4}</div>
+            <div className="flex items-center gap-2">✅ {t.include5}</div>
+          </div>
+        </div>
+
+        {/* FAQ */}
+        <div className="mt-12">
+          <h3 className="text-lg font-bold text-center mb-6">{t.faqTitle}</h3>
+          <div className="space-y-3 max-w-2xl mx-auto">
+            <details className="bg-white border border-gray-200 rounded-lg p-4">
+              <summary className="font-semibold cursor-pointer">{t.faq1q}</summary>
+              <p className="text-sm text-gray-500 mt-2">{t.faq1a}</p>
+            </details>
+            <details className="bg-white border border-gray-200 rounded-lg p-4">
+              <summary className="font-semibold cursor-pointer">{t.faq2q}</summary>
+              <p className="text-sm text-gray-500 mt-2">{t.faq2a}</p>
+            </details>
+            <details className="bg-white border border-gray-200 rounded-lg p-4">
+              <summary className="font-semibold cursor-pointer">{t.faq3q}</summary>
+              <p className="text-sm text-gray-500 mt-2">{t.faq3a}</p>
+            </details>
+          </div>
+        </div>
+
+        {/* Trust Badges */}
+        <div className="mt-12 text-center">
+          <h3 className="text-lg font-bold mb-4">{t.trustTitle}</h3>
+          <div className="flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-gray-500">
+            <span className="bg-blue-50 px-4 py-2 rounded-full">🔒 DSGVO-konform</span>
+            <span className="bg-blue-50 px-4 py-2 rounded-full">🔐 SSL-verschlüsselt</span>
+            <span className="bg-blue-50 px-4 py-2 rounded-full">🇩🇪 Hosted in Germany</span>
           </div>
         </div>
 
