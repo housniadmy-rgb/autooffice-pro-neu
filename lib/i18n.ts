@@ -128,6 +128,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Bei Google Maps suchen",
     doctorSearchInfo: "Sie werden zu Google Maps weitergeleitet, wo Sie alle verfügbaren Ärzte in Ihrer Nähe sehen.",
     doctorSearchQuery: "Arzt",
+    ownerLabel: "Inhaber",
+    streetLabel: "Anschrift",
+    emailLabel: "Kontakt",
   },
   en: {
     home: "Home",
@@ -258,6 +261,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Search on Google Maps",
     doctorSearchInfo: "You will be redirected to Google Maps, where you can see all available doctors near you.",
     doctorSearchQuery: "Doctor",
+    ownerLabel: "Owner",
+    streetLabel: "Address",
+    emailLabel: "Contact",
   },
   fr: {
     home: "Accueil",
@@ -388,6 +394,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Rechercher sur Google Maps",
     doctorSearchInfo: "Vous serez redirigé vers Google Maps, où vous pourrez voir tous les médecins disponibles près de chez vous.",
     doctorSearchQuery: "Médecin",
+    ownerLabel: "Propriétaire",
+    streetLabel: "Adresse",
+    emailLabel: "Contact",
   },
   es: {
     home: "Inicio",
@@ -518,6 +527,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Buscar en Google Maps",
     doctorSearchInfo: "Será redirigido a Google Maps, donde podrá ver todos los médicos disponibles cerca de usted.",
     doctorSearchQuery: "Médico",
+    ownerLabel: "Propietario",
+    streetLabel: "Dirección",
+    emailLabel: "Contacto",
   },
   it: {
     home: "Home",
@@ -648,6 +660,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Cerca su Google Maps",
     doctorSearchInfo: "Verrai reindirizzato a Google Maps, dove potrai vedere tutti i medici disponibili vicino a te.",
     doctorSearchQuery: "Medico",
+    ownerLabel: "Proprietario",
+    streetLabel: "Indirizzo",
+    emailLabel: "Contatto",
   },
   pt: {
     home: "Início",
@@ -778,6 +793,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Pesquisar no Google Maps",
     doctorSearchInfo: "Você será redirecionado para o Google Maps, onde poderá ver todos os médicos disponíveis perto de você.",
     doctorSearchQuery: "Médico",
+    ownerLabel: "Proprietário",
+    streetLabel: "Endereço",
+    emailLabel: "Contato",
   },
   nl: {
     home: "Home",
@@ -908,6 +926,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Zoeken op Google Maps",
     doctorSearchInfo: "U wordt doorgestuurd naar Google Maps, waar u alle beschikbare artsen bij u in de buurt kunt zien.",
     doctorSearchQuery: "Arts",
+    ownerLabel: "Eigenaar",
+    streetLabel: "Adres",
+    emailLabel: "Contact",
   },
   pl: {
     home: "Strona główna",
@@ -1038,6 +1059,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Szukaj w Google Maps",
     doctorSearchInfo: "Zostaniesz przekierowany do Google Maps, gdzie zobaczysz wszystkich dostępnych lekarzy w swojej okolicy.",
     doctorSearchQuery: "Lekarz",
+    ownerLabel: "Właściciel",
+    streetLabel: "Adres",
+    emailLabel: "Kontakt",
   },
   tr: {
     home: "Ana Sayfa",
@@ -1168,6 +1192,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchBtn: "Google Maps'te ara",
     doctorSearchInfo: "Yakınınızdaki tüm doktorları görebileceğiniz Google Maps'e yönlendirileceksiniz.",
     doctorSearchQuery: "Doktor",
+    ownerLabel: "Sahibi",
+    streetLabel: "Adres",
+    emailLabel: "İletişim",
   },
 }
 
