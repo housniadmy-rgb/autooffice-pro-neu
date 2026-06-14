@@ -94,6 +94,9 @@ export default function Home() {
   <a href={l("registrieren")} className="bg-[#1E40AF] text-white text-sm sm:text-lg font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-blue-800 transition shadow-md">
   {t.btnPractice}
   </a>
+  <a href="/preise" className="bg-[#1E40AF] text-white text-sm sm:text-lg font-semibold px-6 sm:px-8 py-3 sm:py-4 rounded-full hover:bg-blue-800 transition shadow-md">
+  💰 {t.btnPricing}
+  </a>
 </div></div></section>
 
       <section className="py-8 sm:py-16 px-3 sm:px-6 max-w-6xl mx-auto">
