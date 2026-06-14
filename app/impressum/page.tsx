@@ -11,6 +11,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Deutschland",
+    ownerLabel: "Inhaber:",
+    streetLabel: "Anschrift:",
+    contactLabel: "Kontakt:",
     email: "E-Mail: info@praxisonline24.com",
     phone: "Telefon: +49 (0) 6721 9875872",
     vat: "Umsatzsteuer-ID: DE410290042",
@@ -33,6 +36,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Germany",
+    ownerLabel: "Owner:",
+    streetLabel: "Address:",
+    contactLabel: "Contact:",
     email: "Email: info@praxisonline24.com",
     phone: "Phone: +49 (0) 6721 9875872",
     vat: "VAT ID: DE410290042",
@@ -55,6 +61,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Allemagne",
+    ownerLabel: "Propriétaire :",
+    streetLabel: "Adresse :",
+    contactLabel: "Contact :",
     email: "E-mail: info@praxisonline24.com",
     phone: "Tél: +49 (0) 6721 9875872",
     vat: "TVA: DE410290042",
@@ -77,6 +86,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Alemania",
+    ownerLabel: "Propietario:",
+    streetLabel: "Dirección:",
+    contactLabel: "Contacto:",
     email: "Correo electrónico: info@praxisonline24.com",
     phone: "Teléfono: +49 (0) 6721 9875872",
     vat: "IVA: DE410290042",
@@ -99,6 +111,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Germania",
+    ownerLabel: "Proprietario:",
+    streetLabel: "Indirizzo:",
+    contactLabel: "Contatto:",
     email: "Email: info@praxisonline24.com",
     phone: "Telefono: +49 (0) 6721 9875872",
     vat: "Partita IVA: DE410290042",
@@ -121,6 +136,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Alemanha",
+    ownerLabel: "Proprietário:",
+    streetLabel: "Endereço:",
+    contactLabel: "Contato:",
     email: "E-mail: info@praxisonline24.com",
     phone: "Telefone: +49 (0) 6721 9875872",
     vat: "IVA: DE410290042",
@@ -143,6 +161,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Duitsland",
+    ownerLabel: "Eigenaar:",
+    streetLabel: "Adres:",
+    contactLabel: "Contact:",
     email: "E-mail: info@praxisonline24.com",
     phone: "Telefoon: +49 (0) 6721 9875872",
     vat: "BTW-nummer: DE410290042",
@@ -165,6 +186,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Niemcy",
+    ownerLabel: "Właściciel:",
+    streetLabel: "Adres:",
+    contactLabel: "Kontakt:",
     email: "E-mail: info@praxisonline24.com",
     phone: "Telefon: +49 (0) 6721 9875872",
     vat: "NIP: DE410290042",
@@ -187,6 +211,9 @@ const texts: Record<string, any> = {
     street: "Berlinstraße 37",
     city: "55411 Bingen am Rhein",
     country: "Almanya",
+    ownerLabel: "Sahibi:",
+    streetLabel: "Adres:",
+    contactLabel: "İletişim:",
     email: "E-posta: info@praxisonline24.com",
     phone: "Telefon: +49 (0) 6721 9875872",
     vat: "KDV Numarası: DE410290042",
@@ -224,16 +251,16 @@ export default function ImpressumPage() {
         
         <div className="space-y-4">
           <p><strong>{t.provider}</strong><br />{t.company}</p>
-          <p><strong>Inhaber:</strong><br />{t.owner}</p>
-          <p><strong>Anschrift:</strong><br />
-            {t.street}<br />
-            {t.city}<br />
-            {t.country}
-          </p>
-          <p><strong>Kontakt:</strong><br />
-            {t.email}<br />
-            {t.phone}
-          </p>
+          <p><strong>{t.ownerLabel || "Inhaber:"}</strong><br />{t.owner}</p>
+<p><strong>{t.streetLabel || "Anschrift:"}</strong><br />
+  {t.street}<br />
+  {t.city}<br />
+  {t.country}
+</p>
+<p><strong>{t.contactLabel || "Kontakt:"}</strong><br />
+  {t.email}<br />
+  {t.phone}
+</p>
           <p><strong>{t.vat}</strong></p>
           <p><strong>{t.copyright}</strong><br />{t.copyrightText}</p>
           <p><strong>{t.odr}</strong><br />{t.odrText}</p>

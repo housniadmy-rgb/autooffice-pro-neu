@@ -131,7 +131,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Arzt",
     ownerLabel: "Inhaber",
     streetLabel: "Anschrift",
-    emailLabel: "Kontakt",
+    contactLabel: "Contact",
   },
   en: {
     home: "Home",
@@ -265,7 +265,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Doctor",
     ownerLabel: "Owner",
     streetLabel: "Address",
-    emailLabel: "Contact",
+    contactLabel: "Contact",
   },
   fr: {
     home: "Accueil",
@@ -399,7 +399,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Médecin",
     ownerLabel: "Propriétaire",
     streetLabel: "Adresse",
-    emailLabel: "Contact",
+    contactLabel: "Contact",
   },
   es: {
     home: "Inicio",
@@ -533,7 +533,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Médico",
     ownerLabel: "Propietario",
     streetLabel: "Dirección",
-    emailLabel: "Contacto",
+    contactLabel: "Contacto",
   },
   it: {
     home: "Home",
@@ -667,7 +667,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Medico",
     ownerLabel: "Proprietario",
     streetLabel: "Indirizzo",
-    emailLabel: "Contatto",
+    contactLabel: "Contatto",
   },
   pt: {
     home: "Início",
@@ -801,7 +801,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Médico",
     ownerLabel: "Proprietário",
     streetLabel: "Endereço",
-    emailLabel: "Contato",
+    contactLabel: "Contato",
   },
   nl: {
     home: "Home",
@@ -935,7 +935,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Arts",
     ownerLabel: "Eigenaar",
     streetLabel: "Adres",
-    emailLabel: "Contact",
+    contactLabel: "Contact",
   },
   pl: {
     home: "Strona główna",
@@ -1069,7 +1069,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Lekarz",
     ownerLabel: "Właściciel",
     streetLabel: "Adres",
-    emailLabel: "Kontakt",
+    contactLabel: "Kontakt",
   },
   tr: {
     home: "Ana Sayfa",
@@ -1203,7 +1203,7 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Doktor",
     ownerLabel: "Sahibi",
     streetLabel: "Adres",
-    emailLabel: "İletişim",
+    contactLabel: "İletişim",
   },
 }
 
