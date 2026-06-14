@@ -1617,8 +1617,9 @@ export const translations: Record<string, Record<string, string>> = {
     doctorSearchQuery: "Lekár",
     ownerLabel: "Majiteľ",
     streetLabel: "Adresa",
-    contactLabel: "Kontakt",
+       contactLabel: "Kontakt",
   },
+};
 
 export const languages = [
   { code: "de", name: "Deutsch", label: "Deutsch" },
