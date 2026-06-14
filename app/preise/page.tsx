@@ -404,15 +404,15 @@ export default function PreisePage() {
         <div className="mt-12">
           <h3 className="text-lg font-bold text-center mb-6">{t.faqTitle}</h3>
           <div className="space-y-3 max-w-2xl mx-auto">
-            <details className="bg-white border border-gray-200 rounded-lg p-4">
+            <details className="bg-blue-50 border border-blue-200 rounded-lg p-4"> rounded-lg p-4">
               <summary className="font-semibold cursor-pointer">{t.faq1q}</summary>
               <p className="text-sm text-gray-500 mt-2">{t.faq1a}</p>
             </details>
-            <details className="bg-white border border-gray-200 rounded-lg p-4">
+            <details className="bg-blue-50 border border-blue-200 rounded-lg p-4"> rounded-lg p-4">
               <summary className="font-semibold cursor-pointer">{t.faq2q}</summary>
               <p className="text-sm text-gray-500 mt-2">{t.faq2a}</p>
             </details>
-            <details className="bg-white border border-gray-200 rounded-lg p-4">
+            <details className="bg-blue-50 border border-blue-200 rounded-lg p-4"> rounded-lg p-4">
               <summary className="font-semibold cursor-pointer">{t.faq3q}</summary>
               <p className="text-sm text-gray-500 mt-2">{t.faq3a}</p>
             </details>
