@@ -178,8 +178,8 @@ const texts: Record<string, any> = {
     linkLiabilityText: "De exploitanten van gelinkte pagina's zijn als enige verantwoordelijk voor hun inhoud.",
     back: "← Terug",
   },
-  pl: {
-    title: "Impressum",
+   pl: {
+    title: "Nota prawna",
     provider: "Dostawca tej strony:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
