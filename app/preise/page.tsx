@@ -311,7 +311,6 @@ const texts: Record<string, Record<string, string>> = {
   },
 }
 
-const stripeLinks
 const stripeLinks: Record<string, string> = {
   basic: "https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c",
   pro: "https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d",
