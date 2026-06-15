@@ -79,7 +79,7 @@ export default function TerminBuchen() {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
-                    practice_id: "00000000-0000-0000-0000-000000000001", 
+                    practice_id: "ab7731db-7e2c-46fc-85b2-f770e1530848", 
           patient_name: patientName,
           patient_email: patientEmail,
           patient_phone: patientPhone,
