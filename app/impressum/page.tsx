@@ -3,8 +3,9 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 
 const texts: Record<string, any> = {
-  de: {
+    de: {
     title: "Impressum",
+    audience: "Unser Service richtet sich an Praxen und medizinische Einrichtungen mit Sitz außerhalb der Europäischen Union.",
     provider: "Anbieter dieser Seite:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -30,6 +31,7 @@ const texts: Record<string, any> = {
   },
   en: {
     title: "Imprint",
+    audience: "Our service is intended for medical practices and institutions based outside the European Union.",
     provider: "Provider of this website:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -55,6 +57,7 @@ const texts: Record<string, any> = {
   },
   fr: {
     title: "Mentions légales",
+    audience: "Notre service s'adresse aux cabinets et établissements médicaux situés en dehors de l'Union européenne.",
     provider: "Fournisseur de ce site:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -80,6 +83,7 @@ const texts: Record<string, any> = {
   },
   es: {
     title: "Aviso legal",
+    audience: "Nuestro servicio está dirigido a consultorios e instituciones médicas con sede fuera de la Unión Europea.",
     provider: "Proveedor de este sitio web:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -105,6 +109,7 @@ const texts: Record<string, any> = {
   },
   it: {
     title: "Note legali",
+    audience: "Il nostro servizio è rivolto a studi e istituzioni mediche con sede al di fuori dell'Unione Europea.",
     provider: "Fornitore di questo sito web:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -130,6 +135,7 @@ const texts: Record<string, any> = {
   },
   pt: {
     title: "Impresso",
+    audience: "O nosso serviço destina-se a clínicas e instituições médicas com sede fora da União Europeia.",
     provider: "Fornecedor deste site:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -155,6 +161,7 @@ const texts: Record<string, any> = {
   },
   nl: {
     title: "Colofon",
+    audience: "Onze service is bedoeld voor praktijken en medische instellingen gevestigd buiten de Europese Unie.",
     provider: "Aanbieder van deze website:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -180,6 +187,7 @@ const texts: Record<string, any> = {
   },
    pl: {
     title: "Nota prawna",
+    audience: "Nasza usługa skierowana jest do praktyk i placówek medycznych mających siedzibę poza Unią Europejską.",
     provider: "Dostawca tej strony:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -230,6 +238,7 @@ const texts: Record<string, any> = {
   },
   sl: {
     title: "Impresum",
+    audience: "Naša storitev je namenjena praksam in zdravstvenim ustanovam s sedežem zunaj Evropske unije.",
     provider: "Ponudnik te strani:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -255,6 +264,7 @@ const texts: Record<string, any> = {
   },
   cs: {
     title: "Impresum",
+    audience: "Naše služba je určena praxím a zdravotnickým zařízením se sídlem mimo Evropskou unii.",
     provider: "Poskytovatel této stránky:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -280,6 +290,7 @@ const texts: Record<string, any> = {
   },
   sk: {
     title: "Impresum",
+    audience: "Naša služba je určená praxiam a zdravotníckym zariadeniam so sídlom mimo Európskej únie.",
     provider: "Poskytovateľ tejto stránky:",
     company: "PraxisOnline24",
     owner: "Housni Admy",
@@ -398,7 +409,8 @@ export default function ImpressumPage() {
     <main className="min-h-screen bg-white py-8">
       <div className="max-w-3xl mx-auto px-4">
         <h1 className="text-2xl font-bold mb-6">{t.title}</h1>
-        
+
+{t.audience && <p className="text-sm text-gray-700 bg-amber-50 border border-amber-200 p-4 rounded-lg mb-6">⚠️ {t.audience}</p>}
         <div className="space-y-4">
           <p><strong>{t.provider}</strong><br />{t.company}</p>
           <p><strong>{t.ownerLabel || "Inhaber:"}</strong><br />{t.owner}</p>
