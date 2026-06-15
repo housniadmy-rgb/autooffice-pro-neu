@@ -12,8 +12,6 @@ const texts: Record<string, any> = {
   nl: { ueberUns: "Over ons", kontakt: "Contact", blog: "Blog", dsgvo: "Privacy", impressum: "Colofon", admin: "Admin" },
   pl: { ueberUns: "O nas", kontakt: "Kontakt", blog: "Blog", dsgvo: "Prywatność", impressum: "Impressum", admin: "Admin" },
   tr: { ueberUns: "Hakkımızda", kontakt: "İletişim", blog: "Blog", dsgvo: "Gizlilik", impressum: "Künye", admin: "Admin" },
-  ja: { ueberUns: "会社概要", kontakt: "お問い合わせ", blog: "ブログ", dsgvo: "プライバシー", impressum: "法的情報", admin: "管理" },
-  zh: { ueberUns: "关于我们", kontakt: "联系我们", blog: "博客", dsgvo: "隐私", impressum: "法律声明", admin: "管理" },
   cs: { ueberUns: "O nás", kontakt: "Kontakt", blog: "Blog", dsgvo: "Ochrana údajů", impressum: "Impresum", admin: "Admin" },
   sk: { ueberUns: "O nás", kontakt: "Kontakt", blog: "Blog", dsgvo: "Ochrana údajov", impressum: "Impresum", admin: "Admin" },
   sl: { ueberUns: "O nas", kontakt: "Kontakt", blog: "Blog", dsgvo: "Zasebnost", impressum: "Impresum", admin: "Admin" },
