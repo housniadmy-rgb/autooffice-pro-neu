@@ -537,7 +537,8 @@ export default function PreisePage() {
 
   const handleCheckout = (plan: string) => {
     const base = stripeLinks[plan]
-    const url = base + "?locale=" + lang
+    const stripeLocale = lang === "ar" ? "en" : lang
+    const url = base + "?locale=" + stripeLocale
     window.open(url, "_blank")
   }
 
