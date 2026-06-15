@@ -1,4 +1,4 @@
-"use client"
++"use client"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { translations, detectLanguage } from "../../lib/i18n"
@@ -79,7 +79,7 @@ export default function TerminBuchen() {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
         body: JSON.stringify({
-          practice_id: token ? JSON.parse(localStorage.getItem("user") || "{}").id : null,
+                    practice_id: "00000000-0000-0000-0000-000000000001", 
           patient_name: patientName,
           patient_email: patientEmail,
           patient_phone: patientPhone,
