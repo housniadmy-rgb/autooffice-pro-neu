@@ -68,9 +68,29 @@ export default function TerminBuchen() {
     setBookingId("")
   }
 
-  const handleConfirm = () => {
+    const handleConfirm = async () => {
     const newId = generateBookingId()
     setBookingId(newId)
+    
+    const token = localStorage.getItem("supabase_token") || ""
+    
+    try {
+      await fetch("/api/appointments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` },
+        body: JSON.stringify({
+          practice_id: token ? JSON.parse(localStorage.getItem("user") || "{}").id : null,
+          patient_name: patientName,
+          patient_email: patientEmail,
+          patient_phone: patientPhone,
+          appointment_date: selectedDate,
+          appointment_time: selectedTime,
+          reason: selectedReason,
+          status: "confirmed"
+        })
+      })
+    } catch {}
+    
     setBookingConfirmed(true)
   }
 

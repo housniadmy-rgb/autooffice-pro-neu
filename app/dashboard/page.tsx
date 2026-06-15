@@ -3,18 +3,41 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { translations, detectLanguage } from "../../lib/i18n"
 
+const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvY2dkZG5la3F1cmx6bGt5d3luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5OTk5OTksImV4cCI6MjA2NTU3NTk5OX0.demo"
+
 export default function Dashboard() {
   const [lang, setLang] = useState("de")
+  const [appointments, setAppointments] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const s = localStorage.getItem("lang")
     if (s && translations[s]) setLang(s)
     else setLang(detectLanguage())
+    
+    loadAppointments()
   }, [])
 
-  const t = translations[lang] || translations.de
+  const loadAppointments = async () => {
+    const token = localStorage.getItem("supabase_token")
+    if (!token) { setLoading(false); return }
+    
+    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${user.id}&order=appointment_date.asc,appointment_time.asc`, {
+      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${token}` }
+    })
+    if (res.ok) {
+      const data = await res.json()
+      setAppointments(data)
+    }
+    setLoading(false)
+  }
 
-  
+  const t = translations[lang] || translations.de
+  const today = new Date().toISOString().split("T")[0]
+  const todayApps = appointments.filter(a => a.appointment_date === today)
 
   return (
     <main className="min-h-screen bg-gray-50">
@@ -34,11 +57,11 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Heutige Termine</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">0</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">{todayApps.length}</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500">Patienten (Monat)</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">0</p>
+            <p className="text-sm text-gray-500">Alle Termine</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">{appointments.length}</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Bewertungen</p>
@@ -51,27 +74,28 @@ export default function Dashboard() {
         </div>
 
        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-  <h2 className="text-lg font-semibold text-gray-900 mb-4">Heutige Termine</h2>
-  <p className="text-gray-500 text-center py-4">Keine Termine für heute</p>
-</div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 opacity-60">
-            <h3 className="font-semibold text-gray-900">📋 Anamnese-Bögen</h3>
-            <p className="text-sm text-gray-500 mt-1">Ausgefüllte Fragebögen einsehen</p>
-            <p className="text-xs text-blue-500 mt-2">Demnächst verfügbar</p>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Alle Termine</h2>
+        {loading ? (
+          <p className="text-gray-500 text-center py-4">Lade...</p>
+        ) : appointments.length === 0 ? (
+          <p className="text-gray-500 text-center py-4">Keine Termine vorhanden</p>
+        ) : (
+          <div className="space-y-2">
+            {appointments.map((a: any) => (
+              <div key={a.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                <div>
+                  <p className="font-semibold">{a.patient_name}</p>
+                  <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm">{new Date(a.appointment_date).toLocaleDateString()}</p>
+                  <p className="text-sm text-gray-500">{a.appointment_time?.slice(0,5)} Uhr</p>
+                </div>
+              </div>
+            ))}
           </div>
-          <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 opacity-60">
-            <h3 className="font-semibold text-gray-900">💊 E-Rezept</h3>
-            <p className="text-sm text-gray-500 mt-1">Neue Rezepte ausstellen</p>
-            <p className="text-xs text-blue-500 mt-2">Demnächst verfügbar</p>
-          </div>
-          <div className="bg-white p-5 rounded-xl shadow-sm border border-gray-100 opacity-60">
-            <h3 className="font-semibold text-gray-900">📊 Statistiken</h3>
-            <p className="text-sm text-gray-500 mt-1">Alle Kennzahlen im Überblick</p>
-            <p className="text-xs text-blue-500 mt-2">Demnächst verfügbar</p>
-          </div>
-        </div>
+        )}
+      </div>
       </div>
     </main>
   )
