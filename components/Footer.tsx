@@ -21,6 +21,7 @@ const texts: Record<string, any> = {
   ar: { ueberUns: "من نحن", kontakt: "اتصل بنا", blog: "المدونة", dsgvo: "الخصوصية", impressum: "بصمة", admin: "المشرف" },
   zh: { ueberUns: "关于我们", kontakt: "联系我们", blog: "博客", dsgvo: "隐私", impressum: "法律声明", admin: "管理" },
   ja: { ueberUns: "会社概要", kontakt: "お問い合わせ", blog: "ブログ", dsgvo: "プライバシー", impressum: "法的情報", admin: "管理" },
+  hi: { ueberUns: "हमारे बारे में", kontakt: "संपर्क", blog: "ब्लॉग", dsgvo: "गोपनीयता", impressum: "इंप्रेसुम", admin: "एडमिन" },
 }
 
 export default function Footer() {

@@ -389,6 +389,7 @@ const texts: Record<string, any> = {
     linkLiabilityText: "リンク先ページの運営者は、そのコンテンツについて単独で責任を負います。",
     back: "← 戻る",
   },
+   hi: { title: "इंप्रेसुम", provider: "इस साइट का प्रदाता:", company: "PraxisOnline24", owner: "Housni Admy", street: "Berlinstraße 37", city: "55411 Bingen am Rhein", country: "जर्मनी", ownerLabel: "मालिक:", streetLabel: "पता:", contactLabel: "संपर्क:", email: "ईमेल: info@praxisonline24.com", phone: "फोन: +49 (0) 6721 9875872", vat: "वैट आईडी: DE410290042", copyright: "कॉपीराइट:", copyrightText: "इस साइट की सभी सामग्री कॉपीराइट द्वारा सुरक्षित है।", odr: "ऑनलाइन विवाद समाधान:", odrText: "यूरोपीय आयोग का प्लेटफॉर्म: https://ec.europa.eu/consumers/odr/", noParticipation: "हम उपभोक्ता मध्यस्थता बोर्डों के समक्ष विवाद समाधान कार्यवाही में भाग नहीं लेते।", liability: "सामग्री के लिए दायित्व:", liabilityText: "सामग्री अत्यंत सावधानी से बनाई गई है। हम शुद्धता और अद्यतनता के लिए कोई जिम्मेदारी नहीं लेते।", linkLiability: "लिंक के लिए दायित्व:", linkLiabilityText: "लिंक किए गए पृष्ठों के संचालक उनकी सामग्री के लिए पूरी तरह जिम्मेदार हैं।", back: "← वापस" },
 }
 
 export default function ImpressumPage() {
