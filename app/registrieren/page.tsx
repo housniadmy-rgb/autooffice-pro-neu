@@ -24,6 +24,7 @@ const texts: Record<string, any> = {
   sv: { title: "Registrera", name: "Namn", email: "E-post", password: "Lösenord", dsgvo: "Jag accepterar", dsgvoLink: "Integritetspolicy", registerBtn: "Skapa konto", loading: "Registrerar...", hasAccount: "Redan registrerad?", login: "Logga in", success: "Registrering klar!", back: "← Tillbaka", dsgvoError: "Vänligen acceptera integritetspolicyn." },
   no: { title: "Registrer", name: "Navn", email: "E-post", password: "Passord", dsgvo: "Jeg aksepterer", dsgvoLink: "Personvernerklæring", registerBtn: "Opprett konto", loading: "Registrerer...", hasAccount: "Allerede registrert?", login: "Logg inn", success: "Registrering vellykket!", back: "← Tilbake", dsgvoError: "Vennligst godta personvernerklæringen." },
   da: { title: "Registrer", name: "Navn", email: "E-mail", password: "Adgangskode", dsgvo: "Jeg accepterer", dsgvoLink: "Privatlivspolitik", registerBtn: "Opret konto", loading: "Registrerer...", hasAccount: "Allerede registreret?", login: "Log ind", success: "Registrering gennemført!", back: "← Tilbage", dsgvoError: "Accepter venligst privatlivspolitikken." },
+  ar: { title: "التسجيل", name: "الاسم", email: "البريد الإلكتروني", password: "كلمة المرور", dsgvo: "أوافق على", dsgvoLink: "سياسة الخصوصية", registerBtn: "إنشاء حساب", loading: "جاري التسجيل...", hasAccount: "هل لديك حساب بالفعل؟", login: "تسجيل الدخول", success: "تم التسجيل بنجاح!", back: "← رجوع", dsgvoError: "يرجى الموافقة على سياسة الخصوصية." },
 }
 
 export default function Registrieren() {
