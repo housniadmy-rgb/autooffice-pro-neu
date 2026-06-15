@@ -516,9 +516,9 @@ const texts: Record<string, Record<string, string>> = {
 }
 
 const stripeLinks: Record<string, string> = {
-  basic: `https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c?locale=${lang}`,
-  pro: `https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d?locale=${lang}`,
-  business: `https://buy.stripe.com/8x28wRdCo0im0eneSUfAc0e?locale=${lang}`,
+  basic: "https://buy.stripe.com/fZu6oJgOA9SW4uDbGIfAc0c",
+  pro: "https://buy.stripe.com/5kQeVfdCo5CG3qz8uwfAc0d",
+  business: "https://buy.stripe.com/8x28wRdCo0im0eneSUfAc0e",
 }
 
 export default function PreisePage() {
@@ -536,8 +536,9 @@ export default function PreisePage() {
   const t = texts[lang] || texts.de
 
   const handleCheckout = (plan: string) => {
-    const link = stripeLinks[plan].replace("${lang}", lang)
-    window.open(link, "_blank")
+    const base = stripeLinks[plan]
+    const url = base + "?locale=" + lang
+    window.open(url, "_blank")
   }
 
   return (
