@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 
 const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
-const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij"
 
 export async function POST(req: NextRequest) {
   try {
