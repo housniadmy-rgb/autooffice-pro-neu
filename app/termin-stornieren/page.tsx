@@ -9,13 +9,13 @@ export default function TerminStornieren() {
   const [error, setError] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const handleCancel = async () => {
-    if (!email || !terminId) return
+    const handleCancel = async () => {
+    if (!email) return
     setLoading(true)
     setError("")
     
     try {
-      const res = await fetch("https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?id=eq." + encodeURIComponent(terminId) + "&patient_email=eq." + encodeURIComponent(email), {
+      const res = await fetch("https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?patient_email=eq." + encodeURIComponent(email) + "&status=eq.confirmed&order=created_at.desc&limit=1", {
         method: "PATCH",
         headers: {
           "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij",
@@ -28,8 +28,13 @@ export default function TerminStornieren() {
       if (res.ok) {
         setCancelled(true)
       } else {
-        setError("Termin nicht gefunden. Bitte prüfen Sie Ihre Daten.")
+        setError("Kein aktiver Termin mit dieser E-Mail gefunden.")
       }
+    } catch {
+      setError("Ein Fehler ist aufgetreten.")
+    }
+    setLoading(false)
+  }
     } catch {
       setError("Ein Fehler ist aufgetreten.")
     }
@@ -62,13 +67,10 @@ export default function TerminStornieren() {
               <label className="block text-sm font-medium text-gray-700 mb-1">E-Mail-Adresse *</label>
               <input type="email" className="w-full p-3 border border-gray-300 rounded-lg" value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Termin-ID *</label>
-              <input type="text" className="w-full p-3 border border-gray-300 rounded-lg" placeholder="z.B. TERM-123456" value={terminId} onChange={(e) => setTerminId(e.target.value)} />
-            </div>
+            
             {error && <p className="text-red-500 text-sm">{error}</p>}
-            <button onClick={handleCancel} disabled={!email || !terminId || loading} className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50">
-              {loading ? "Wird storniert..." : "Termin stornieren"}
+                        <button onClick={handleCancel} disabled={!email || loading} className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold hover:bg-red-700 transition disabled:opacity-50">
+              {loading ? "Wird storniert..." : "Nächsten Termin stornieren"}
             </button>
           </div>
         </div>
