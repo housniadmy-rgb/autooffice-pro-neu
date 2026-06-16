@@ -90,7 +90,19 @@ export default function TerminBuchen() {
           waiting_since: bookingType === "waiting" ? new Date().toISOString() : null
         })
       })
-    } catch {}
+        } catch {}
+    
+    // Bestätigungs-E-Mail senden
+    fetch("/api/send-email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to: patientEmail,
+        toName: patientName,
+        subject: "Ihr Termin bei " + (selectedDoctor?.name || "uns"),
+        htmlContent: `<h2>Termin bestätigt!</h2><p>Hallo ${patientName},</p><p>Ihr Termin bei ${selectedDoctor?.name} am ${selectedDate} um ${selectedTime} Uhr wurde gebucht.</p><p>Grund: ${selectedReason}</p><p>Zum Stornieren: <a href="https://praxisonline24.com/termin-stornieren">hier klicken</a></p>`
+      })
+    }).catch(() => {})
     
     setBookingConfirmed(true)
   }
