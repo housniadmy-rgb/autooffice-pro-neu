@@ -23,9 +23,13 @@ export default function Dashboard() {
     const token = localStorage.getItem("supabase_token")
     if (!token) { setLoading(false); return }
     
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
+        const token = localStorage.getItem("supabase_token")
+    if (!token) { setLoading(false); return }
     
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${user.id}&order=appointment_date.asc,appointment_time.asc`, {
+    const payload = JSON.parse(atob(token.split(".")[1]))
+    const userId = payload.sub
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
       headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${token}` }
     })
     if (res.ok) {
