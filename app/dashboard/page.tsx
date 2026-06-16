@@ -6,6 +6,7 @@ import { translations, detectLanguage } from "../../lib/i18n"
 export default function Dashboard() {
   const [lang, setLang] = useState("de")
   const [appointments, setAppointments] = useState<any[]>([])
+  const [waitingList, setWaitingList] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -16,16 +17,26 @@ export default function Dashboard() {
     loadAppointments()
   }, [])
 
-  const loadAppointments = async () => {
+    const loadAppointments = async () => {
     const token = localStorage.getItem("supabase_token")
     if (!token) { setLoading(false); return }
     
     const payload = JSON.parse(atob(token.split(".")[1]))
     const userId = payload.sub
     
-        const res = await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?status=eq.confirmed&practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
-      headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
-    })
+    const [confirmedRes, waitingRes] = await Promise.all([
+      fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?status=eq.confirmed&practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
+        headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
+      }),
+      fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?status=eq.waiting&practice_id=eq.${userId}&order=waiting_since.asc`, {
+        headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
+      })
+    ])
+    
+    if (confirmedRes.ok) setAppointments(await confirmedRes.json())
+    if (waitingRes.ok) setWaitingList(await waitingRes.json())
+    setLoading(false)
+  })
     if (res.ok) {
       const data = await res.json()
       setAppointments(data)
@@ -107,6 +118,27 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Warteliste ({waitingList.length})</h2>
+        {waitingList.length === 0 ? (
+          <p className="text-gray-500 text-center py-4">Keine Patienten auf Warteliste</p>
+        ) : (
+          <div className="space-y-2">
+            {waitingList.map((a: any) => (
+              <div key={a.id} className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+                <div>
+                  <p className="font-semibold">{a.patient_name}</p>
+                  <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
+                </div>
+                <div className="text-right text-sm text-gray-500">
+                  <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
       </div>
     </main>
   )
