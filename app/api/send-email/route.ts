@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
         "accept": "application/json",
       },
       body: JSON.stringify({
-        sender: { name: "PraxisOnline24", email: "info@praxisonline24.com" },
+        sender: { name: "PraxisOnline24", email: "housniadmy@yahoo.de" },
         to: [{ email: to, name: toName || to }],
         subject: subject,
         htmlContent: htmlContent,
