@@ -45,3 +45,31 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Fehler" }, { status: 500 })
   }
 }
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json()
+    const email = body.email
+    
+    if (!email) {
+      return NextResponse.json({ error: "E-Mail erforderlich" }, { status: 400 })
+    }
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?patient_email=eq.${encodeURIComponent(email)}&status=eq.confirmed&order=created_at.desc&limit=1`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_KEY,
+        "Prefer": "return=representation"
+      },
+      body: JSON.stringify({ status: "cancelled" })
+    })
+    
+    if (res.ok) {
+      return NextResponse.json({ success: true })
+    } else {
+      return NextResponse.json({ error: "Kein Termin gefunden" }, { status: 404 })
+    }
+  } catch {
+    return NextResponse.json({ error: "Fehler" }, { status: 500 })
+  }
+}

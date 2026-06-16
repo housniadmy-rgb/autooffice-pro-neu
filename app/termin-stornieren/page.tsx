@@ -15,14 +15,10 @@ export default function TerminStornieren() {
     setError("")
     
     try {
-      const res = await fetch("https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?patient_email=eq." + encodeURIComponent(email) + "&status=eq.confirmed&order=created_at.desc&limit=1", {
+    const res = await fetch("/api/appointments", {
         method: "PATCH",
-        headers: {
-          "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij",
-          "Content-Type": "application/json",
-          "Prefer": "return=representation"
-        },
-        body: JSON.stringify({ status: "cancelled" })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email })
       })
       
       if (res.ok) {
