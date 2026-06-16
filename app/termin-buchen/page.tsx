@@ -93,14 +93,17 @@ export default function TerminBuchen() {
         } catch {}
     
     // Bestätigungs-E-Mail senden
+    const isWaiting = bookingType === "waiting"
     fetch("/api/send-email", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         to: patientEmail,
         toName: patientName,
-        subject: "Ihr Termin bei " + (selectedDoctor?.name || "uns"),
-        htmlContent: `<h2>Termin bestätigt!</h2><p>Hallo ${patientName},</p><p>Ihr Termin bei ${selectedDoctor?.name} am ${selectedDate} um ${selectedTime} Uhr wurde gebucht.</p><p>Grund: ${selectedReason}</p><p>Zum Stornieren: <a href="https://praxisonline24.com/termin-stornieren">hier klicken</a></p>`
+        subject: isWaiting ? "Sie sind auf der Warteliste" : "Ihr Termin bei " + (selectedDoctor?.name || "uns"),
+        htmlContent: isWaiting 
+          ? `<h2>Warteliste bestätigt!</h2><p>Hallo ${patientName},</p><p>Sie stehen jetzt auf der Warteliste. Falls ein Termin frei wird, rücken Sie automatisch nach und erhalten eine weitere E-Mail.</p>`
+          : `<h2>Termin bestätigt!</h2><p>Hallo ${patientName},</p><p>Ihr Termin bei ${selectedDoctor?.name} am ${selectedDate} um ${selectedTime} Uhr wurde gebucht.</p><p>Grund: ${selectedReason}</p><p>Zum Stornieren: <a href="https://praxisonline24.com/termin-stornieren">hier klicken</a></p>`
       })
     }).catch(() => {})
     
