@@ -102,8 +102,7 @@ export default function TerminBuchen() {
             <span className="text-2xl">✅</span>
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">{t.bookingConfirmed}</h1>
-          <p className="text-sm text-gray-500 mb-2">{t.yourBookingId} <strong>{bookingId}</strong></p>
-          <p className="text-xs text-gray-400 mb-4">{t.saveIdNotice}</p>
+          
           <p className="text-gray-500 mb-4">{t.appointmentConfirmed} {selectedDoctor?.name} {t.on} {selectedDate} {t.at} {selectedTime} {t.reserved}</p>
           <p className="text-sm text-gray-400 mb-6">{bookingType === "guest" ? t.confirmationEmailGuest : t.confirmationEmailAccount}</p>
           {bookingType === "account" && (
