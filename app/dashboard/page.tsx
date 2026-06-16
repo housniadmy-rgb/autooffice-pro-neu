@@ -38,16 +38,22 @@ export default function Dashboard() {
     setLoading(false)
   }
 
-  const cancelAppointment = async (id: string) => {
+    const cancelAppointment = async (id: string) => {
     const token = localStorage.getItem("supabase_token")
     if (!token) return
     
     await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?id=eq.${id}`, {
-      method: "DELETE",
-      headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
+      method: "PATCH",
+      headers: { 
+        "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", 
+        "Authorization": `Bearer ${token}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ status: "cancelled" })
     })
     
     setAppointments(appointments.filter(a => a.id !== id))
+    setWaitingList(waitingList.filter(a => a.id !== id))
   }
 
   const t = translations[lang] || translations.de
@@ -105,7 +111,7 @@ export default function Dashboard() {
                   <div className="text-right">
                     <p className="text-sm">{new Date(a.appointment_date).toLocaleDateString()}</p>
                     <p className="text-sm text-gray-500">{a.appointment_time?.slice(0,5)} Uhr</p>
-                    <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
+                    <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline cursor-pointer">✕ Löschen</button>
                   </div>
                 </div>
               ))}
@@ -127,7 +133,7 @@ export default function Dashboard() {
                 </div>
                 <div className="text-right text-sm text-gray-500">
                   <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
-                  <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
+                  <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline cursor-pointer">✕ Löschen</button>
                 </div>
               </div>
               ))}
