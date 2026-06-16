@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     
     const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${practiceId}&order=appointment_date.asc,appointment_time.asc`, {
       headers: {
-        "apikey": SUPABASE_SERVICE_KEY,
+        "apikey": "sb_secret_Uo2vhqleUa90EOcCMlwBzg_QLeho1hQ",
         "Authorization": `Bearer ${token}`
       }
     })
