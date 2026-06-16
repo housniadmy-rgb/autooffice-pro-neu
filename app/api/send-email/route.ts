@@ -1,31 +1,34 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 
-export async function POST(request: Request) {
+const BREVO_API_KEY = process.env.BREVO_API_KEY || "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"
+
+export async function POST(req: NextRequest) {
   try {
-    const { to, subject, html } = await request.json()
-    const apiKey = process.env.BREVO_API_KEY || ""
-    
+    const body = await req.json()
+    const { to, toName, subject, htmlContent } = body
+
     const res = await fetch("https://api.brevo.com/v3/smtp/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "api-key": apiKey,
+        "api-key": BREVO_API_KEY,
         "accept": "application/json",
       },
       body: JSON.stringify({
-        sender: { email: "housniadmy@yahoo.de", name: "PraxisOnline" },
-        to: [{ email: to }],
-        subject,
-        htmlContent: html,
+        sender: { name: "PraxisOnline24", email: "info@praxisonline24.com" },
+        to: [{ email: to, name: toName || to }],
+        subject: subject,
+        htmlContent: htmlContent,
       }),
     })
 
-    const text = await res.text()
-    let data
-    try { data = JSON.parse(text) } catch { data = { text } }
-
-    return NextResponse.json({ ok: res.ok, status: res.status, data, apikeyLength: apiKey.length })
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 })
+    if (res.ok) {
+      return NextResponse.json({ success: true })
+    } else {
+      const err = await res.json()
+      return NextResponse.json({ error: err }, { status: 400 })
+    }
+  } catch {
+    return NextResponse.json({ error: "Fehler" }, { status: 500 })
   }
 }
