@@ -23,9 +23,6 @@ export default function Dashboard() {
     const token = localStorage.getItem("supabase_token")
     if (!token) { setLoading(false); return }
     
-        const token = localStorage.getItem("supabase_token")
-    if (!token) { setLoading(false); return }
-    
     const payload = JSON.parse(atob(token.split(".")[1]))
     const userId = payload.sub
     
