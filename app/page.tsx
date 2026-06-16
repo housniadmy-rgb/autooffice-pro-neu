@@ -1,9 +1,14 @@
 "use client"
+import { useEffect } from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { translations, languages, detectLanguage } from "../lib/i18n"
 
 export default function Home() {
+  useEffect(() => {
+    window.location.href = "/wartung"
+  }, [])
+  return null
   const [lang, setLang] = useState("de")
   const [showLangs, setShowLangs] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
