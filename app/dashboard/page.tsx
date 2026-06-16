@@ -17,7 +17,7 @@ export default function Dashboard() {
     loadAppointments()
   }, [])
 
-    const loadAppointments = async () => {
+  const loadAppointments = async () => {
     const token = localStorage.getItem("supabase_token")
     if (!token) { setLoading(false); return }
     
@@ -36,7 +36,7 @@ export default function Dashboard() {
     if (confirmedRes.ok) setAppointments(await confirmedRes.json())
     if (waitingRes.ok) setWaitingList(await waitingRes.json())
     setLoading(false)
-  
+  }
 
   const cancelAppointment = async (id: string) => {
     const token = localStorage.getItem("supabase_token")
@@ -79,8 +79,8 @@ export default function Dashboard() {
             <p className="text-2xl font-bold text-[#1E40AF]">{appointments.length}</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-            <p className="text-sm text-gray-500">Bewertungen</p>
-            <p className="text-2xl font-bold text-[#1E40AF]">0 ★</p>
+            <p className="text-sm text-gray-500">Warteliste</p>
+            <p className="text-2xl font-bold text-[#1E40AF]">{waitingList.length}</p>
           </div>
           <div className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <p className="text-sm text-gray-500">Umsatz (Monat)</p>
@@ -88,51 +88,51 @@ export default function Dashboard() {
           </div>
         </div>
 
-       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Alle Termine</h2>
-        {loading ? (
-          <p className="text-gray-500 text-center py-4">Lade...</p>
-        ) : appointments.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">Keine Termine vorhanden</p>
-        ) : (
-          <div className="space-y-2">
-            {appointments.map((a: any) => (
-              <div key={a.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
-                <div>
-                  <p className="font-semibold">{a.patient_name}</p>
-                  <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Alle Termine</h2>
+          {loading ? (
+            <p className="text-gray-500 text-center py-4">Lade...</p>
+          ) : appointments.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">Keine Termine vorhanden</p>
+          ) : (
+            <div className="space-y-2">
+              {appointments.map((a: any) => (
+                <div key={a.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
+                  <div>
+                    <p className="font-semibold">{a.patient_name}</p>
+                    <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm">{new Date(a.appointment_date).toLocaleDateString()}</p>
+                    <p className="text-sm text-gray-500">{a.appointment_time?.slice(0,5)} Uhr</p>
+                    <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <p className="text-sm">{new Date(a.appointment_date).toLocaleDateString()}</p>
-                  <p className="text-sm text-gray-500">{a.appointment_time?.slice(0,5)} Uhr</p>
-                  <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Warteliste ({waitingList.length})</h2>
-        {waitingList.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">Keine Patienten auf Warteliste</p>
-        ) : (
-          <div className="space-y-2">
-            {waitingList.map((a: any) => (
-              <div key={a.id} className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
-                <div>
-                  <p className="font-semibold">{a.patient_name}</p>
-                  <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
-                </div>
-                <div className="text-right text-sm text-gray-500">
-                  <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+              ))}
+            </div>
+          )}
+        </div>
 
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">📋 Warteliste ({waitingList.length})</h2>
+          {waitingList.length === 0 ? (
+            <p className="text-gray-500 text-center py-4">Keine Patienten auf Warteliste</p>
+          ) : (
+            <div className="space-y-2">
+              {waitingList.map((a: any) => (
+                <div key={a.id} className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
+                  <div>
+                    <p className="font-semibold">{a.patient_name}</p>
+                    <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
+                  </div>
+                  <div className="text-right text-sm text-gray-500">
+                    <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </main>
   )
