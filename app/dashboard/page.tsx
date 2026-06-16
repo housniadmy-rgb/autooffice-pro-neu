@@ -26,8 +26,8 @@ export default function Dashboard() {
     const payload = JSON.parse(atob(token.split(".")[1]))
     const userId = payload.sub
     
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
-      headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${token}` }
+        const res = await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
+      headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
     })
     if (res.ok) {
       const data = await res.json()
