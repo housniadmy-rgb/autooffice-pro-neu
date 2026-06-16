@@ -86,7 +86,8 @@ export default function TerminBuchen() {
           appointment_date: selectedDate,
           appointment_time: selectedTime,
           reason: selectedReason,
-          status: "confirmed"
+          status: bookingType === "waiting" ? "waiting" : "confirmed",
+          waiting_since: bookingType === "waiting" ? new Date().toISOString() : null
         })
       })
     } catch {}
@@ -334,6 +335,15 @@ export default function TerminBuchen() {
                       >
                         🔐 {t.createAccount}
                         <p className="text-xs text-gray-400 mt-1">{t.forRepeatBookings}</p>
+                      </button>
+                      <button
+                        onClick={() => setBookingType("waiting")}
+                        className={`flex-1 p-3 border rounded-lg text-center transition ${
+                          bookingType === "waiting" ? "border-[#1E40AF] bg-blue-50" : "border-gray-200"
+                        }`}
+                      >
+                        📋 Auf Warteliste
+                        <p className="text-xs text-gray-400 mt-1">Nachrücken bei Absage</p>
                       </button>
                     </div>
                   </div>
