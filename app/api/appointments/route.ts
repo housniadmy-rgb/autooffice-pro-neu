@@ -59,7 +59,7 @@ export async function PATCH(req: NextRequest) {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
-        "apikey": SUPABASE_KEY,
+        "apikey": "sb_secret_Uo2vhqleUa90EOcCMlwBzg_QLeho1hQ",
         "Prefer": "return=representation"
       },
       body: JSON.stringify({ status: "cancelled" })
