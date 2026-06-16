@@ -36,13 +36,7 @@ export default function Dashboard() {
     if (confirmedRes.ok) setAppointments(await confirmedRes.json())
     if (waitingRes.ok) setWaitingList(await waitingRes.json())
     setLoading(false)
-  })
-    if (res.ok) {
-      const data = await res.json()
-      setAppointments(data)
-    }
-    setLoading(false)
-  }
+  
 
   const cancelAppointment = async (id: string) => {
     const token = localStorage.getItem("supabase_token")
