@@ -111,8 +111,7 @@ export async function PATCH(req: NextRequest) {
       }
     }
     
-    return NextResponse.json({ success: true })
-    const canceledData = await cancelRes.json()
+    
     if (canceledData && canceledData.length > 0) {
       const canceled = canceledData[0]
       
