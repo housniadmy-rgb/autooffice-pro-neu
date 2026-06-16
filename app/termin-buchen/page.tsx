@@ -28,7 +28,7 @@ export default function TerminBuchen() {
   const [selectedReason, setSelectedReason] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
   const [selectedTime, setSelectedTime] = useState("")
-  const [bookingType, setBookingType] = useState<"guest" | "account" | null>(null)
+  const [bookingType, setBookingType] = useState<"guest" | "account" | "waiting" | null>(null)
   const [patientName, setPatientName] = useState("")
   const [patientEmail, setPatientEmail] = useState("")
   const [patientPhone, setPatientPhone] = useState("")
