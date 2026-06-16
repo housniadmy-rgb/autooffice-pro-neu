@@ -35,12 +35,8 @@ export default function TerminStornieren() {
     }
     setLoading(false)
   }
-    } catch {
-      setError("Ein Fehler ist aufgetreten.")
-    }
-    setLoading(false)
-  }
-
+    
+  
   if (cancelled) {
     return (
       <main className="min-h-screen bg-gray-50 py-12 px-4">
