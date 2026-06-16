@@ -1,5 +1,4 @@
 "use client"
-import { useEffect } from "react"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { translations, languages, detectLanguage } from "../lib/i18n"
