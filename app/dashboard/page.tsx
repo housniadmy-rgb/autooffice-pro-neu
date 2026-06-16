@@ -3,9 +3,6 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { translations, detectLanguage } from "../../lib/i18n"
 
-const SUPABASE_URL = "https://pocgddnekqurlzlkywyn.supabase.co"
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBvY2dkZG5la3F1cmx6bGt5d3luIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5OTk5OTksImV4cCI6MjA2NTU3NTk5OX0.demo"
-
 export default function Dashboard() {
   const [lang, setLang] = useState("de")
   const [appointments, setAppointments] = useState<any[]>([])
@@ -26,7 +23,7 @@ export default function Dashboard() {
     const payload = JSON.parse(atob(token.split(".")[1]))
     const userId = payload.sub
     
-        const res = await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
+    const res = await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?practice_id=eq.${userId}&order=appointment_date.asc,appointment_time.asc`, {
       headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
     })
     if (res.ok) {
@@ -34,6 +31,18 @@ export default function Dashboard() {
       setAppointments(data)
     }
     setLoading(false)
+  }
+
+  const cancelAppointment = async (id: string) => {
+    const token = localStorage.getItem("supabase_token")
+    if (!token) return
+    
+    await fetch(`https://pocgddnekqurlzlkywyn.supabase.co/rest/v1/appointments?id=eq.${id}`, {
+      method: "DELETE",
+      headers: { "apikey": "sb_publishable_hlfO39j5ABT-17h_sV1jDQ_6keQz0ij", "Authorization": `Bearer ${token}` }
+    })
+    
+    setAppointments(appointments.filter(a => a.id !== id))
   }
 
   const t = translations[lang] || translations.de
@@ -83,7 +92,7 @@ export default function Dashboard() {
         ) : (
           <div className="space-y-2">
             {appointments.map((a: any) => (
-              <div key={a.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+              <div key={a.id} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg group">
                 <div>
                   <p className="font-semibold">{a.patient_name}</p>
                   <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
@@ -91,6 +100,7 @@ export default function Dashboard() {
                 <div className="text-right">
                   <p className="text-sm">{new Date(a.appointment_date).toLocaleDateString()}</p>
                   <p className="text-sm text-gray-500">{a.appointment_time?.slice(0,5)} Uhr</p>
+                  <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
                 </div>
               </div>
             ))}
