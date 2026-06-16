@@ -55,7 +55,8 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: "E-Mail erforderlich" }, { status: 400 })
     }
     
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/appointments?patient_email=eq.${encodeURIComponent(email)}&status=eq.confirmed&order=created_at.desc&limit=1`, {
+    // 1. Termin stornieren
+    const cancelRes = await fetch(`${SUPABASE_URL}/rest/v1/appointments?patient_email=eq.${encodeURIComponent(email)}&status=eq.confirmed&order=created_at.desc&limit=1`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -65,11 +66,31 @@ export async function PATCH(req: NextRequest) {
       body: JSON.stringify({ status: "cancelled" })
     })
     
-    if (res.ok) {
-      return NextResponse.json({ success: true })
-    } else {
+    if (!cancelRes.ok) {
       return NextResponse.json({ error: "Kein Termin gefunden" }, { status: 404 })
     }
+    
+    // 2. Nächsten Wartelisten-Patienten nachrücken lassen
+    const canceledData = await cancelRes.json()
+    if (canceledData && canceledData.length > 0) {
+      const canceled = canceledData[0]
+      
+      await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${canceled.practice_id}&status=eq.waiting&order=waiting_since.asc&limit=1`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_secret_Uo2vhqleUa90EOcCMlwBzg_QLeho1hQ",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({ 
+          status: "confirmed",
+          appointment_date: canceled.appointment_date,
+          appointment_time: canceled.appointment_time
+        })
+      })
+    }
+    
+    return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: "Fehler" }, { status: 500 })
   }
