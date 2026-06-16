@@ -75,6 +75,47 @@ export async function PATCH(req: NextRequest) {
     if (canceledData && canceledData.length > 0) {
       const canceled = canceledData[0]
       
+      const waitingRes = await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${canceled.practice_id}&status=eq.waiting&order=waiting_since.asc&limit=1`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_secret_Uo2vhqleUa90EOcCMlwBzg_QLeho1hQ",
+          "Prefer": "return=representation"
+        },
+        body: JSON.stringify({ 
+          status: "confirmed",
+          appointment_date: canceled.appointment_date,
+          appointment_time: canceled.appointment_time
+        })
+      })
+      
+      // E-Mail an nachgerückten Patienten senden
+      if (waitingRes.ok) {
+        const waitingData = await waitingRes.json()
+        if (waitingData && waitingData.length > 0) {
+          const patient = waitingData[0]
+          fetch("https://api.brevo.com/v3/smtp/email", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "api-key": "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"
+            },
+            body: JSON.stringify({
+              sender: { name: "PraxisOnline24", email: "housniadmy@yahoo.de" },
+              to: [{ email: patient.patient_email, name: patient.patient_name }],
+              subject: "Sie sind nachgerückt! Termin bestätigt",
+              htmlContent: `<h2>Gute Nachrichten!</h2><p>Hallo ${patient.patient_name},</p><p>Sie sind von der Warteliste nachgerückt!</p><p>Ihr neuer Termin: ${canceled.appointment_date} um ${canceled.appointment_time} Uhr</p><p>Zum Stornieren: <a href="https://praxisonline24.com/termin-stornieren">hier klicken</a></p>`
+            })
+          }).catch(() => {})
+        }
+      }
+    }
+    
+    return NextResponse.json({ success: true })
+    const canceledData = await cancelRes.json()
+    if (canceledData && canceledData.length > 0) {
+      const canceled = canceledData[0]
+      
       await fetch(`${SUPABASE_URL}/rest/v1/appointments?practice_id=eq.${canceled.practice_id}&status=eq.waiting&order=waiting_since.asc&limit=1`, {
         method: "PATCH",
         headers: {
