@@ -120,15 +120,16 @@ export default function Dashboard() {
           ) : (
             <div className="space-y-2">
               {waitingList.map((a: any) => (
-                <div key={a.id} className="flex justify-between items-center p-3 bg-amber-50 rounded-lg">
-                  <div>
-                    <p className="font-semibold">{a.patient_name}</p>
-                    <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
-                  </div>
-                  <div className="text-right text-sm text-gray-500">
-                    <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
-                  </div>
+             <div key={a.id} className="flex justify-between items-center p-3 bg-amber-50 rounded-lg group">
+                <div>
+                  <p className="font-semibold">{a.patient_name}</p>
+                  <p className="text-sm text-gray-500">{a.reason || "Kein Grund"}</p>
                 </div>
+                <div className="text-right text-sm text-gray-500">
+                  <p>Wartet seit {new Date(a.waiting_since).toLocaleDateString()}</p>
+                  <button onClick={() => cancelAppointment(a.id)} className="text-red-500 text-xs mt-1 opacity-0 group-hover:opacity-100 transition hover:underline">✕ Löschen</button>
+                </div>
+              </div>
               ))}
             </div>
           )}
