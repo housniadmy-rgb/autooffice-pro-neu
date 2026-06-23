@@ -14,14 +14,14 @@
       --ai-text: #111827;
       --ai-muted: #6b7280;
       --ai-subtle: #9ca3af;
-      --ai-blue: #7C3AED;
+      --ai-blue: #2563EB;
       --ai-green: #16A34A;
       --ai-yellow: #d97706;
       --ai-red: #dc2626;
       --ai-green-bg: #DCFCE7;
       --ai-yellow-bg: #fef3c7;
       --ai-red-bg: #fee2e2;
-      --ai-blue-bg: #EDE9FE;
+      --ai-blue-bg: #DBEAFE;
     }
 
     body { background: var(--ai-bg); }
@@ -104,7 +104,7 @@
     }
     .prio-badge.kritisch { background: #fee2e2; color: #991b1b; }
     .prio-badge.dringend { background: #fef3c7; color: #92400e; }
-    .prio-badge.heute    { background: #EDE9FE; color: #6D28D9; }
+    .prio-badge.heute    { background: #DBEAFE; color: #1D4ED8; }
     .prio-badge.info     { background: #f3f4f6; color: #374151; }
     .prio-badge.ok       { background: var(--ai-green-bg); color: #14532D; }
     .prio-text { font-size: .9rem; color: var(--ai-text); line-height: 1.45; flex: 1; }
@@ -179,10 +179,10 @@
       letter-spacing: .04em; white-space: nowrap;
     }
     .empf-impact.hoch   { background: #fef3c7; color: #92400e; }
-    .empf-impact.mittel { background: var(--ai-blue-bg); color: #6D28D9; }
+    .empf-impact.mittel { background: var(--ai-blue-bg); color: #1D4ED8; }
     .empf-impact.niedrig{ background: #f3f4f6; color: #374151; }
     .empf-impact.gut    { background: var(--ai-green-bg); color: #14532D; }
-    .empf-impact.setup  { background: var(--ai-blue-bg); color: #6D28D9; }
+    .empf-impact.setup  { background: var(--ai-blue-bg); color: #1D4ED8; }
     .empf-text { font-size: .875rem; color: var(--ai-text); line-height: 1.5; word-break: break-word; }
 
     /* ── To-do Liste ── */
@@ -228,9 +228,9 @@
       background: #f1f5f9; color: #64748b;
       white-space: nowrap;
     }
-    .todo-cat.profil          { background: #F5F3FF; color: #7C3AED; }
+    .todo-cat.profil          { background: #EFF6FF; color: #2563EB; }
     .todo-cat.oeffnungszeiten { background: #f0fdf4; color: #16a34a; }
-    .todo-cat.behandler       { background: #faf5ff; color: #7c3aed; }
+    .todo-cat.behandler       { background: #EFF6FF; color: #2563EB; }
     .todo-cat.bewertungen     { background: #fffbeb; color: #d97706; }
     .todo-cat.warteliste      { background: #fff7ed; color: #ea580c; }
     .todo-cat.auslastung      { background: #fdf2f8; color: #9d174d; }
@@ -332,7 +332,7 @@
       border-radius: 6px; text-decoration: none; margin-top: .625rem;
       transition: background .15s;
     }
-    .ai-empty-action:hover { background: #DDD6FE; text-decoration: none; }
+    .ai-empty-action:hover { background: #BFDBFE; text-decoration: none; }
 
     /* ── Praxis-Optimierung: Prioritätsgruppen ── */
     .setup-group-header {
@@ -870,8 +870,8 @@
     } else {
       check.dataset.done = '1';
       check.innerHTML = '<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-      check.style.background = '#7C3AED';
-      check.style.borderColor = '#7C3AED';
+      check.style.background = '#2563EB';
+      check.style.borderColor = '#2563EB';
       if (text) text.style.textDecoration = 'line-through';
     }
   };

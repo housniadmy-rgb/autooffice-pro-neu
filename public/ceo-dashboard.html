@@ -9,7 +9,7 @@
     :root {
       --mc-bg: #f9fafb; --mc-surface: #ffffff; --mc-border: #e5e7eb;
       --mc-text: #111827; --mc-muted: #6b7280; --mc-subtle: #9ca3af;
-      --mc-blue: #7C3AED; --mc-blue-bg: #EDE9FE;
+      --mc-blue: #2563EB; --mc-blue-bg: #DBEAFE;
       --mc-green: #16A34A; --mc-green-bg: #DCFCE7;
       --mc-yellow: #d97706; --mc-yellow-bg: #fef3c7;
       --mc-red: #dc2626; --mc-red-bg: #fee2e2;
@@ -84,10 +84,10 @@
     .bar-fill { border-radius:3px 3px 0 0; width:100%; min-height:2px; background:var(--mc-blue); opacity:.85; }
     .bar-lbl  { font-size:.5rem; color:var(--mc-subtle); margin-top:3px; text-align:center; }
 
-    .ai-panel { background:linear-gradient(135deg,#F5F3FF 0%,#f0fdf4 100%); border:1px solid #DDD6FE; border-radius:12px; padding:1.125rem; margin-bottom:1rem; }
+    .ai-panel { background:linear-gradient(135deg,#EFF6FF 0%,#f0fdf4 100%); border:1px solid #BFDBFE; border-radius:12px; padding:1.125rem; margin-bottom:1rem; }
     .ai-header { display:flex; align-items:center; gap:.5rem; margin-bottom:1rem; }
-    .ai-header-title  { font-size:.9375rem; font-weight:700; color:#6D28D9; }
-    .ai-header-badge  { font-size:.6875rem; font-weight:500; background:#EDE9FE; color:#6D28D9; padding:.125rem .5rem; border-radius:9999px; }
+    .ai-header-title  { font-size:.9375rem; font-weight:700; color:#1D4ED8; }
+    .ai-header-badge  { font-size:.6875rem; font-weight:500; background:#DBEAFE; color:#1D4ED8; padding:.125rem .5rem; border-radius:9999px; }
     .ai-section-lbl   { font-size:.6875rem; font-weight:600; color:var(--mc-subtle); text-transform:uppercase; letter-spacing:.06em; margin:.875rem 0 .5rem; }
     .ai-task          { display:flex; align-items:flex-start; gap:.625rem; padding:.375rem 0; font-size:.875rem; color:var(--mc-text); border-bottom:1px solid #e0e7ff40; }
     .ai-task:last-child { border-bottom:none; }
@@ -116,7 +116,7 @@
     .chip-green  { background:var(--mc-green-bg);  color:#14532D; }
     .chip-yellow { background:var(--mc-yellow-bg); color:#92400e; }
     .chip-red    { background:var(--mc-red-bg);    color:#991b1b; }
-    .chip-blue   { background:var(--mc-blue-bg);   color:#6D28D9; }
+    .chip-blue   { background:var(--mc-blue-bg);   color:#1D4ED8; }
     .chip-gray   { background:#f3f4f6; color:#374151; }
 
     .inv-row { display:flex; justify-content:space-between; align-items:center; padding:.625rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; }
@@ -144,12 +144,12 @@
     .status-btn { cursor:pointer; border:none; border-radius:4px; padding:.2rem .5rem; font-size:.75rem; font-weight:500; transition:opacity .15s; }
     .status-btn:hover { opacity:.8; }
     .status-btn.neu         { background:#f3f4f6; color:#374151; }
-    .status-btn.eingeladen  { background:#EDE9FE; color:#6D28D9; }
+    .status-btn.eingeladen  { background:#DBEAFE; color:#1D4ED8; }
     .status-btn.aktiviert   { background:#DCFCE7; color:#14532D; }
     .status-btn.kontaktiert { background:#fef3c7; color:#92400e; }
     .status-btn.erledigt    { background:#e5e7eb; color:#1f2937; }
-    .resend-btn { cursor:pointer; border:1px solid #DDD6FE; border-radius:4px; padding:.15rem .4rem; font-size:.7rem; font-weight:500; background:#F5F3FF; color:#6D28D9; transition:background .15s; margin-left:.25rem; }
-    .resend-btn:hover { background:#EDE9FE; }
+    .resend-btn { cursor:pointer; border:1px solid #BFDBFE; border-radius:4px; padding:.15rem .4rem; font-size:.7rem; font-weight:500; background:#EFF6FF; color:#1D4ED8; transition:background .15s; margin-left:.25rem; }
+    .resend-btn:hover { background:#DBEAFE; }
 
     /* MRR table */
     .mrr-pkg-row { display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; }
@@ -183,7 +183,7 @@
       <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> AI Praxismanager</a></li>
       <li><a href="/settings.html"><span class="nav-icon">⚙️</span> Einstellungen</a></li>
       <li class="sidebar-divider" style="border-top:1px solid var(--border);margin:.5rem 0;"></li>
-      <li><a href="/ceo-dashboard.html" class="active" style="background:#eef2ff;color:#7C3AED;font-weight:600;"><span class="nav-icon">👑</span> Management Center</a></li>
+      <li><a href="/ceo-dashboard.html" class="active" style="background:#eef2ff;color:#2563EB;font-weight:600;"><span class="nav-icon">👑</span> Management Center</a></li>
     </ul>
   </aside>
 
@@ -510,11 +510,11 @@ async function loadMarketing() {
     <div class="mgmt-grid">
       <div class="mc-card">
         <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 6 Monate</span></div>
-        <div class="mc-card-body">${buildBar(d.registrations_by_month,'month','count','#8b5cf6',monthLabel)}</div>
+        <div class="mc-card-body">${buildBar(d.registrations_by_month,'month','count','#3B82F6',monthLabel)}</div>
       </div>
       <div class="mc-card">
         <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 8 Wochen</span></div>
-        <div class="mc-card-body">${buildBar(d.registrations_by_week,'week','count','#7C3AED')}</div>
+        <div class="mc-card-body">${buildBar(d.registrations_by_week,'week','count','#2563EB')}</div>
       </div>
     </div>
 
@@ -600,7 +600,7 @@ async function loadMarketing() {
             <span style="font-size:.8125rem;color:var(--mc-muted);">${d.new_this_month} / ${ZIEL_REG_MONAT} Ziel</span>
           </div>
           <div style="background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;">
-            <div style="height:10px;border-radius:6px;background:${regProg>=100?'#16A34A':regProg>=50?'#8b5cf6':'#d97706'};width:${regProg}%;transition:width .4s;"></div>
+            <div style="height:10px;border-radius:6px;background:${regProg>=100?'#16A34A':regProg>=50?'#3B82F6':'#d97706'};width:${regProg}%;transition:width .4s;"></div>
           </div>
           <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${regProg}% des Monatsziels erreicht</div>
         </div>
