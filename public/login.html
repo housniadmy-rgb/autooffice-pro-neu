@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anmelden – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-container">
+  <div class="auth-card">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem;">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </div>
+
+    <div class="auth-logo">
+      <a href="/" class="auth-logo-link">
+        <div class="logo-text">PraxisOnline24</div>
+        <div id="login-slogan" class="logo-sub">Ihre Praxis. Online. Rund um die Uhr.</div>
+      </a>
+    </div>
+
+    <h2 id="login-h2" style="margin-bottom:1.5rem;">Anmelden</h2>
+
+    <div id="alert-container"></div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label" for="email"><span id="login-email-label">E-Mail</span> <span class="required">*</span></label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="praxis@example.com" required autocomplete="email">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="password"><span id="login-pw-label">Passwort</span> <span class="required">*</span></label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="login-btn" class="btn btn-primary" style="width:100%;">Anmelden</button>
+    </form>
+
+    <p style="text-align:center;margin-top:.875rem;font-size:.875rem;">
+      <a id="login-forgot" href="/reset-password.html" style="color:var(--text-secondary);">Passwort vergessen?</a>
+    </p>
+    <p style="text-align:center;margin-top:.625rem;font-size:.9375rem;">
+      <span id="login-no-account">Noch kein Konto?</span> <a id="login-reg-link" href="/register.html">Praxis registrieren</a>
+    </p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="login-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="login-agb" href="/agb.html">AGB</a>
+        <a id="login-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="login-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a id="login-impressum" href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/public-i18n.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/password-toggle.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    document.getElementById('login-slogan').textContent = pT('slogan');
+    document.getElementById('login-h2').textContent = pT('idx_login');
+    document.getElementById('login-email-label').textContent = pT('email_label');
+    document.getElementById('login-pw-label').textContent = pT('password_label');
+    document.getElementById('login-btn').textContent = pT('idx_login');
+    document.getElementById('login-forgot').textContent = pT('login_forgot');
+    document.getElementById('login-no-account').textContent = pT('login_no_account');
+    document.getElementById('login-reg-link').textContent = pT('reg_submit');
+    document.getElementById('login-footer-note').textContent = pT('footer_note');
+    document.getElementById('login-agb').textContent = pT('nav_agb');
+    document.getElementById('login-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('login-sec-comp').textContent = pT('footer.security_compliance');
+    document.getElementById('login-impressum').textContent = pT('nav_impressum') || 'Impressum';
+  })();
+
+  document.getElementById('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const container = document.getElementById('alert-container');
+    const btn = document.getElementById('login-btn');
+    container.innerHTML = '';
+    btn.disabled = true;
+    btn.textContent = pT('login_submitting');
+
+    try {
+      await API.post('/api/auth/login', { email, password });
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      const el = document.createElement('div');
+      el.className = 'alert alert-danger';
+      el.textContent = err.message;
+      container.appendChild(el);
+      btn.disabled = false;
+      btn.textContent = pT('idx_login');
+    }
+  });
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

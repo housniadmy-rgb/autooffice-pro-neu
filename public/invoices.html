@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rechnungen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html" class="active"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="page-header">
+      <h1 data-i18n="page_invoices">Rechnungen</h1>
+      <button id="btn-new-invoice" class="btn btn-primary" data-i18n="btn_new_invoice">+ Neue Rechnung</button>
+    </div>
+
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-status="" data-i18n="filter_all">Alle</button>
+      <button class="filter-tab" data-status="draft" data-i18n="filter_draft">Entwurf</button>
+      <button class="filter-tab" data-status="pending" data-i18n="filter_pending">Ausstehend</button>
+      <button class="filter-tab" data-status="paid" data-i18n="filter_paid">Bezahlt</button>
+    </div>
+
+    <div class="card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="th_number">Nummer</th>
+              <th data-i18n="th_patient">Patient</th>
+              <th data-i18n="th_date">Datum</th>
+              <th data-i18n="th_due">Fällig am</th>
+              <th style="text-align:right;" data-i18n="th_total">Gesamt</th>
+              <th data-i18n="th_status">Status</th>
+              <th style="text-align:right;" data-i18n="th_actions">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody id="invoices-tbody">
+            <tr><td colspan="7" style="text-align:center;color:var(--text-secondary);padding:2rem;" data-i18n="loading">Wird geladen…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal: Neue Rechnung -->
+<div class="modal-backdrop hidden" id="modal-new">
+  <div class="modal" style="max-width:700px;">
+    <div class="modal-header">
+      <h3 data-i18n="modal_new_invoice">Neue Rechnung</h3>
+      <button class="modal-close" id="btn-close-new" type="button">&times;</button>
+    </div>
+    <div id="new-alert"></div>
+    <form id="new-invoice-form" novalidate>
+
+      <h3 class="form-section-title" data-i18n="section_patient">Patient</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_firstname_inv">Vorname <span class="required">*</span></label>
+          <input type="text" name="patient_first_name" class="form-control" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_lastname_inv">Nachname <span class="required">*</span></label>
+          <input type="text" name="patient_last_name" class="form-control" required autocomplete="off">
+        </div>
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label" data-i18n="form_address_p">Adresse Patient</label>
+          <input type="text" name="patient_address" class="form-control" data-i18n-ph="ph_address" placeholder="Musterstraße 1, 12345 Berlin" autocomplete="off">
+        </div>
+      </div>
+
+      <h3 class="form-section-title" style="margin-top:1.25rem;" data-i18n="section_dates">Datum</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_invoice_date">Rechnungsdatum <span class="required">*</span></label>
+          <input type="date" name="invoice_date" id="inv-date" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_due_date">Fällig am</label>
+          <input type="date" name="due_date" id="inv-due" class="form-control">
+        </div>
+      </div>
+
+      <h3 class="form-section-title" style="margin-top:1.25rem;" data-i18n="section_positions">Positionen</h3>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th style="width:55%;" data-i18n="th_service">Leistungsbeschreibung</th>
+            <th style="width:25%;text-align:right;" data-i18n="th_amount">Betrag (€)</th>
+            <th style="width:20%;"></th>
+          </tr>
+        </thead>
+        <tbody id="items-body"></tbody>
+      </table>
+      <button type="button" id="btn-add-item" class="btn btn-secondary btn-sm" data-i18n="btn_add_position">+ Position</button>
+
+      <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;flex-wrap:wrap;">
+        <label class="form-label" style="margin:0;" data-i18n="form_tax">MwSt.:</label>
+        <select id="tax-rate" class="form-control" style="width:120px;">
+          <option value="0">0 %</option>
+          <option value="7">7 %</option>
+          <option value="19">19 %</option>
+        </select>
+      </div>
+
+      <div class="invoice-totals" id="totals-display" style="margin-top:1rem;">
+        <div class="invoice-totals-row"><span data-i18n="total_net">Netto</span><span id="t-net">0,00 €</span></div>
+        <div class="invoice-totals-row"><span id="t-tax-label">MwSt. 0 %</span><span id="t-tax">0,00 €</span></div>
+        <div class="invoice-totals-row total"><span data-i18n="total_total">Gesamt</span><span id="t-total">0,00 €</span></div>
+      </div>
+
+      <div class="form-group" style="margin-top:1.25rem;">
+        <label class="form-label" data-i18n="form_notes_inv">Notizen</label>
+        <textarea name="notes" class="form-control" rows="2" data-i18n-ph="ph_notes_inv" placeholder="Zahlungshinweise, IBAN, …"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-new" data-i18n="btn_cancel">Abbrechen</button>
+        <button type="submit" class="btn btn-primary" id="btn-save-new" data-i18n="btn_new_invoice">Rechnung erstellen</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: Detail -->
+<div class="modal-backdrop hidden" id="modal-detail">
+  <div class="modal" style="max-width:620px;">
+    <div class="modal-header">
+      <h3 id="detail-title">Rechnung</h3>
+      <button class="modal-close" id="btn-close-detail" type="button">&times;</button>
+    </div>
+    <div id="detail-alert"></div>
+    <div id="detail-body"></div>
+    <div class="modal-footer" id="detail-footer"></div>
+  </div>
+</div>
+
+<!-- Modal: Zahlung erfassen -->
+<div class="modal-backdrop hidden" id="modal-pay">
+  <div class="modal" style="max-width:420px;">
+    <div class="modal-header">
+      <h3 data-i18n="modal_payment">Zahlung erfassen</h3>
+      <button class="modal-close" id="btn-close-pay" type="button">&times;</button>
+    </div>
+    <div id="pay-alert"></div>
+    <form id="pay-form" novalidate>
+      <div class="form-group">
+        <label class="form-label" data-i18n="form_pay_date">Zahlungsdatum <span class="required">*</span></label>
+        <input type="date" name="payment_date" id="pay-date" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label" data-i18n="form_pay_method">Zahlungsart</label>
+        <select name="payment_method" class="form-control">
+          <option value="Bar" data-i18n="pay_cash">Bar</option>
+          <option value="Überweisung" data-i18n="pay_transfer">Überweisung</option>
+          <option value="Kartenzahlung" data-i18n="pay_card">Kartenzahlung</option>
+          <option value="Sonstiges" data-i18n="pay_other">Sonstiges</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-pay" data-i18n="btn_cancel">Abbrechen</button>
+        <button type="submit" class="btn btn-success" id="btn-confirm-pay" data-i18n="btn_mark_paid">Bezahlt markieren</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script src="/js/invoices.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rezeptdruck – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html" class="active"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="page-header">
+      <h1 data-i18n="page_recipes">Rezeptdruck-Protokoll</h1>
+    </div>
+
+    <div class="recipe-info-banner" data-i18n="recipe_info">
+      Nur Behandler, Patientenname und Zeitstempel werden gespeichert.
+      Rezeptinhalte, Medikamente und Dosierungen werden nicht erfasst.
+    </div>
+
+    <!-- Log-Formular -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h2 class="card-title" style="font-size:1rem;" data-i18n="card_log_form">Druckvorgang erfassen</h2>
+      <div id="log-alert"></div>
+      <form id="log-form" novalidate>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:1rem;align-items:end;">
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" data-i18n="th_practitioner">Behandler <span class="required">*</span></label>
+            <select name="practitioner_id" id="sel-practitioner" class="form-control" required>
+              <option value="" data-i18n-ph="ph_practitioner">Behandler wählen…</option>
+            </select>
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" data-i18n="form_firstname">Vorname Patient <span class="required">*</span></label>
+            <input type="text" name="patient_first_name" class="form-control" required autocomplete="off">
+          </div>
+          <div class="form-group" style="margin:0;">
+            <label class="form-label" data-i18n="form_lastname">Nachname Patient <span class="required">*</span></label>
+            <input type="text" name="patient_last_name" class="form-control" required autocomplete="off">
+          </div>
+          <div style="padding-bottom:1.25rem;">
+            <button type="submit" class="btn btn-primary" id="btn-log" data-i18n="btn_log">Erfassen</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Log-Tabelle -->
+    <div class="card">
+      <h2 class="card-title" style="font-size:1rem;margin-bottom:1rem;" data-i18n="card_log">Protokoll</h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="th_datetime">Datum &amp; Uhrzeit</th>
+              <th data-i18n="th_practitioner">Behandler</th>
+              <th data-i18n="th_patient">Patient</th>
+              <th data-i18n="th_recorded_by">Erfasst von</th>
+            </tr>
+          </thead>
+          <tbody id="log-tbody">
+            <tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:2rem;" data-i18n="loading">Wird geladen…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script src="/js/recipes.js"></script>
+</body>
+</html>

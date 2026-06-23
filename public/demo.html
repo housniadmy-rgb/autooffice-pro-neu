@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo anfragen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .demo-section {
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1rem 4rem;
+      background: var(--bg-light, #f8f9fa);
+    }
+    .demo-card {
+      background: #fff;
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: var(--shadow-md, 0 4px 16px rgba(0,0,0,.08));
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 540px;
+    }
+    .demo-card h1 {
+      font-size: 1.625rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: .5rem;
+    }
+    .demo-subtitle {
+      color: var(--text-secondary);
+      font-size: .9375rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+    .demo-form .form-group { margin-bottom: 1.125rem; }
+    .demo-form .required-star { color: var(--danger); margin-left: .125rem; }
+    .demo-success {
+      display: none;
+      background: #e8f5e9;
+      border: 1px solid #a5d6a7;
+      border-radius: var(--radius);
+      padding: 1.25rem 1.5rem;
+      color: #2e7d32;
+      font-size: .9375rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .demo-card { padding: 1.75rem 1.25rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">
+      PraxisOnline24 <span id="logo-slogan">Ihre Praxis. Online. Rund um die Uhr.</span>
+    </a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+      <a id="nav-preise" href="/preise.html">Preise</a>
+      <a id="nav-demo" href="/demo.html" style="font-weight:600;">Demo anfragen</a>
+      <a id="nav-login" href="/login.html">Anmelden</a>
+      <a id="nav-start" href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="demo-section">
+    <div class="demo-card">
+      <h1 id="demo-title">Demo anfragen</h1>
+      <p id="demo-subtitle" class="demo-subtitle">Erfahren Sie, wie PraxisOnline24 Ihre Praxis transformiert. Unsere Experten zeigen Ihnen alle Funktionen in einer persönlichen Demo.</p>
+
+      <div id="demo-success" class="demo-success">
+        Vielen Dank für Ihre Anfrage. Wir werden uns schnellstmöglich mit Ihnen in Verbindung setzen.
+      </div>
+
+      <div id="demo-alert" class="alert alert-danger" style="display:none;"></div>
+
+      <form id="demo-form" class="demo-form" novalidate>
+        <div class="form-group">
+          <label class="form-label" for="demo-practice">
+            <span id="label-practice">Praxisname</span><span class="required-star">*</span>
+          </label>
+          <input id="demo-practice" name="practice" type="text" class="form-control"
+                 placeholder="z.B. Praxis Dr. Müller" required autocomplete="organization">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-contact">
+            <span id="label-contact">Ansprechpartner</span><span class="required-star">*</span>
+          </label>
+          <input id="demo-contact" name="contact" type="text" class="form-control"
+                 placeholder="Vor- und Nachname" required autocomplete="name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-email">
+            E-Mail<span class="required-star">*</span>
+          </label>
+          <input id="demo-email" name="email" type="email" class="form-control"
+                 placeholder="name@praxis.de" required autocomplete="email">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-phone">
+            <span id="label-phone">Telefon</span>
+          </label>
+          <input id="demo-phone" name="phone" type="tel" class="form-control"
+                 placeholder="+49 123 456789" autocomplete="tel">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-country">
+            <span id="label-country">Land</span><span class="required-star">*</span>
+          </label>
+          <input id="demo-country" name="country" type="text" class="form-control"
+                 placeholder="z.B. Deutschland" required autocomplete="country-name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-language">
+            <span id="label-language">Bevorzugte Sprache</span>
+          </label>
+          <select id="demo-language" name="language" class="form-control">
+            <option value="">– Bitte wählen –</option>
+            <option value="de">Deutsch</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+            <option value="es">Español</option>
+            <option value="pt">Português</option>
+            <option value="ar">العربية</option>
+            <option value="tr">Türkçe</option>
+            <option value="ru">Русский</option>
+            <option value="zh">中文</option>
+            <option value="hi">हिन्दी</option>
+            <option value="id">Bahasa Indonesia</option>
+            <option value="th">ภาษาไทย</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="demo-message">
+            <span id="label-message">Nachricht</span>
+          </label>
+          <textarea id="demo-message" name="message" class="form-control" rows="4"
+                    placeholder="Haben Sie Fragen oder besondere Wünsche?"></textarea>
+        </div>
+
+        <button id="demo-submit" type="submit" class="btn btn-primary" style="width:100%;margin-top:.5rem;">
+          Demo anfragen
+        </button>
+      </form>
+
+      <p style="margin-top:1.25rem;text-align:center;">
+        <a id="demo-back" href="/" style="color:var(--text-secondary);font-size:.875rem;">← Zurück zur Startseite</a>
+      </p>
+    </div>
+  </section>
+</main>
+
+<script src="/js/public-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    if (document.getElementById('pub-lang-switcher')) {
+      renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    }
+
+    document.getElementById('logo-slogan').textContent     = pT('slogan')             || 'Ihre Praxis. Online. Rund um die Uhr.';
+    document.getElementById('nav-preise').textContent      = pT('nav_preise')          || 'Preise';
+    document.getElementById('nav-demo').textContent        = pT('nav_demo')            || 'Demo anfragen';
+    document.getElementById('nav-login').textContent       = pT('idx_login')           || 'Anmelden';
+    document.getElementById('nav-start').textContent       = pT('idx_start')           || 'Kostenlos starten';
+    document.getElementById('demo-title').textContent      = pT('demo_title')          || 'Demo anfragen';
+    document.getElementById('demo-subtitle').textContent   = pT('demo_subtitle')       || '';
+    document.getElementById('label-practice').textContent  = pT('demo_label_practice') || 'Praxisname';
+    document.getElementById('label-contact').textContent   = pT('demo_label_contact')  || 'Ansprechpartner';
+    document.getElementById('label-country').textContent   = pT('demo_label_country')  || 'Land';
+    document.getElementById('label-message').textContent   = pT('demo_label_message')  || 'Nachricht';
+    document.getElementById('demo-practice').placeholder   = pT('demo_ph_practice')   || '';
+    document.getElementById('demo-contact').placeholder    = pT('demo_ph_contact')    || '';
+    document.getElementById('demo-country').placeholder    = pT('demo_ph_country')    || '';
+    document.getElementById('demo-message').placeholder    = pT('demo_ph_message')    || '';
+    document.getElementById('demo-submit').textContent     = pT('demo_submit')         || 'Demo anfragen';
+    document.getElementById('demo-back').textContent       = '← ' + (pT('nav_home') || 'Startseite');
+
+    document.getElementById('demo-form').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const btn = document.getElementById('demo-submit');
+      const alertEl = document.getElementById('demo-alert');
+      const defaultLabel = pT('demo_submit') || 'Demo anfragen';
+      alertEl.style.display = 'none';
+
+      const body = {
+        practice: document.getElementById('demo-practice').value.trim(),
+        contact:  document.getElementById('demo-contact').value.trim(),
+        email:    document.getElementById('demo-email').value.trim(),
+        phone:    document.getElementById('demo-phone').value.trim(),
+        country:  document.getElementById('demo-country').value.trim(),
+        language: document.getElementById('demo-language').value,
+        message:  document.getElementById('demo-message').value.trim(),
+      };
+
+      btn.disabled = true;
+      btn.textContent = '…';
+
+      // Client-seitiger Hard-Timeout: Button bleibt nie dauerhaft auf "…"
+      const controller = new AbortController();
+      const abortTimer = setTimeout(() => controller.abort(), 15000);
+
+      try {
+        const res = await fetch('/api/demo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(body),
+          signal: controller.signal,
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(json.error || 'Fehler');
+
+        document.getElementById('demo-form').style.display = 'none';
+        const successEl = document.getElementById('demo-success');
+        successEl.textContent = pT('demo_success') || 'Vielen Dank für Ihre Anfrage. Wir werden uns schnellstmöglich mit Ihnen in Verbindung setzen.';
+        successEl.style.display = 'block';
+      } catch (err) {
+        alertEl.textContent = pT('demo_error') || 'Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.';
+        alertEl.style.display = 'block';
+        alertEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        btn.disabled = false;
+        btn.textContent = defaultLabel;
+      } finally {
+        clearTimeout(abortTimer);
+        if (btn.textContent === '…') {
+          btn.disabled = false;
+          btn.textContent = defaultLabel;
+        }
+      }
+    });
+
+    document.title = (pT('demo_title') || 'Demo anfragen') + ' – PraxisOnline24';
+  })();
+</script>
+</body>
+</html>

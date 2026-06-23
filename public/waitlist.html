@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Warteliste – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem;">
+  <div class="card waitlist-form-card" style="width:100%;">
+
+    <div id="practice-info" style="margin-bottom:1.5rem;">
+      <h1 id="practice-name" style="font-size:1.25rem;margin-bottom:.25rem;">Warteliste</h1>
+      <p id="wl-intro" style="font-size:.9375rem;color:var(--text-secondary);">Tragen Sie sich in die Warteliste ein. Wir benachrichtigen Sie, sobald ein Termin frei wird.</p>
+    </div>
+
+    <div id="alert-area"></div>
+
+    <form id="waitlist-form">
+      <input type="hidden" id="inp-practice-id" name="practice_id">
+
+      <div class="form-grid" style="margin-bottom:.75rem;">
+        <div class="form-group">
+          <label class="form-label" for="inp-first-name"><span id="wl-fn-label">Vorname</span> *</label>
+          <input type="text" id="inp-first-name" name="patient_first_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-last-name"><span id="wl-ln-label">Nachname</span> *</label>
+          <input type="text" id="inp-last-name" name="patient_last_name" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-email"><span id="wl-email-label">E-Mail</span> *</label>
+          <input type="email" id="inp-email" name="patient_email" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-phone"><span id="wl-phone-label">Telefon</span></label>
+          <input type="tel" id="inp-phone" name="patient_phone" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-language" id="wl-lang-label">Bevorzugte Sprache</label>
+          <select id="inp-language" name="language" class="form-control">
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="en">🇬🇧 English</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="id">🇮🇩 Bahasa Indonesia</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="zh">🇨🇳 中文</option>
+            <option value="hi">🇮🇳 हिन्दी</option>
+            <option value="th">🇹🇭 ภาษาไทย</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-period" id="wl-period-label">Gewünschter Zeitraum</label>
+          <input type="text" id="inp-period" name="preferred_period" class="form-control" placeholder="z. B. Montag vormittags">
+        </div>
+      </div>
+
+      <p id="wl-disclaimer" style="font-size:.8125rem;color:var(--text-secondary);margin-bottom:1rem;">
+        Bitte keine Diagnosen oder Gesundheitsdaten eingeben.
+      </p>
+
+      <button type="submit" id="btn-submit" class="btn btn-primary" style="width:100%;">Auf Warteliste eintragen</button>
+    </form>
+
+    <div id="success-msg" style="display:none;text-align:center;padding:2rem 0;">
+      <div style="font-size:2rem;margin-bottom:.75rem;">✓</div>
+      <h2 id="wl-success-h2" style="margin-bottom:.5rem;">Sie stehen auf der Warteliste!</h2>
+      <p id="wl-success-p" style="color:var(--text-secondary);">Wir melden uns, sobald ein passender Termin frei wird.</p>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="wl-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="wl-agb" href="/agb.html">AGB</a>
+        <a id="wl-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="wl-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/public-i18n.js"></script>
+<script src="/js/main.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    document.getElementById('wl-intro').textContent = pT('wl_intro');
+    document.getElementById('wl-fn-label').textContent = pT('first_name_label');
+    document.getElementById('wl-ln-label').textContent = pT('last_name_label');
+    document.getElementById('wl-email-label').textContent = pT('email_label');
+    document.getElementById('wl-phone-label').textContent = pT('phone_label');
+    document.getElementById('wl-lang-label').textContent = pT('wl_lang_label');
+    document.getElementById('wl-period-label').textContent = pT('wl_period_label');
+    document.getElementById('inp-period').placeholder = pT('wl_period_ph');
+    document.getElementById('wl-disclaimer').textContent = pT('wl_disclaimer');
+    document.getElementById('btn-submit').textContent = pT('wl_submit');
+    document.getElementById('wl-success-h2').textContent = pT('wl_success_h2');
+    document.getElementById('wl-success-p').textContent = pT('wl_success_p');
+    document.getElementById('wl-footer-note').textContent = pT('footer_note');
+    document.getElementById('wl-agb').textContent = pT('nav_agb');
+    document.getElementById('wl-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('wl-sec-comp').textContent = pT('footer.security_compliance');
+  })();
+
+  const practiceId = getQueryParam('p');
+  if (!practiceId) {
+    document.getElementById('practice-info').innerHTML = '<p style="color:var(--danger);">' + pT('wl_invalid_link') + '</p>';
+    document.getElementById('waitlist-form').style.display = 'none';
+  } else {
+    document.getElementById('inp-practice-id').value = practiceId;
+    fetch('/api/public/practice/' + practiceId)
+      .then(r => r.json())
+      .then(p => {
+        if (p.name) document.getElementById('practice-name').textContent = 'Warteliste – ' + p.name;
+      })
+      .catch(() => {});
+  }
+
+  document.getElementById('waitlist-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    document.getElementById('alert-area').innerHTML = '';
+
+    const form = e.target;
+    const data = {
+      practice_id: form.elements['practice_id'].value,
+      patient_first_name: form.elements['patient_first_name'].value.trim(),
+      patient_last_name: form.elements['patient_last_name'].value.trim(),
+      patient_email: form.elements['patient_email'].value.trim(),
+      patient_phone: form.elements['patient_phone'].value.trim() || undefined,
+      language: form.elements['language'].value,
+      preferred_period: form.elements['preferred_period'].value.trim() || undefined,
+    };
+
+    try {
+      const res = await fetch('/api/waitlist', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error || 'Fehler');
+
+      form.style.display = 'none';
+      document.getElementById('success-msg').style.display = 'block';
+    } catch (err) {
+      document.getElementById('alert-area').innerHTML = '<div class="alert alert-danger">' + err.message + '</div>';
+      btn.disabled = false;
+    }
+  });
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

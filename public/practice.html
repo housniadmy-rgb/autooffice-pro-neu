@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praxisprofil – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <span class="logo">PraxisOnline24</span>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main style="flex:1;padding:2rem 1rem 3rem;">
+  <div style="max-width:760px;margin:0 auto;">
+
+    <div id="loading" style="text-align:center;padding:4rem 0;color:var(--text-secondary);">Wird geladen…</div>
+    <div id="error" style="display:none;" class="card">
+      <p id="error-msg" style="color:var(--danger);text-align:center;padding:2rem;"></p>
+    </div>
+
+    <div id="content" style="display:none;">
+
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;align-items:flex-start;">
+          <div>
+            <h1 id="p-name" style="margin-bottom:.375rem;"></h1>
+            <p id="p-description" style="color:var(--text-secondary);font-size:.9375rem;max-width:480px;"></p>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div id="p-rating" style="color:var(--warning);font-size:1.25rem;letter-spacing:.05em;"></div>
+            <div id="p-rating-label" style="font-size:.8125rem;color:var(--text-secondary);"></div>
+          </div>
+        </div>
+
+        <hr style="margin:1.25rem 0;border:none;border-top:1px solid var(--border);">
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:.75rem 1.5rem;">
+          <div id="row-address" style="display:none;">
+            <div id="lbl-address" style="font-size:.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">Adresse</div>
+            <div id="p-address" style="font-size:.9375rem;"></div>
+          </div>
+          <div id="row-phone" style="display:none;">
+            <div id="lbl-phone" style="font-size:.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">Telefon</div>
+            <div id="p-phone" style="font-size:.9375rem;"></div>
+          </div>
+          <div id="row-website" style="display:none;">
+            <div id="lbl-website" style="font-size:.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">Website</div>
+            <a id="p-website" href="#" target="_blank" rel="noopener" style="font-size:.9375rem;"></a>
+          </div>
+          <div id="row-hours" style="display:none;">
+            <div id="lbl-hours" style="font-size:.75rem;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.25rem;">Öffnungszeiten</div>
+            <div id="p-hours" style="font-size:.875rem;white-space:pre-line;"></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem;">
+          <a id="btn-book" href="#" class="btn btn-primary">Termin buchen</a>
+          <a id="btn-waitlist" href="#" class="btn btn-secondary">Auf Warteliste eintragen</a>
+          <a id="btn-my-appts" href="#" class="btn btn-secondary">Meine Termine</a>
+        </div>
+      </div>
+
+      <div id="practitioners-section" style="display:none;margin-bottom:1.25rem;">
+        <h2 id="section-prac-h2" style="margin-bottom:.875rem;font-size:1.125rem;">Behandler</h2>
+        <div id="practitioners-list" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+      </div>
+
+      <div id="reviews-section" style="display:none;">
+        <h2 id="section-reviews-h2" style="margin-bottom:.875rem;font-size:1.125rem;">Bewertungen</h2>
+        <div id="reviews-list" style="display:flex;flex-direction:column;gap:.75rem;"></div>
+        <div style="margin-top:1rem;text-align:center;">
+          <a id="btn-review" href="#" class="btn btn-secondary btn-sm">Bewertung schreiben</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html">AGB</a>
+        <a href="/datenschutz.html">Datenschutz</a>
+        <a id="prac-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    applyTranslations();
+
+    const practiceId = getQueryParam('p');
+
+    if (!practiceId) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = '';
+      document.getElementById('error-msg').textContent = pT('error_no_id');
+    } else {
+      loadPractice(practiceId);
+    }
+  });
+
+  function applyTranslations() {
+    document.getElementById('loading').textContent = pT('loading');
+    document.getElementById('lbl-address').textContent = pT('prac_address');
+    document.getElementById('lbl-phone').textContent = pT('prac_phone');
+    document.getElementById('lbl-website').textContent = pT('prac_website');
+    document.getElementById('lbl-hours').textContent = pT('prac_hours');
+    document.getElementById('btn-book').textContent = pT('prac_book');
+    document.getElementById('btn-waitlist').textContent = pT('prac_waitlist');
+    document.getElementById('btn-my-appts').textContent = pT('prac_my_appts');
+    document.getElementById('section-prac-h2').textContent = pT('prac_practitioners');
+    document.getElementById('section-reviews-h2').textContent = pT('prac_reviews');
+    document.getElementById('btn-review').textContent = pT('prac_write_review');
+    document.getElementById('footer-note').textContent = pT('footer_note');
+    document.getElementById('prac-sec-comp').textContent = pT('footer.security_compliance');
+  }
+
+  async function loadPractice(practiceId) {
+    try {
+      const res = await fetch(`/api/public/practices/${practiceId}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Fehler');
+
+      const { practice, practitioners, rating, reviews } = data;
+      const lang = pLang();
+
+      document.title = `${practice.name} – PraxisOnline24`;
+      document.getElementById('p-name').textContent = practice.name;
+
+      if (practice.description) {
+        document.getElementById('p-description').textContent = practice.description;
+      }
+
+      if (rating && rating.count > 0) {
+        const avg = Math.round(rating.avg);
+        document.getElementById('p-rating').textContent = '★'.repeat(avg) + '☆'.repeat(5 - avg);
+        const countFn = pT('prac_rating_count');
+        const countStr = typeof countFn === 'function' ? countFn(rating.count) : `${rating.count}`;
+        document.getElementById('p-rating-label').textContent = `${Number(rating.avg).toFixed(1)} / 5 · ${countStr}`;
+      }
+
+      const addr = [practice.address, practice.zip, practice.city].filter(Boolean).join(', ');
+      if (addr) {
+        document.getElementById('p-address').textContent = addr;
+        document.getElementById('row-address').style.display = '';
+      }
+      if (practice.phone) {
+        document.getElementById('p-phone').textContent = practice.phone;
+        document.getElementById('row-phone').style.display = '';
+      }
+      if (practice.website) {
+        const w = document.getElementById('p-website');
+        w.href = practice.website;
+        w.textContent = practice.website.replace(/^https?:\/\//, '');
+        document.getElementById('row-website').style.display = '';
+      }
+      if (practice.opening_hours) {
+        document.getElementById('p-hours').textContent = practice.opening_hours;
+        document.getElementById('row-hours').style.display = '';
+      }
+
+      document.getElementById('btn-book').href = `/booking.html?p=${practiceId}&lang=${lang}`;
+      document.getElementById('btn-waitlist').href = `/waitlist.html?p=${practiceId}`;
+      document.getElementById('btn-my-appts').href = `/my-appointments.html?p=${practiceId}&lang=${lang}`;
+      document.getElementById('btn-review').href = `/review.html?p=${practiceId}&lang=${lang}`;
+
+      if (practitioners && practitioners.length) {
+        document.getElementById('practitioners-section').style.display = '';
+        document.getElementById('practitioners-list').innerHTML = practitioners.map(p => {
+          const name = [p.title, p.first_name, p.last_name].filter(Boolean).join(' ');
+          return `<div class="card" style="padding:1rem;">
+            <div style="font-weight:600;margin-bottom:.25rem;">${esc(name)}</div>
+            ${p.specialty ? `<div style="font-size:.875rem;color:var(--text-secondary);margin-bottom:.25rem;">${esc(p.specialty)}</div>` : ''}
+            ${p.bio ? `<div style="font-size:.875rem;color:var(--text-secondary);">${esc(p.bio)}</div>` : ''}
+          </div>`;
+        }).join('');
+      }
+
+      if (reviews && reviews.length) {
+        document.getElementById('reviews-section').style.display = '';
+        document.getElementById('reviews-list').innerHTML = reviews.map(r => {
+          const stars = '★'.repeat(r.rating) + '☆'.repeat(5 - r.rating);
+          const date = r.created_at
+            ? new Date(r.created_at).toLocaleDateString(lang === 'ar' ? 'ar-SA' : lang, { day: '2-digit', month: '2-digit', year: 'numeric' })
+            : '';
+          return `<div class="card" style="padding:1rem;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:.375rem;">
+              <span style="color:var(--warning);">${stars}</span>
+              <span style="font-size:.8125rem;color:var(--text-secondary);">${esc(date)}</span>
+            </div>
+            ${r.author_name ? `<div style="font-weight:500;font-size:.875rem;margin-bottom:.25rem;">${esc(r.author_name)}</div>` : ''}
+            ${r.comment ? `<div style="font-size:.9375rem;color:var(--text-secondary);">${esc(r.comment)}</div>` : ''}
+          </div>`;
+        }).join('');
+      }
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('content').style.display = '';
+    } catch (err) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('error').style.display = '';
+      document.getElementById('error-msg').textContent = err.message;
+    }
+  }
+
+  function esc(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

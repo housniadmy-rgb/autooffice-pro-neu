@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Einstellungen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html" class="active"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="page-header">
+      <h1 data-i18n="page_settings">Einstellungen</h1>
+    </div>
+
+    <!-- Praxisprofil -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h2 class="form-section-title" data-i18n="section_profile">Praxisprofil</h2>
+      <div id="profile-alert"></div>
+      <form id="profile-form">
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="inp-name" data-i18n="form_practice_name">Praxisname *</label>
+            <input type="text" id="inp-name" name="name" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-phone" data-i18n="form_phone_s">Telefon</label>
+            <input type="tel" id="inp-phone" name="phone" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-email" data-i18n="form_email_s">E-Mail</label>
+            <input type="email" id="inp-email" name="email" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-website" data-i18n="form_website">Website</label>
+            <input type="url" id="inp-website" name="website" class="form-control" data-i18n-ph="ph_website" placeholder="https://…">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inp-address" data-i18n="form_address_s">Adresse</label>
+            <input type="text" id="inp-address" name="address" class="form-control">
+          </div>
+          <div class="form-group" style="display:grid;grid-template-columns:1fr 2fr;gap:.75rem;">
+            <div>
+              <label class="form-label" for="inp-zip" data-i18n="form_zip">PLZ</label>
+              <input type="text" id="inp-zip" name="zip" class="form-control" maxlength="10">
+            </div>
+            <div>
+              <label class="form-label" for="inp-city" data-i18n="form_city">Ort</label>
+              <input type="text" id="inp-city" name="city" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="form-group" style="margin-top:.75rem;">
+          <label class="form-label" for="inp-description" data-i18n="form_description">Beschreibung</label>
+          <textarea id="inp-description" name="description" class="form-control" rows="3" style="resize:vertical;"></textarea>
+        </div>
+        <div class="form-group" style="margin-top:.75rem;">
+          <label class="form-label" for="inp-opening-hours" data-i18n="form_opening_hours">Öffnungszeiten</label>
+          <textarea id="inp-opening-hours" name="opening_hours" class="form-control" rows="3" style="resize:vertical;" data-i18n-ph="ph_opening_hours" placeholder="Mo–Fr 08:00–18:00&#10;Sa 09:00–13:00"></textarea>
+        </div>
+        <div style="margin-top:1.25rem;">
+          <button type="submit" id="btn-save-profile" class="btn btn-primary" data-i18n="btn_save">Speichern</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sprache -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h2 class="form-section-title" data-i18n="section_language">Sprache / Language</h2>
+      <div id="lang-alert"></div>
+      <p style="font-size:.9375rem;color:var(--text-secondary);margin-bottom:1rem;" data-i18n="lang_info">
+        Sprache für E-Mail-Benachrichtigungen und die Benutzeroberfläche.
+      </p>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+        <select id="lang-select" class="form-control" style="max-width:260px;">
+          <option value="de">🇩🇪 Deutsch</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="pt">🇧🇷 Português</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="th">🇹🇭 ภาษาไทย</option>
+          <option value="tr">🇹🇷 Türkçe</option>
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+        </select>
+        <button id="btn-save-lang" class="btn btn-primary" data-i18n="btn_save_lang">Speichern</button>
+      </div>
+    </div>
+
+    <!-- Terminarchivierung -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h2 class="form-section-title" data-i18n="section_archive">Terminarchivierung</h2>
+      <div id="archive-alert"></div>
+      <p style="font-size:.9375rem;color:var(--text-secondary);margin-bottom:1rem;" data-i18n="archive_info">
+        Abgeschlossene und abgesagte Termine werden automatisch archiviert und aus der Standardansicht ausgeblendet.
+      </p>
+      <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+        <select id="archive-select" class="form-control" style="width:auto;min-width:220px;">
+          <option value="never" data-i18n="archive_never">Nie archivieren</option>
+          <option value="6" data-i18n="archive_6m">Nach 6 Monaten</option>
+          <option value="12" data-i18n="archive_12m" selected>Nach 12 Monaten (Standard)</option>
+          <option value="24" data-i18n="archive_24m">Nach 24 Monaten</option>
+        </select>
+        <button id="btn-save-archive" class="btn btn-primary btn-sm" data-i18n="btn_save">Speichern</button>
+      </div>
+    </div>
+
+    <!-- Abonnement -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h2 class="form-section-title">Abonnement</h2>
+      <div id="subscription-info">
+        <p style="color:var(--text-secondary);font-size:.9375rem;" data-i18n="loading">Wird geladen…</p>
+      </div>
+    </div>
+
+    <!-- Buchungsseite -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <h2 class="form-section-title" data-i18n="section_booking">Buchungsseite</h2>
+      <p style="font-size:.9375rem;color:var(--text-secondary);margin-bottom:.75rem;" data-i18n="booking_info">
+        Teilen Sie diesen Link mit Ihren Patienten, damit diese direkt Termine buchen können.
+      </p>
+      <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+        <input type="text" id="booking-link-input" class="form-control" readonly style="flex:1;min-width:0;background:var(--surface);cursor:default;">
+        <button id="btn-copy-booking" class="btn btn-secondary" style="white-space:nowrap;" data-i18n="btn_copy_link">Link kopieren</button>
+      </div>
+      <p id="copy-feedback" style="font-size:.875rem;color:var(--secondary);margin-top:.5rem;min-height:1.25rem;"></p>
+    </div>
+
+    <!-- Aktivitätsprotokoll -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;">
+        <h2 class="form-section-title" style="margin:0;" data-i18n="section_activity">Aktivitätsprotokoll</h2>
+        <button id="btn-load-activity" class="btn btn-secondary btn-sm" data-i18n="btn_load_activity">Protokoll laden</button>
+      </div>
+      <div id="activity-log-container" style="display:none;">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="th_time">Zeit</th>
+                <th data-i18n="th_action">Aktion</th>
+                <th data-i18n="th_user">Benutzer</th>
+                <th data-i18n="th_details">Details</th>
+              </tr>
+            </thead>
+            <tbody id="activity-log-tbody">
+              <tr><td colspan="4" style="text-align:center;color:var(--text-secondary);padding:1rem;" data-i18n="loading">Wird geladen…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Passwort ändern -->
+    <div class="card">
+      <h2 class="form-section-title" data-i18n="section_password">Passwort ändern</h2>
+      <div id="password-alert"></div>
+      <form id="password-form" style="max-width:420px;">
+        <div class="form-group">
+          <label class="form-label" for="inp-current-pw" data-i18n="form_current_pw">Aktuelles Passwort</label>
+          <input type="password" id="inp-current-pw" name="current_password" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-new-pw" data-i18n="form_new_pw">Neues Passwort</label>
+          <input type="password" id="inp-new-pw" name="new_password" class="form-control" required minlength="8">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="inp-confirm-pw" data-i18n="form_confirm_pw">Neues Passwort bestätigen</label>
+          <input type="password" id="inp-confirm-pw" name="confirm_password" class="form-control" required minlength="8">
+        </div>
+        <div style="margin-top:1.25rem;">
+          <button type="submit" id="btn-save-password" class="btn btn-primary" data-i18n="btn_change_pw">Passwort ändern</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script src="/js/settings.js"></script>
+<script src="/js/password-toggle.js"></script>
+</body>
+</html>

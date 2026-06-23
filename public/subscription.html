@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abonnement – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="page-header">
+      <h1>Abonnement</h1>
+    </div>
+
+    <!-- Status Banner -->
+    <div id="status-banner"></div>
+
+    <!-- Aktuelles Paket -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h2 class="form-section-title">Aktuelles Paket</h2>
+      <div id="current-plan-info" style="color:var(--text-secondary);">Wird geladen…</div>
+    </div>
+
+    <!-- Pakete vergleichen -->
+    <div class="card" style="margin-bottom:1.5rem;">
+      <h2 class="form-section-title">Pakete vergleichen</h2>
+      <div class="subscription-grid">
+
+        <div class="subscription-plan-card" id="card-basic">
+          <div class="subscription-plan-name">Basic</div>
+          <div class="subscription-plan-price">$19 / Monat</div>
+          <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
+            <li>Bis 200 Termine pro Monat</li>
+            <li>Bis zu 3 Behandler</li>
+            <li>Online-Buchung</li>
+            <li>Rechnungen &amp; Rezepte</li>
+            <li>Bewertungen</li>
+          </ul>
+        </div>
+
+        <div class="subscription-plan-card" id="card-professional">
+          <div class="subscription-plan-name" style="color:var(--primary);">Pro</div>
+          <div class="subscription-plan-price">$39 / Monat</div>
+          <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
+            <li>Bis 500 Termine pro Monat</li>
+            <li>Bis zu 10 Behandler</li>
+            <li>Online-Buchung</li>
+            <li>Rechnungen &amp; Rezepte</li>
+            <li>Bewertungen</li>
+            <li>Warteliste</li>
+            <li>KI-Praxismanager</li>
+          </ul>
+        </div>
+
+        <div class="subscription-plan-card" id="card-unlimited">
+          <div class="subscription-plan-name" style="color:var(--secondary);">Unlimited</div>
+          <div class="subscription-plan-price">$79 / Monat</div>
+          <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
+            <li>Unbegrenzte Termine</li>
+            <li>Unbegrenzte Behandler</li>
+            <li>Online-Buchung</li>
+            <li>Rechnungen &amp; Rezepte</li>
+            <li>Bewertungen</li>
+            <li>Warteliste</li>
+            <li>KI-Praxismanager</li>
+            <li>Prioritäts-Support</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Kontaktformular -->
+    <div class="card">
+      <h2 class="form-section-title">Paket buchen / Frage stellen</h2>
+      <p style="font-size:.9375rem;color:var(--text-secondary);margin-bottom:1.25rem;">
+        Um Ihr Paket zu aktivieren, zu upgraden oder bei Fragen zu Ihrem Abonnement,
+        kontaktieren Sie uns bitte:
+      </p>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;max-width:640px;">
+        <div>
+          <div class="form-label">E-Mail</div>
+          <a href="mailto:info@praxisonline24.com" style="font-size:.9375rem;">info@praxisonline24.com</a>
+        </div>
+        <div>
+          <div class="form-label">Website</div>
+          <span style="font-size:.9375rem;color:var(--text-secondary);">praxisonline24.com</span>
+        </div>
+      </div>
+
+      <div id="contact-form-alert" style="margin-top:1rem;"></div>
+
+      <form id="contact-form" style="margin-top:1.5rem;max-width:520px;">
+        <div class="form-group">
+          <label class="form-label" for="contact-subject">Betreff</label>
+          <select id="contact-subject" class="form-control">
+            <option value="upgrade-pro">Upgrade auf PROFESSIONAL</option>
+            <option value="upgrade-unl">Upgrade auf UNLIMITED</option>
+            <option value="activate">Abonnement aktivieren</option>
+            <option value="question">Allgemeine Frage</option>
+            <option value="cancel">Kündigung</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="contact-message">Nachricht</label>
+          <textarea id="contact-message" class="form-control" rows="4" placeholder="Ihre Nachricht…" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" id="btn-contact">Anfrage senden</button>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const ok = await checkAuth();
+  if (!ok) return;
+
+  // Load user info
+  try {
+    const user = await API.get('/api/auth/me');
+    const el = document.getElementById('user-name');
+    if (el) el.textContent = `${user.first_name} ${user.last_name}`;
+  } catch {}
+
+  // Load subscription info
+  try {
+    const sub = await API.get('/api/practices/subscription');
+    renderPlanInfo(sub);
+  } catch (err) {
+    document.getElementById('current-plan-info').textContent = 'Konnte nicht geladen werden.';
+  }
+
+  // Logout
+  document.getElementById('btn-logout')?.addEventListener('click', async () => {
+    try { await API.post('/api/auth/logout'); } finally { window.location.href = '/login.html'; }
+  });
+
+  // Contact form
+  document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const alertEl = document.getElementById('contact-form-alert');
+    alertEl.innerHTML = '<div class="alert alert-info">Vielen Dank! Bitte senden Sie Ihre Anfrage an <strong>info@praxisonline24.com</strong>. Wir melden uns innerhalb von 24 Stunden.</div>';
+    document.getElementById('btn-contact').disabled = true;
+  });
+});
+
+function renderPlanInfo(sub) {
+  const pkgLabel = sub.package === 'UNLIMITED' ? 'Unlimited' : sub.package === 'PROFESSIONAL' ? 'Pro' : 'Basic';
+  const pkgClass = sub.package === 'UNLIMITED' ? 'badge-unlimited' : sub.package === 'PROFESSIONAL' ? 'badge-pro' : 'badge-basic';
+
+  // Highlight current plan card
+  const cardMap = { BASIC: 'card-basic', PROFESSIONAL: 'card-professional', UNLIMITED: 'card-unlimited' };
+  const cardId = cardMap[sub.package] || 'card-basic';
+  const card = document.getElementById(cardId);
+  if (card) card.classList.add('current');
+  // Mark higher plans as upgrade options
+  ['card-basic', 'card-professional', 'card-unlimited'].forEach(function(id) {
+    if (id !== cardId) {
+      var el = document.getElementById(id);
+      if (el) el.classList.add('upgrade');
+    }
+  });
+
+  let trialHtml = '';
+  if (sub.trial_end_date) {
+    if (sub.trial_days_left > 0) {
+      trialHtml = `<div class="trial-banner" style="margin-top:1rem;">
+        <span>Testphase aktiv – endet am <strong>${formatDate(sub.trial_end_date)}</strong> (noch ${sub.trial_days_left} Tage)</span>
+      </div>`;
+    } else {
+      trialHtml = `<div class="trial-banner expired" style="margin-top:1rem;">
+        <span><strong>Testphase abgelaufen</strong> (${formatDate(sub.trial_end_date)}) – Bitte Paket aktivieren</span>
+      </div>`;
+    }
+  }
+
+  let statusHtml = '';
+  if (sub.account_status === 'paused') {
+    statusHtml = `<div class="alert alert-danger" style="margin-top:1rem;">
+      <strong>Konto pausiert.</strong> Bitte kontaktieren Sie uns zur Reaktivierung.
+    </div>`;
+  }
+
+  const statusBanner = document.getElementById('status-banner');
+  if (statusBanner) statusBanner.innerHTML = trialHtml + statusHtml;
+
+  document.getElementById('current-plan-info').innerHTML = `
+    <p style="font-size:1rem;">Ihr aktuelles Paket: <span class="badge ${pkgClass}" style="font-size:.9375rem;padding:.3rem .875rem;">${pkgLabel}</span></p>
+    <p style="font-size:.875rem;color:var(--text-secondary);margin-top:.5rem;">Kontostatus: <strong>${sub.account_status === 'paused' ? 'Pausiert' : 'Aktiv'}</strong></p>
+  `;
+}
+</script>
+</body>
+</html>

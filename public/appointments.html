@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kalender – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html" class="active"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div id="limit-bar" style="display:none;"></div>
+
+    <div class="cal-controls">
+      <button id="btn-prev-month" class="btn btn-secondary btn-sm" data-i18n="btn_prev">← Zurück</button>
+      <span id="cal-month-title" class="cal-title"></span>
+      <button id="btn-next-month" class="btn btn-secondary btn-sm" data-i18n="btn_next">Weiter →</button>
+      <button id="btn-today" class="btn btn-secondary btn-sm" data-i18n="btn_today">Heute</button>
+      <div style="flex:1;"></div>
+      <select id="filter-practitioner" class="form-control" style="width:auto;min-width:200px;"></select>
+      <select id="filter-archive" class="form-control" style="width:auto;min-width:160px;">
+        <option value="active" data-i18n="filter_active">Aktive Termine</option>
+        <option value="archived" data-i18n="filter_archived">Archivierte Termine</option>
+        <option value="all" data-i18n="filter_all_apts">Alle Termine</option>
+      </select>
+      <button id="btn-new-apt" class="btn btn-primary" data-i18n="btn_new_appointment">+ Neuer Termin</button>
+    </div>
+
+    <!-- Month View -->
+    <div id="view-month">
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+
+    <!-- Day View -->
+    <div id="view-day" style="display:none;">
+      <div class="day-view-header">
+        <button id="btn-back-month" class="btn btn-secondary btn-sm" data-i18n="btn_back_month">← Monatsansicht</button>
+        <button id="btn-prev-day" class="btn btn-secondary btn-sm" title="Vorheriger Tag">&#8249;</button>
+        <h2 id="day-view-date" style="flex:1;font-size:1.25rem;"></h2>
+        <button id="btn-next-day" class="btn btn-secondary btn-sm" title="Nächster Tag">&#8250;</button>
+      </div>
+      <div id="day-apt-list" class="day-apt-list"></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Appointment Modal -->
+<div class="modal-backdrop hidden" id="modal-appointment">
+  <div class="modal" style="max-width:640px;">
+    <div class="modal-header">
+      <h3 id="modal-title" data-i18n="modal_new_apt">Neuer Termin</h3>
+      <button class="modal-close" id="btn-close-modal" type="button">&times;</button>
+    </div>
+
+    <div id="modal-alert"></div>
+
+    <form id="apt-form" novalidate>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label" data-i18n="form_practitioner">Behandler <span class="required">*</span></label>
+          <select name="practitioner_id" id="form-practitioner" class="form-control" required></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_date">Datum <span class="required">*</span></label>
+          <input type="date" name="appointment_date" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_time">Uhrzeit <span class="required">*</span></label>
+          <input type="time" name="appointment_time" class="form-control" required step="900" min="07:00" max="20:00">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_duration">Dauer</label>
+          <select name="duration_minutes" class="form-control">
+            <option value="15" data-i18n="min_15">15 Minuten</option>
+            <option value="30" selected data-i18n="min_30">30 Minuten</option>
+            <option value="45" data-i18n="min_45">45 Minuten</option>
+            <option value="60" data-i18n="min_60">60 Minuten</option>
+            <option value="90" data-i18n="min_90">90 Minuten</option>
+            <option value="120" data-i18n="min_120">120 Minuten</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_type">Terminart</label>
+          <select name="appointment_type" id="form-apt-type" class="form-control">
+            <option value="" data-i18n="ph_select">– wählen –</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_firstname">Vorname Patient <span class="required">*</span></label>
+          <input type="text" name="patient_first_name" class="form-control" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_lastname">Nachname Patient <span class="required">*</span></label>
+          <input type="text" name="patient_last_name" class="form-control" required autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_email_p">E-Mail Patient <span class="required">*</span></label>
+          <input type="email" name="patient_email" class="form-control" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-i18n="form_phone_p">Telefon Patient</label>
+          <input type="tel" name="patient_phone" class="form-control" autocomplete="off">
+        </div>
+
+        <div class="form-group" style="grid-column:span 2;">
+          <label class="form-label" data-i18n="form_notes">Notizen</label>
+          <textarea name="notes" class="form-control" rows="2"></textarea>
+        </div>
+      </div>
+
+      <div id="status-section" style="display:none;">
+        <hr style="border:none;border-top:1px solid var(--border);margin:1rem 0 .75rem;">
+        <div class="form-label" style="margin-bottom:.5rem;" data-i18n="form_status_change">Status ändern</div>
+        <div id="status-buttons" style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1rem;"></div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-cancel-modal" data-i18n="btn_cancel">Abbrechen</button>
+        <button type="submit" class="btn btn-primary" id="btn-save-apt" data-i18n="btn_save">Speichern</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script src="/js/appointments.js"></script>
+</body>
+</html>

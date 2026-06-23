@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termin buchen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <span class="logo">PraxisOnline24</span>
+    <nav class="nav" style="gap:.75rem;">
+      <a id="my-appointments-link" href="#" style="font-size:.875rem;">Meine Termine</a>
+      <a id="waitlist-link" href="#" style="font-size:.875rem;">Warteliste</a>
+      <div id="bk-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main style="flex:1;padding:1.5rem 1rem 3rem;">
+  <div style="max-width:720px;margin:0 auto;">
+
+    <!-- Loading -->
+    <div id="loading-screen" style="text-align:center;padding:4rem 0;color:var(--text-secondary);">Wird geladen…</div>
+
+    <!-- Error -->
+    <div id="error-screen" style="display:none;">
+      <div class="card" style="text-align:center;padding:3rem;">
+        <p id="error-msg" style="color:var(--danger);font-size:1.1rem;"></p>
+      </div>
+    </div>
+
+    <!-- Main content -->
+    <div id="booking-main" style="display:none;">
+
+      <!-- Practice card -->
+      <div class="card" style="margin-bottom:1.25rem;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:.75rem;">
+          <div>
+            <h1 id="practice-name" style="font-size:1.375rem;margin-bottom:.25rem;"></h1>
+            <p id="practice-address" style="font-size:.9375rem;color:var(--text-secondary);"></p>
+            <p id="practice-phone" style="font-size:.875rem;color:var(--text-secondary);"></p>
+          </div>
+          <div style="text-align:right;">
+            <div id="practice-rating" style="color:var(--warning);font-size:1rem;letter-spacing:.05em;"></div>
+            <div id="hours-row" style="display:none;font-size:.8125rem;color:var(--text-secondary);margin-top:.25rem;white-space:pre-line;" id="practice-hours"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step indicator -->
+      <div class="step-indicator">
+        <div class="step active" id="si-1"><span class="step-num">1</span><span class="step-label" id="step-label-1">Termin</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="si-2"><span class="step-num">2</span><span class="step-label" id="step-label-2">Daten</span></div>
+        <div class="step-line"></div>
+        <div class="step" id="si-3"><span class="step-num">3</span><span class="step-label" id="step-label-3">Bestätigung</span></div>
+      </div>
+
+      <!-- ── STEP 1 ── -->
+      <div id="step-1" class="card">
+        <div id="step1-alert"></div>
+
+        <!-- Practitioner -->
+        <div class="form-group">
+          <label class="form-label" id="lbl-doctor">Behandler wählen</label>
+          <div id="practitioner-cards" class="prac-cards"></div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="form-group" style="margin-top:1.25rem;">
+          <label class="form-label" id="lbl-date">Datum wählen</label>
+          <div class="booking-cal">
+            <div class="booking-cal-header">
+              <button id="cal-prev" type="button" class="cal-nav-btn">‹</button>
+              <span id="cal-month-label" style="font-weight:600;min-width:160px;text-align:center;"></span>
+              <button id="cal-next" type="button" class="cal-nav-btn">›</button>
+            </div>
+            <div class="booking-cal-weekdays" id="cal-weekdays"></div>
+            <div id="cal-grid" class="booking-cal-grid"></div>
+          </div>
+        </div>
+
+        <!-- Slots -->
+        <div id="slots-section" style="display:none;margin-top:1.25rem;">
+          <label class="form-label" id="lbl-time">Uhrzeit wählen</label>
+          <div id="slots-grid"></div>
+        </div>
+
+        <div style="margin-top:1.5rem;text-align:right;">
+          <button id="btn-next" class="btn btn-primary" disabled>Weiter →</button>
+        </div>
+      </div>
+
+      <!-- ── STEP 2 ── -->
+      <div id="step-2" style="display:none;" class="card">
+        <h2 class="form-section-title" id="s2-title">Ihre Daten</h2>
+        <div id="step2-alert"></div>
+
+        <form id="booking-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label" id="lbl-firstname" for="inp-firstname">Vorname *</label>
+              <input type="text" id="inp-firstname" class="form-control" required autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lbl-lastname" for="inp-lastname">Nachname *</label>
+              <input type="text" id="inp-lastname" class="form-control" required autocomplete="family-name">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lbl-email" for="inp-email">E-Mail *</label>
+              <input type="email" id="inp-email" class="form-control" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lbl-phone" for="inp-phone">Telefon</label>
+              <input type="tel" id="inp-phone" class="form-control" autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label class="form-label" id="lbl-type" for="inp-type">Terminart</label>
+              <select id="inp-type" class="form-control"></select>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:.75rem;margin-top:1.5rem;justify-content:space-between;">
+            <button type="button" id="btn-back" class="btn btn-secondary">← Zurück</button>
+            <button type="submit" id="btn-book" class="btn btn-primary">Termin buchen</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ── STEP 3 ── -->
+      <div id="step-3" style="display:none;" class="card">
+        <div style="text-align:center;padding:1rem 0 1.5rem;">
+          <div style="font-size:2.5rem;margin-bottom:.5rem;">✓</div>
+          <h2 style="color:var(--secondary);margin-bottom:.25rem;">Termin erfolgreich gebucht!</h2>
+          <p style="color:var(--text-secondary);font-size:.9375rem;">Eine Bestätigungs-E-Mail wird in Kürze gesendet.</p>
+        </div>
+
+        <div style="background:var(--bg);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;white-space:nowrap;">Patient</td><td id="conf-name" style="font-weight:500;"></td></tr>
+            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Behandler</td><td id="conf-practitioner"></td></tr>
+            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Datum</td><td id="conf-date"></td></tr>
+            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Uhrzeit</td><td id="conf-time"></td></tr>
+            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Terminart</td><td id="conf-type"></td></tr>
+          </table>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center;">
+          <a id="ics-link" href="#" class="btn btn-secondary">📅 Im Kalender speichern (.ics)</a>
+          <a id="cancel-link" href="#" class="btn btn-sm" style="color:var(--text-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:.5rem 1rem;align-self:center;">Termin absagen</a>
+        </div>
+
+        <div style="text-align:center;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
+          <a href="#" onclick="location.reload();return false;" class="btn btn-primary">Weiteren Termin buchen</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html">AGB</a>
+        <a href="/datenschutz.html">Datenschutz</a>
+        <a id="book-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/public-i18n.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){pApplyDir();var el=document.getElementById("book-sec-comp");if(el)el.textContent=pT("footer.security_compliance");});</script>
+<script src="/js/main.js"></script>
+<script src="/js/booking.js"></script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

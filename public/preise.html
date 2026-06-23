@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preise – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ── Pricing grid ── */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      margin: 2rem 0 1.5rem;
+    }
+    @media (min-width: 680px) { .pricing-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .pricing-card {
+      border: 1.5px solid var(--border, #e5e7eb);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      background: #fff;
+      transition: box-shadow .15s;
+    }
+    .pricing-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .pricing-card.featured {
+      border-color: #7C3AED;
+      box-shadow: 0 0 0 2px rgba(37,99,235,.12), 0 4px 20px rgba(37,99,235,.1);
+    }
+
+    .pricing-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #7C3AED;
+      color: #fff;
+      font-size: .6875rem;
+      font-weight: 700;
+      padding: .2rem .625rem;
+      border-radius: 99px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      margin-bottom: .875rem;
+      align-self: flex-start;
+    }
+    .pricing-badge-placeholder { height: 1.5rem; margin-bottom: .875rem; }
+
+    .pricing-name {
+      font-size: .875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: #6b7280;
+      margin-bottom: .5rem;
+    }
+    .pricing-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: .25rem;
+      margin-bottom: .2rem;
+    }
+    .pricing-amount {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #111827;
+      letter-spacing: -.03em;
+      line-height: 1;
+    }
+    .pricing-period {
+      font-size: .9375rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+    .pricing-vat {
+      font-size: .75rem;
+      color: #9ca3af;
+      margin-bottom: 1.25rem;
+    }
+
+    .pricing-divider { border: none; border-top: 1px solid #f3f4f6; margin: 0 0 1rem; }
+
+    .pricing-features {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 1.75rem;
+      flex: 1;
+    }
+    .pricing-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: .5rem;
+      font-size: .875rem;
+      color: #374151;
+      padding: .35rem 0;
+    }
+    .pricing-check { color: #16A34A; font-weight: 700; flex-shrink: 0; margin-top: .05rem; }
+
+    .pricing-cta {
+      display: block;
+      text-align: center;
+      padding: .75rem 1rem;
+      border-radius: 8px;
+      font-size: .9375rem;
+      font-weight: 600;
+      text-decoration: none;
+      background: #f3f4f6;
+      color: #111827;
+      transition: background .15s, color .15s;
+      margin-top: auto;
+    }
+    .pricing-cta:hover { background: #e5e7eb; }
+    .pricing-card.featured .pricing-cta {
+      background: #7C3AED;
+      color: #fff;
+    }
+    .pricing-card.featured .pricing-cta:hover { background: #6D28D9; }
+
+    .pricing-note {
+      text-align: center;
+      font-size: .8125rem;
+      color: #9ca3af;
+      margin-top: .5rem;
+      line-height: 1.7;
+    }
+    .pricing-note strong { color: #6b7280; }
+
+    /* ── FAQ / trust strip ── */
+    .trust-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .5rem 1.5rem;
+      margin: 1.5rem 0 0;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: .375rem;
+      font-size: .8125rem;
+      color: #6b7280;
+    }
+    .trust-icon { font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+      <a id="pr-nav-preise" href="/preise.html" style="font-weight:600;">Preise</a>
+      <a id="pr-nav-demo"   href="/demo.html">Demo anfragen</a>
+      <a id="pr-nav-login"  href="/login.html">Anmelden</a>
+      <a id="pr-nav-start"  href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
+      <!-- Hidden; hamburger picks these up for mobile drawer -->
+      <a id="pr-nav-home"        href="/"                         style="display:none">Startseite</a>
+      <a id="pr-nav-register"    href="/register.html"            style="display:none">Kostenlos starten</a>
+      <a id="pr-nav-agb"         href="/agb.html"                 style="display:none">AGB</a>
+      <a id="pr-nav-datenschutz" href="/datenschutz.html"         style="display:none">Datenschutz</a>
+      <a id="pr-nav-sec"         href="/security-compliance.html" style="display:none">Sicherheit</a>
+      <a id="pr-nav-impressum"   href="/impressum.html"           style="display:none">Impressum</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container-sm" style="padding:2rem 1rem 3rem;">
+
+    <div style="text-align:center;margin-bottom:.25rem;">
+      <h1 id="pr-h1" style="font-size:1.75rem;font-weight:800;color:#111827;margin-bottom:.5rem;letter-spacing:-.02em;">Preise</h1>
+      <p id="pr-intro" style="font-size:1rem;color:#6b7280;max-width:480px;margin:0 auto;line-height:1.6;">
+        Transparent, fair und monatlich kündbar.<br>30 Tage kostenlos testen – keine Kreditkarte erforderlich.
+      </p>
+    </div>
+
+    <!-- ── Pricing grid ── -->
+    <div class="pricing-grid">
+
+      <!-- BASIC -->
+      <div class="pricing-card">
+        <div class="pricing-badge-placeholder"></div>
+        <div id="pr-basic-name" class="pricing-name">Basic</div>
+        <div class="pricing-price-row">
+          <span class="pricing-period">$</span>
+          <span id="pr-basic-amount" class="pricing-amount">19</span>
+          <span class="pricing-period"><span id="pr-basic-period"> / Monat</span></span>
+        </div>
+        <div id="pr-basic-vat" class="pricing-vat">zzgl. gesetzl. MwSt.</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span><span id="pr-f-appt200">Bis 200 Termine pro Monat</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-treat3">Bis 3 Behandler</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-booking1">Online-Buchung</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-invoices1">Rechnungen &amp; Rezepte</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-reviews1">Bewertungen</span></li>
+        </ul>
+        <a id="pr-basic-cta" href="/register.html?plan=BASIC" class="pricing-cta">Kostenlos starten</a>
+      </div>
+
+      <!-- PRO (featured) -->
+      <div class="pricing-card featured">
+        <span id="pr-badge" class="pricing-badge">Beliebteste Wahl</span>
+        <div id="pr-pro-name" class="pricing-name">Pro</div>
+        <div class="pricing-price-row">
+          <span class="pricing-period">$</span>
+          <span id="pr-pro-amount" class="pricing-amount">39</span>
+          <span class="pricing-period"><span id="pr-pro-period"> / Monat</span></span>
+        </div>
+        <div id="pr-pro-vat" class="pricing-vat">zzgl. gesetzl. MwSt.</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span><span id="pr-f-appt500">Bis 500 Termine pro Monat</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-treat10">Bis 10 Behandler</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-booking2">Online-Buchung</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-invoices2">Rechnungen &amp; Rezepte</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-reviews2">Bewertungen</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-waitlist2">Warteliste</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-ai2">KI-Praxismanager</span></li>
+        </ul>
+        <a id="pr-pro-cta" href="/register.html?plan=PROFESSIONAL" class="pricing-cta">Kostenlos starten</a>
+      </div>
+
+      <!-- UNLIMITED -->
+      <div class="pricing-card">
+        <div class="pricing-badge-placeholder"></div>
+        <div id="pr-unl-name" class="pricing-name">Unlimited</div>
+        <div class="pricing-price-row">
+          <span class="pricing-period">$</span>
+          <span id="pr-unl-amount" class="pricing-amount">79</span>
+          <span class="pricing-period"><span id="pr-unl-period"> / Monat</span></span>
+        </div>
+        <div id="pr-unl-vat" class="pricing-vat">zzgl. gesetzl. MwSt.</div>
+        <hr class="pricing-divider">
+        <ul class="pricing-features">
+          <li><span class="pricing-check">✓</span><span id="pr-f-appt-unl">Unbegrenzte Termine</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-treat-unl">Unbegrenzte Behandler</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-booking3">Online-Buchung</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-invoices3">Rechnungen &amp; Rezepte</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-reviews3">Bewertungen</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-waitlist3">Warteliste</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-ai3">KI-Praxismanager</span></li>
+          <li><span class="pricing-check">✓</span><span id="pr-f-support">Prioritäts-Support</span></li>
+        </ul>
+        <a id="pr-unl-cta" href="/register.html?plan=UNLIMITED" class="pricing-cta">Kostenlos starten</a>
+      </div>
+
+    </div><!-- .pricing-grid -->
+
+    <!-- VAT / cancel note -->
+    <p id="pr-vat-note" class="pricing-note">
+      Alle Preise zzgl. gesetzlicher MwSt. &nbsp;·&nbsp; Monatlich kündbar &nbsp;·&nbsp; Keine Kreditkarte erforderlich.
+    </p>
+
+    <!-- Trust strip -->
+    <div class="trust-strip">
+      <span class="trust-item"><span class="trust-icon">🔒</span><span id="pr-trust1">DSGVO-konform</span></span>
+      <span class="trust-item"><span class="trust-icon">🇩🇪</span><span id="pr-trust2">Hosting in Deutschland</span></span>
+      <span class="trust-item"><span class="trust-icon">📞</span><span id="pr-trust3">Keine Kreditkarte</span></span>
+      <span class="trust-item"><span class="trust-icon">✓</span><span id="pr-trust4">30 Tage kostenlos testen</span></span>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="pr-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="pr-agb"         href="/agb.html">AGB</a>
+        <a id="pr-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="pr-sec-comp"    href="/security-compliance.html">Sicherheit</a>
+        <a id="pr-impressum"   href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+(function () {
+  pApplyDir();
+  renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+
+  // Header nav
+  document.getElementById('pr-nav-preise').textContent      = pT('nav_preise')               || 'Preise';
+  document.getElementById('pr-nav-demo').textContent         = pT('nav_demo')                 || 'Demo anfragen';
+  document.getElementById('pr-nav-login').textContent        = pT('idx_login')                || 'Anmelden';
+  document.getElementById('pr-nav-start').textContent        = pT('idx_start')                || 'Kostenlos starten';
+  document.getElementById('pr-nav-home').textContent         = pT('nav_home')                 || 'Startseite';
+  document.getElementById('pr-nav-register').textContent     = pT('idx_start')                || 'Kostenlos starten';
+  document.getElementById('pr-nav-agb').textContent          = pT('nav_agb')                  || 'AGB';
+  document.getElementById('pr-nav-datenschutz').textContent  = pT('nav_datenschutz')          || 'Datenschutz';
+  document.getElementById('pr-nav-sec').textContent          = pT('footer.security_compliance') || 'Sicherheit';
+  document.getElementById('pr-nav-impressum').textContent    = pT('nav_impressum')            || 'Impressum';
+
+  // Page header
+  document.getElementById('pr-h1').textContent    = pT('preise_h1')    || 'Preise';
+  document.getElementById('pr-intro').innerHTML   = (pT('preise_intro') || 'Transparent, fair und monatlich kündbar.<br>30 Tage kostenlos testen – keine Kreditkarte erforderlich.');
+
+  // Badge
+  document.getElementById('pr-badge').textContent = pT('preise_badge')  || 'Beliebteste Wahl';
+
+  // Plan names
+  document.getElementById('pr-basic-name').textContent = pT('preise_basic_name') || 'BASIC';
+  document.getElementById('pr-pro-name').textContent   = pT('preise_pro_name')   || 'PROFESSIONAL';
+  document.getElementById('pr-unl-name').textContent   = pT('preise_unl_name')   || 'UNLIMITED';
+
+  // Periods
+  var perMonth = pT('preise_per_month') || ' / Monat';
+  ['pr-basic-period','pr-pro-period','pr-unl-period'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = perMonth;
+  });
+
+  // VAT line
+  var vatLine = pT('preise_excl_vat') || 'zzgl. gesetzl. MwSt.';
+  ['pr-basic-vat','pr-pro-vat','pr-unl-vat'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = vatLine;
+  });
+
+  // CTA buttons
+  var ctaText = pT('preise_cta') || 'Kostenlos starten';
+  ['pr-basic-cta','pr-pro-cta','pr-unl-cta'].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = ctaText;
+  });
+
+  // Features
+  var f = {
+    'pr-f-appt200':   pT('preise_f_appt200')         || 'Bis 200 Termine pro Monat',
+    'pr-f-appt500':   pT('preise_f_appt500')         || 'Bis 500 Termine pro Monat',
+    'pr-f-appt-unl':  pT('preise_f_appt_unlimited')  || 'Unbegrenzte Termine',
+    'pr-f-treat3':    pT('preise_f_treat3')           || 'Bis 3 Behandler',
+    'pr-f-treat10':   pT('preise_f_treat10')          || 'Bis 10 Behandler',
+    'pr-f-treat-unl': pT('preise_f_treat_unlimited')  || 'Unbegrenzte Behandler',
+    'pr-f-booking1':  pT('preise_f_booking')          || 'Online-Buchung',
+    'pr-f-booking2':  pT('preise_f_booking')          || 'Online-Buchung',
+    'pr-f-booking3':  pT('preise_f_booking')          || 'Online-Buchung',
+    'pr-f-invoices1': pT('preise_f_invoices')         || 'Rechnungen & Rezeptdruck',
+    'pr-f-invoices2': pT('preise_f_invoices')         || 'Rechnungen & Rezeptdruck',
+    'pr-f-invoices3': pT('preise_f_invoices')         || 'Rechnungen & Rezeptdruck',
+    'pr-f-reviews1':  pT('preise_f_reviews')          || 'Bewertungen',
+    'pr-f-reviews2':  pT('preise_f_reviews')          || 'Bewertungen',
+    'pr-f-reviews3':  pT('preise_f_reviews')          || 'Bewertungen',
+    'pr-f-waitlist2': pT('preise_f_waitlist')         || 'Warteliste',
+    'pr-f-waitlist3': pT('preise_f_waitlist')         || 'Warteliste',
+    'pr-f-ai2':       pT('preise_f_ai')               || 'KI-Praxismanager',
+    'pr-f-ai3':       pT('preise_f_ai')               || 'KI-Praxismanager',
+    'pr-f-support':   pT('preise_f_support')          || 'Prioritäts-Support',
+    'pr-f-trial1':    pT('preise_f_trial')            || '30 Tage kostenlos testen',
+    'pr-f-trial2':    pT('preise_f_trial')            || '30 Tage kostenlos testen',
+    'pr-f-trial3':    pT('preise_f_trial')            || '30 Tage kostenlos testen',
+  };
+  Object.keys(f).forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = f[id];
+  });
+
+  // VAT note + trust strip
+  document.getElementById('pr-vat-note').textContent = pT('preise_vat_note') || 'Alle Preise zzgl. gesetzlicher MwSt. · Monatlich kündbar · Keine Kreditkarte erforderlich.';
+  document.getElementById('pr-trust1').textContent = pT('preise_trust_gdpr')   || 'DSGVO-konform';
+  document.getElementById('pr-trust2').textContent = pT('preise_trust_host')   || 'Hosting in Deutschland';
+  document.getElementById('pr-trust3').textContent = pT('preise_trust_nocc')   || 'Keine Kreditkarte';
+  document.getElementById('pr-trust4').textContent = pT('preise_f_trial')      || '30 Tage kostenlos testen';
+
+  // Footer
+  document.getElementById('pr-footer-note').textContent = pT('footer_note')             || '';
+  document.getElementById('pr-agb').textContent         = pT('nav_agb')                 || 'AGB';
+  document.getElementById('pr-datenschutz').textContent = pT('nav_datenschutz')         || 'Datenschutz';
+  document.getElementById('pr-sec-comp').textContent    = pT('footer.security_compliance') || 'Sicherheit';
+  document.getElementById('pr-impressum').textContent   = pT('nav_impressum')           || 'Impressum';
+})();
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

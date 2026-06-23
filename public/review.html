@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bewertung abgeben – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container-sm" style="padding:2rem 1rem;">
+    <div id="alert-container"></div>
+
+    <div id="review-form-wrapper" class="card">
+      <h2 class="card-title" id="review-title-h2">Bewertung abgeben</h2>
+      <p id="review-intro-p" style="color:var(--text-secondary);margin-bottom:.75rem;">Ihre Bewertung hilft der Praxis, sich zu verbessern. Sie wird erst nach Freigabe sichtbar.</p>
+      <p id="review-disclaimer-p" style="font-size:.875rem;color:var(--text-secondary);margin-bottom:1.5rem;">Bitte keine Diagnosen oder Gesundheitsdaten eingeben.</p>
+
+      <form id="review-form">
+        <div class="form-group">
+          <label class="form-label" id="lbl-rating">Bewertung <span class="required">*</span></label>
+          <div class="star-rating">
+            <input type="radio" id="s5" name="rating" value="5"><label for="s5" title="Sehr gut">★</label>
+            <input type="radio" id="s4" name="rating" value="4"><label for="s4" title="Gut">★</label>
+            <input type="radio" id="s3" name="rating" value="3"><label for="s3" title="Befriedigend">★</label>
+            <input type="radio" id="s2" name="rating" value="2"><label for="s2" title="Ausreichend">★</label>
+            <input type="radio" id="s1" name="rating" value="1"><label for="s1" title="Mangelhaft">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="lbl-comment" for="comment">Kommentar</label>
+          <textarea id="comment" class="form-control" placeholder="Was hat Ihnen besonders gefallen oder was kann verbessert werden?"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" id="lbl-name" for="author_name">Ihr Name (optional)</label>
+          <input type="text" id="author_name" class="form-control" placeholder="Anonym">
+        </div>
+
+        <button type="submit" id="review-submit-btn" class="btn btn-primary" style="width:100%;">Bewertung abschicken</button>
+      </form>
+    </div>
+
+    <div id="success-message" class="card" style="display:none;text-align:center;padding:3rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">⭐</div>
+      <h2 id="review-success-h2">Vielen Dank für Ihre Bewertung!</h2>
+      <p id="review-success-p" style="color:var(--text-secondary);margin-top:1rem;">Ihre Bewertung wird nach Prüfung freigeschaltet.</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="review-agb" href="/agb.html">AGB</a>
+        <a id="review-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="review-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    applyTranslations();
+
+    const practiceId = getQueryParam('p');
+
+    if (!practiceId) {
+      document.getElementById('review-form-wrapper').innerHTML =
+        `<div class="alert alert-danger">${pT('error_no_id')}</div>`;
+      return;
+    }
+
+    document.getElementById('review-form')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const container = document.getElementById('alert-container');
+      container.innerHTML = '';
+
+      const selected = document.querySelector('input[name="rating"]:checked');
+      if (!selected) {
+        const el = document.createElement('div');
+        el.className = 'alert alert-warning';
+        el.textContent = pT('review_rating_req');
+        container.appendChild(el);
+        return;
+      }
+
+      const data = {
+        practice_id: practiceId,
+        rating: parseInt(selected.value),
+        comment: document.getElementById('comment').value,
+        author_name: document.getElementById('author_name').value || null,
+      };
+
+      try {
+        await API.post('/api/reviews', data);
+        document.getElementById('review-form-wrapper').style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+      } catch (err) {
+        const el = document.createElement('div');
+        el.className = 'alert alert-danger';
+        el.textContent = err.message;
+        container.appendChild(el);
+      }
+    });
+  });
+
+  function applyTranslations() {
+    document.title = pT('review_title') + ' – PraxisOnline24';
+    document.getElementById('review-title-h2').textContent = pT('review_title');
+    document.getElementById('review-intro-p').textContent = pT('review_intro');
+    document.getElementById('review-disclaimer-p').textContent = pT('review_disclaimer');
+    document.getElementById('lbl-rating').innerHTML = pT('review_rating') + ' <span class="required">*</span>';
+    document.getElementById('lbl-comment').textContent = pT('review_comment');
+    document.getElementById('comment').placeholder = pT('review_comment_ph');
+    document.getElementById('lbl-name').textContent = pT('review_name');
+    document.getElementById('author_name').placeholder = pT('review_name_ph');
+    document.getElementById('review-submit-btn').textContent = pT('review_btn');
+    document.getElementById('review-success-h2').textContent = pT('review_success_title');
+    document.getElementById('review-success-p').textContent = pT('review_success_text');
+    document.getElementById('footer-note').textContent = pT('footer_note');
+    document.getElementById('review-agb').textContent = pT('nav_agb');
+    document.getElementById('review-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('review-sec-comp').textContent = pT('footer.security_compliance');
+    var s5 = document.querySelector('label[for="s5"]'); if (s5) s5.title = pT('star_5');
+    var s4 = document.querySelector('label[for="s4"]'); if (s4) s4.title = pT('star_4');
+    var s3 = document.querySelector('label[for="s3"]'); if (s3) s3.title = pT('star_3');
+    var s2 = document.querySelector('label[for="s2"]'); if (s2) s2.title = pT('star_2');
+    var s1 = document.querySelector('label[for="s1"]'); if (s1) s1.title = pT('star_1');
+  }
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

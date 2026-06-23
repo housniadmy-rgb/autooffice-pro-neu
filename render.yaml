@@ -1,0 +1,36 @@
+services:
+  - type: web
+    name: praxisonline24
+    runtime: node
+    region: frankfurt
+    plan: starter
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: EMAIL_DEV_MODE
+        value: false
+      - key: OWNER_EMAIL
+        value: housniadmy@yahoo.de
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        value: 587
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        value: "PraxisOnline24 <info@praxisonline24.com>"
+    disk:
+      name: praxisonline24-db
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1

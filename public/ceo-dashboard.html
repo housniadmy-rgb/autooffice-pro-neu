@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Management Center – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    :root {
+      --mc-bg: #f9fafb; --mc-surface: #ffffff; --mc-border: #e5e7eb;
+      --mc-text: #111827; --mc-muted: #6b7280; --mc-subtle: #9ca3af;
+      --mc-blue: #7C3AED; --mc-blue-bg: #EDE9FE;
+      --mc-green: #16A34A; --mc-green-bg: #DCFCE7;
+      --mc-yellow: #d97706; --mc-yellow-bg: #fef3c7;
+      --mc-red: #dc2626; --mc-red-bg: #fee2e2;
+    }
+    .app-content { background: var(--mc-bg); }
+
+    .mc-header { display:flex; align-items:flex-start; gap:1rem; padding:1.5rem 0 1.25rem; }
+    .mc-title  { font-size:1.25rem; font-weight:700; color:var(--mc-text); letter-spacing:-.02em; }
+    .mc-sub    { font-size:.8125rem; color:var(--mc-muted); margin-top:.2rem; }
+    .mc-header-right { margin-left:auto; display:flex; align-items:center; gap:.75rem; flex-shrink:0; }
+    .mc-ts     { font-size:.75rem; color:var(--mc-subtle); }
+
+    .tab-nav { display:flex; border-bottom:1px solid var(--mc-border); margin-bottom:1.5rem; overflow-x:auto; scrollbar-width:none; }
+    .tab-nav::-webkit-scrollbar { display:none; }
+    .tab-btn {
+      padding:.625rem 1.125rem; font-size:.9375rem; font-weight:500; color:var(--mc-muted);
+      background:none; border:none; border-bottom:2px solid transparent; cursor:pointer;
+      transition:color .12s, border-color .12s; margin-bottom:-1px; white-space:nowrap; flex-shrink:0;
+    }
+    .tab-btn:hover { color:var(--mc-text); }
+    .tab-btn.active { color:var(--mc-text); border-bottom-color:var(--mc-text); font-weight:600; }
+
+    .tab-panel { display:none; animation:fadeIn .18s ease; }
+    .tab-panel.active { display:block; }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+
+    .kpi-row { display:grid; grid-template-columns:repeat(4,1fr); gap:.75rem; margin-bottom:1.25rem; }
+    @media (max-width:1100px) { .kpi-row { grid-template-columns:repeat(2,1fr); } }
+    @media (max-width:500px)  { .kpi-row { grid-template-columns:1fr 1fr; } }
+    .kpi-row-3 { grid-template-columns:repeat(3,1fr); }
+    .kpi-row-2 { grid-template-columns:repeat(2,1fr); }
+    @media (max-width:600px) { .kpi-row-3,.kpi-row-2 { grid-template-columns:1fr 1fr; } }
+
+    .kpi { background:var(--mc-surface); border:1px solid var(--mc-border); border-radius:10px; padding:.875rem 1rem; }
+    .kpi-val { font-size:1.625rem; font-weight:700; color:var(--mc-text); letter-spacing:-.03em; line-height:1.1; }
+    .kpi-lbl { font-size:.75rem; color:var(--mc-muted); margin-top:.25rem; }
+    .kpi-badge { display:inline-flex; align-items:center; font-size:.6875rem; font-weight:500; padding:.1rem .375rem; border-radius:4px; margin-top:.375rem; }
+    .kpi-badge.up     { background:var(--mc-green-bg); color:#14532D; }
+    .kpi-badge.warn   { background:var(--mc-yellow-bg); color:#92400e; }
+    .kpi-badge.danger { background:var(--mc-red-bg); color:#991b1b; }
+    .kpi-badge.neutral{ background:#f3f4f6; color:#374151; }
+
+    .mgmt-grid   { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-bottom:1rem; }
+    .mgmt-grid-3 { grid-template-columns:2fr 1fr; }
+    @media (max-width:900px) { .mgmt-grid,.mgmt-grid-3 { grid-template-columns:1fr; } }
+
+    .mc-card { background:var(--mc-surface); border:1px solid var(--mc-border); border-radius:12px; margin-bottom:1rem; overflow:hidden; }
+    .mc-card-header { padding:.875rem 1.125rem; border-bottom:1px solid #f3f4f6; display:flex; align-items:center; justify-content:space-between; }
+    .mc-card-title  { font-size:.9375rem; font-weight:600; color:var(--mc-text); }
+    .mc-card-sub    { font-size:.75rem; color:var(--mc-subtle); }
+    .mc-card-body   { padding:1.125rem; }
+
+    .ampel { display:flex; align-items:center; gap:.625rem; padding:.75rem 1rem; border-radius:8px; font-weight:600; font-size:.9rem; margin-bottom:1.125rem; }
+    .ampel.green  { background:var(--mc-green-bg);  color:#14532D;  border:1px solid #a7f3d0; }
+    .ampel.yellow { background:var(--mc-yellow-bg); color:#92400e;  border:1px solid #fde68a; }
+    .ampel.red    { background:var(--mc-red-bg);    color:#991b1b;  border:1px solid #fecaca; }
+    .ampel-dot    { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .ampel.green  .ampel-dot { background:var(--mc-green);  box-shadow:0 0 0 3px #a7f3d080; }
+    .ampel.yellow .ampel-dot { background:var(--mc-yellow); box-shadow:0 0 0 3px #fde68a80; }
+    .ampel.red    .ampel-dot { background:var(--mc-red);    box-shadow:0 0 0 3px #fecaca80; }
+
+    .risk-list { list-style:none; padding:0; margin:0; }
+    .risk-item { display:flex; align-items:flex-start; gap:.625rem; padding:.5rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; color:#374151; }
+    .risk-item:last-child { border-bottom:none; }
+    .risk-dot       { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:.35rem; }
+    .risk-dot.danger{ background:var(--mc-red); }
+    .risk-dot.warn  { background:var(--mc-yellow); }
+    .risk-dot.info  { background:var(--mc-blue); }
+
+    .bar-wrap { display:flex; align-items:flex-end; gap:4px; height:64px; }
+    .bar-col  { display:flex; flex-direction:column; align-items:center; flex:1; height:100%; justify-content:flex-end; }
+    .bar-fill { border-radius:3px 3px 0 0; width:100%; min-height:2px; background:var(--mc-blue); opacity:.85; }
+    .bar-lbl  { font-size:.5rem; color:var(--mc-subtle); margin-top:3px; text-align:center; }
+
+    .ai-panel { background:linear-gradient(135deg,#F5F3FF 0%,#f0fdf4 100%); border:1px solid #DDD6FE; border-radius:12px; padding:1.125rem; margin-bottom:1rem; }
+    .ai-header { display:flex; align-items:center; gap:.5rem; margin-bottom:1rem; }
+    .ai-header-title  { font-size:.9375rem; font-weight:700; color:#6D28D9; }
+    .ai-header-badge  { font-size:.6875rem; font-weight:500; background:#EDE9FE; color:#6D28D9; padding:.125rem .5rem; border-radius:9999px; }
+    .ai-section-lbl   { font-size:.6875rem; font-weight:600; color:var(--mc-subtle); text-transform:uppercase; letter-spacing:.06em; margin:.875rem 0 .5rem; }
+    .ai-task          { display:flex; align-items:flex-start; gap:.625rem; padding:.375rem 0; font-size:.875rem; color:var(--mc-text); border-bottom:1px solid #e0e7ff40; }
+    .ai-task:last-child { border-bottom:none; }
+    .ai-dot       { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:.375rem; }
+    .ai-dot.high  { background:var(--mc-red); }
+    .ai-dot.medium{ background:var(--mc-yellow); }
+    .ai-dot.low   { background:var(--mc-blue); }
+    .ai-dot.none  { background:var(--mc-green); }
+
+    .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:.625rem; }
+    @media (max-width:600px) { .summary-grid { grid-template-columns:1fr 1fr; } }
+    .summary-item { background:#fff; border-radius:8px; padding:.625rem .75rem; border:1px solid #e0e7ff; }
+    .summary-num  { font-size:1.375rem; font-weight:700; color:var(--mc-text); letter-spacing:-.02em; }
+    .summary-lbl  { font-size:.6875rem; color:var(--mc-muted); margin-top:.125rem; }
+
+    .idea-item { padding:.5rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; color:#374151; display:flex; gap:.5rem; }
+    .idea-item:last-child { border-bottom:none; }
+    .idea-item::before { content:'→'; color:var(--mc-blue); flex-shrink:0; }
+
+    .mc-table { width:100%; border-collapse:collapse; font-size:.8125rem; }
+    .mc-table th { text-align:left; padding:.4rem .625rem; color:var(--mc-subtle); font-weight:600; font-size:.6875rem; text-transform:uppercase; letter-spacing:.05em; border-bottom:1px solid var(--mc-border); }
+    .mc-table td { padding:.5rem .625rem; border-bottom:1px solid #f9fafb; color:#374151; vertical-align:top; }
+    .mc-table tr:last-child td { border-bottom:none; }
+
+    .chip        { display:inline-flex; align-items:center; padding:.125rem .5rem; border-radius:4px; font-size:.75rem; font-weight:500; }
+    .chip-green  { background:var(--mc-green-bg);  color:#14532D; }
+    .chip-yellow { background:var(--mc-yellow-bg); color:#92400e; }
+    .chip-red    { background:var(--mc-red-bg);    color:#991b1b; }
+    .chip-blue   { background:var(--mc-blue-bg);   color:#6D28D9; }
+    .chip-gray   { background:#f3f4f6; color:#374151; }
+
+    .inv-row { display:flex; justify-content:space-between; align-items:center; padding:.625rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; }
+    .inv-row:last-child { border-bottom:none; }
+
+    .revenue-big { font-size:2rem; font-weight:700; color:var(--mc-text); letter-spacing:-.04em; line-height:1; margin-bottom:.375rem; }
+
+    .sec-row  { display:flex; align-items:center; gap:.625rem; padding:.5rem 0; font-size:.875rem; border-bottom:1px solid #f9fafb; }
+    .sec-row:last-child { border-bottom:none; }
+    .sec-dot  { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+    .sec-ok   { background:var(--mc-green); }
+    .sec-warn { background:var(--mc-yellow); }
+    .sec-err  { background:var(--mc-red); }
+
+    .panel-loading { text-align:center; padding:3rem 1rem; color:var(--mc-muted); font-size:.9375rem; }
+    .panel-loading::after { content:''; display:block; width:28px; height:28px; border:2px solid #e5e7eb; border-top-color:var(--mc-blue); border-radius:50%; animation:spin .7s linear infinite; margin:.75rem auto 0; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .error-box { background:var(--mc-red-bg); border:1px solid #fecaca; border-radius:10px; padding:1.25rem; color:#991b1b; text-align:center; font-size:.9375rem; }
+
+    .section-lbl { font-size:.6875rem; font-weight:600; color:var(--mc-subtle); text-transform:uppercase; letter-spacing:.06em; margin:1rem 0 .5rem; }
+    .pkg-row  { display:flex; flex-wrap:wrap; gap:.375rem; }
+    .lang-wrap{ display:flex; flex-wrap:wrap; gap:.375rem; }
+
+    /* Demo status buttons */
+    .status-btn { cursor:pointer; border:none; border-radius:4px; padding:.2rem .5rem; font-size:.75rem; font-weight:500; transition:opacity .15s; }
+    .status-btn:hover { opacity:.8; }
+    .status-btn.neu         { background:#f3f4f6; color:#374151; }
+    .status-btn.eingeladen  { background:#EDE9FE; color:#6D28D9; }
+    .status-btn.aktiviert   { background:#DCFCE7; color:#14532D; }
+    .status-btn.kontaktiert { background:#fef3c7; color:#92400e; }
+    .status-btn.erledigt    { background:#e5e7eb; color:#1f2937; }
+    .resend-btn { cursor:pointer; border:1px solid #DDD6FE; border-radius:4px; padding:.15rem .4rem; font-size:.7rem; font-weight:500; background:#F5F3FF; color:#6D28D9; transition:background .15s; margin-left:.25rem; }
+    .resend-btn:hover { background:#EDE9FE; }
+
+    /* MRR table */
+    .mrr-pkg-row { display:flex; justify-content:space-between; align-items:center; padding:.5rem 0; border-bottom:1px solid #f9fafb; font-size:.875rem; }
+    .mrr-pkg-row:last-child { border-bottom:none; }
+
+    @media (max-width:768px) { .mc-header { flex-wrap:wrap; } .mc-header-right { flex-wrap:wrap; } }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <button id="btn-logout" class="btn btn-secondary btn-sm">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> Übersicht</a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> Kalender</a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> Rechnungen</a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> Bewertungen</a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> Patienten</a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> Behandler</a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> Warteliste</a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> AI Praxismanager</a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> Einstellungen</a></li>
+      <li class="sidebar-divider" style="border-top:1px solid var(--border);margin:.5rem 0;"></li>
+      <li><a href="/ceo-dashboard.html" class="active" style="background:#eef2ff;color:#7C3AED;font-weight:600;"><span class="nav-icon">👑</span> Management Center</a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content" style="padding:0 1.5rem 2rem;">
+
+    <div id="access-error" class="error-box" style="display:none;margin-top:2rem;">
+      Kein Zugriff. Dieses Dashboard ist nur für den Plattform-Owner zugänglich.
+    </div>
+
+    <div id="main-ui" style="display:none;">
+      <div class="mc-header">
+        <div>
+          <div class="mc-title">Management Center</div>
+          <div class="mc-sub">Nur für Plattform-Owner &middot; Keine Patientendaten</div>
+        </div>
+        <div class="mc-header-right">
+          <span class="mc-ts" id="ts-active"></span>
+          <button id="btn-refresh" class="btn btn-secondary btn-sm">↻ Aktualisieren</button>
+        </div>
+      </div>
+
+      <nav class="tab-nav">
+        <button class="tab-btn active" data-tab="ceo">CEO</button>
+        <button class="tab-btn" data-tab="cfo">CFO</button>
+        <button class="tab-btn" data-tab="marketing">Marketing</button>
+        <button class="tab-btn" data-tab="demos">Demo-Anfragen</button>
+        <button class="tab-btn" data-tab="cto">CTO</button>
+      </nav>
+
+      <div id="panel-ceo"       class="tab-panel active"><div class="panel-loading" id="loading-ceo"></div><div id="content-ceo"       style="display:none;"></div></div>
+      <div id="panel-cfo"       class="tab-panel">       <div class="panel-loading" id="loading-cfo"></div><div id="content-cfo"       style="display:none;"></div></div>
+      <div id="panel-marketing" class="tab-panel">       <div class="panel-loading" id="loading-marketing"></div><div id="content-marketing" style="display:none;"></div></div>
+      <div id="panel-demos"     class="tab-panel">       <div class="panel-loading" id="loading-demos"></div><div id="content-demos"     style="display:none;"></div></div>
+      <div id="panel-cto"       class="tab-panel">       <div class="panel-loading" id="loading-cto"></div><div id="content-cto"       style="display:none;"></div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const fmt    = n => new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(n||0);
+const fmtNum = n => new Intl.NumberFormat('de-DE').format(n||0);
+const fmtDt  = s => s ? new Date(s).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+const fmtD   = s => s ? new Date(s).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
+const fmtTs  = s => s ? 'Stand: '+new Date(s).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+
+const LANG_FLAG = {de:'🇩🇪',en:'🇬🇧',fr:'🇫🇷',es:'🇪🇸',pt:'🇧🇷',ar:'🇸🇦',ru:'🇷🇺',zh:'🇨🇳',hi:'🇮🇳',th:'🇹🇭',tr:'🇹🇷',id:'🇮🇩'};
+const MONTH_NAMES = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
+function monthLabel(s) { const m=parseInt((s||'').split('-')[1],10); return isNaN(m)?String(s||'').slice(-5):MONTH_NAMES[m-1]; }
+function conversionCls(r) { return r>50?'up':r>=20?'warn':'danger'; }
+function conversionTxt(r) { return r>50?'gut':r>=20?'mittel':'niedrig'; }
+
+function buildBar(rows, labelKey, valueKey, color, labelFmt) {
+  if (!rows || !rows.length) return '<span style="color:var(--mc-subtle);font-size:.8125rem;">Keine Daten</span>';
+  const max = Math.max(...rows.map(r => r[valueKey]||0), 1);
+  return `<div class="bar-wrap">${rows.map(r => {
+    const pct = Math.max(Math.round(((r[valueKey]||0)/max)*100), 2);
+    const lbl = labelFmt ? labelFmt(String(r[labelKey]||'')) : String(r[labelKey]||'').slice(-5);
+    return `<div class="bar-col"><div class="bar-fill" style="height:${pct}%;${color?'background:'+color:''}"></div><div class="bar-lbl">${lbl}</div></div>`;
+  }).join('')}</div>`;
+}
+
+function kpi(val, label, badge) {
+  const b = badge ? `<div class="kpi-badge ${badge.cls}">${badge.text}</div>` : '';
+  return `<div class="kpi"><div class="kpi-val">${val}</div><div class="kpi-lbl">${label}</div>${b}</div>`;
+}
+
+// ── Tab system ─────────────────────────────────────────────────────────────────
+const loaded  = {};
+const loadFns = { ceo: loadCEO, cfo: loadCFO, marketing: loadMarketing, demos: loadDemos, cto: loadCTO };
+
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('panel-'+tab).classList.add('active');
+    document.getElementById('ts-active').textContent = '';
+    if (!loaded[tab]) loadFns[tab]();
+  });
+});
+
+document.getElementById('btn-refresh').addEventListener('click', () => {
+  const tab = document.querySelector('.tab-btn.active').dataset.tab;
+  delete loaded[tab];
+  document.getElementById('content-'+tab).style.display = 'none';
+  loadFns[tab]();
+});
+
+// ── CEO Tab ────────────────────────────────────────────────────────────────────
+async function loadCEO() {
+  if (loaded.ceo) return;
+  const loading = document.getElementById('loading-ceo');
+  const content = document.getElementById('content-ceo');
+  loading.style.display = 'block'; content.style.display = 'none';
+  let d;
+  try {
+    const r = await fetch('/api/owner/tab/ceo');
+    if (r.status === 401) { location.href='/login.html'; return; }
+    if (r.status === 403||r.status === 503) { showAccessError(); return; }
+    d = await r.json();
+  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+
+  loaded.ceo = true;
+  document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
+  const ov = d.overview;
+  const ai = d.ai;
+  const ampelLabels = { green:'Plattform stabil – kein Handlungsbedarf', yellow:'Achtung – Handlungsbedarf', red:'Kritisch – sofortiger Handlungsbedarf' };
+
+  const dm = d.demo || {};
+  content.innerHTML = `
+    <div class="ampel ${d.ampel}"><div class="ampel-dot"></div>${ampelLabels[d.ampel]||ampelLabels.green}</div>
+    <div class="kpi-row">
+      ${kpi(fmtNum(ov.totalPractices),'Praxen gesamt')}
+      ${kpi(fmtNum(ov.activePractices),'Aktiv',ov.activePractices>0?{cls:'up',text:'aktiv'}:null)}
+      ${kpi(fmtNum(ov.trialPractices),'In Trial')}
+      ${kpi(fmtNum(ov.pausedPractices),'Pausiert',ov.pausedPractices>0?{cls:'warn',text:'prüfen'}:null)}
+      ${kpi(fmtNum(ov.newToday),'Neu heute')}
+      ${kpi(fmtNum(ov.newThisWeek),'Neu diese Woche')}
+      ${kpi(fmtNum(ov.newThisMonth),'Neu diesen Monat')}
+      ${kpi(fmtNum(ov.trialsExpiring7d),'Trial endet in 7d',ov.trialsExpiring7d>0?{cls:'warn',text:'bald'}:null)}
+    </div>
+    <div class="mc-card" style="margin-bottom:1rem;">
+      <div class="mc-card-header">
+        <span class="mc-card-title">Demo-Anfragen</span>
+        <span class="mc-card-sub">Conversion Demo → Registrierung: <strong>${dm.conversion||0}%</strong></span>
+      </div>
+      <div class="mc-card-body">
+        <div class="kpi-row" style="margin-bottom:.75rem;">
+          ${kpi(fmtNum(dm.total||0),'Anfragen gesamt')}
+          ${kpi(fmtNum(dm.this_week||0),'Diese Woche')}
+          ${kpi(fmtNum(dm.this_month||0),'Diesen Monat')}
+          ${kpi((dm.conversion||0)+'%','Conversion Demo→Reg.',{cls:(dm.conversion||0)>=20?'up':'warn',text:(dm.conversion||0)>=20?'gut':'niedrig'})}
+        </div>
+        ${(dm.countries||[]).length===0
+          ? '<p style="color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen.</p>'
+          : `<div class="section-lbl">Top-Länder</div>
+             <div style="display:flex;flex-wrap:wrap;gap:.375rem;">
+               ${dm.countries.map(c=>`<span class="chip chip-blue" style="font-size:.8125rem;">${c.country||'—'} <strong style="margin-left:.25rem;">${c.count}</strong></span>`).join('')}
+             </div>`}
+      </div>
+    </div>
+    <div class="mgmt-grid mgmt-grid-3">
+      <div>
+        <div class="mc-card">
+          <div class="mc-card-header"><span class="mc-card-title">Wachstum – letzte 12 Monate</span></div>
+          <div class="mc-card-body">${buildBar(d.growth,'month','count')}</div>
+        </div>
+        <div class="ai-panel">
+          <div class="ai-header"><span class="ai-header-title">AI Praxismanager</span><span class="ai-header-badge">Platform-Level</span></div>
+          <div class="ai-section-lbl">Tägliche Zusammenfassung</div>
+          <div class="summary-grid">
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.aptsToday}</div><div class="summary-lbl">Termine heute</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.openInvoices}</div><div class="summary-lbl">Offene Rechnungen</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.waitlistTotal}</div><div class="summary-lbl">Warteliste</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.pendingReviews}</div><div class="summary-lbl">Bewertungen offen</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.automationsToday}</div><div class="summary-lbl">Automationen heute</div></div>
+          </div>
+          <div class="ai-section-lbl">Aufgaben</div>
+          ${ai.tasks.map(t=>`<div class="ai-task"><div class="ai-dot ${t.priority}"></div><span>${t.text}</span></div>`).join('')}
+          <div class="ai-section-lbl">Empfehlungen</div>
+          ${ai.recommendations.map(r=>`<div class="idea-item">${r}</div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="mc-card">
+          <div class="mc-card-header"><span class="mc-card-title">Risiken</span><span class="mc-card-sub">${d.risks.length} erkannt</span></div>
+          <div class="mc-card-body">
+            <ul class="risk-list">
+              ${d.risks.length===0
+                ? '<li class="risk-item"><div class="risk-dot info"></div>Keine Risiken erkannt</li>'
+                : d.risks.map(r=>`<li class="risk-item"><div class="risk-dot ${r.level}"></div>${r.msg}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+        <div class="mc-card">
+          <div class="mc-card-header"><span class="mc-card-title">To-dos</span></div>
+          <div class="mc-card-body">
+            <ul class="risk-list">
+              ${d.todos.map(t=>`<li class="risk-item"><div style="flex-shrink:0;color:var(--mc-blue);">☐</div>${t}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  loading.style.display='none'; content.style.display='block';
+}
+
+// ── CFO Tab ────────────────────────────────────────────────────────────────────
+async function loadCFO() {
+  if (loaded.cfo) return;
+  const loading = document.getElementById('loading-cfo');
+  const content = document.getElementById('content-cfo');
+  loading.style.display='block'; content.style.display='none';
+  let d;
+  try {
+    const r = await fetch('/api/owner/tab/cfo');
+    if (r.status===401) { location.href='/login.html'; return; }
+    d = await r.json();
+  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+
+  loaded.cfo = true;
+  document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
+
+  const pkgColors  = { BASIC:'chip-blue', PROFESSIONAL:'chip-green', PRO:'chip-green', UNLIMITED:'chip-yellow' };
+  const pkgLabels  = { BASIC:'Basic', PROFESSIONAL:'Pro', PRO:'Pro', UNLIMITED:'Unlimited' };
+  const PKG_PRICE  = { BASIC:19, PROFESSIONAL:39, PRO:39, UNLIMITED:79 };
+
+  const mrrRows = Object.entries(d.mrr_by_package||{});
+
+  content.innerHTML = `
+    <div class="kpi-row">
+      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.mrr)+'</span>','MRR (Monthly Recurring Revenue)',{cls:'up',text:'monatlich'})}
+      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.arr)+'</span>','ARR (Annual Recurring Revenue)',{cls:'up',text:'jährlich'})}
+      ${kpi(fmtNum(d.paying_practices),'Zahlende Praxen',{cls:'up',text:'bezahlt'})}
+      ${kpi(fmtNum(d.trial_practices),'Trial-Praxen',{cls:'neutral',text:'kostenlos'})}
+    </div>
+    <div class="kpi-row kpi-row-3">
+      ${kpi(fmt(d.total_revenue),'Gesamtumsatz (Zahlungen)')}
+      ${kpi(fmtNum(d.paid.count),'Bezahlte Rechnungen',{cls:'up',text:fmt(d.paid.amount)})}
+      ${kpi(fmtNum(d.overdue.count),'Überfällig',d.overdue.count>0?{cls:'danger',text:fmt(d.overdue.amount)}:{cls:'up',text:'keine'})}
+    </div>
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">MRR nach Paket</span></div>
+        <div class="mc-card-body">
+          ${mrrRows.length===0
+            ? '<p style="color:var(--mc-muted);font-size:.875rem;">Noch keine zahlenden Praxen</p>'
+            : mrrRows.map(([pkg,v])=>`
+              <div class="mrr-pkg-row">
+                <span class="chip ${pkgColors[pkg]||'chip-gray'}">${pkgLabels[pkg]||pkg}</span>
+                <span style="color:var(--mc-muted);font-size:.8125rem;">${v.count} × ${fmt(v.price)}</span>
+                <strong>${fmt(v.revenue)}</strong>
+              </div>`).join('')
+          }
+          ${mrrRows.length>0?`<div class="mrr-pkg-row" style="border-top:1px solid var(--mc-border);margin-top:.25rem;font-weight:700;"><span>Gesamt MRR</span><span></span><span>${fmt(d.mrr)}</span></div>`:''}
+        </div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Rechnungsübersicht</span></div>
+        <div class="mc-card-body">
+          <div class="inv-row"><span>Bezahlte Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-green">${d.paid.count} Stk.</span><strong>${fmt(d.paid.amount)}</strong></span></div>
+          <div class="inv-row"><span>Offene Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-yellow">${d.unpaid.count} Stk.</span><strong>${fmt(d.unpaid.amount)}</strong></span></div>
+          <div class="inv-row"><span>Überfällige Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-red">${d.overdue.count} Stk.</span><strong>${fmt(d.overdue.amount)}</strong></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header"><span class="mc-card-title">Paket-Verteilung (alle Praxen)</span></div>
+      <div class="mc-card-body">
+        <div class="pkg-row">
+          ${Object.entries(d.packages).length===0
+            ? '<span style="color:var(--mc-muted);font-size:.875rem;">Keine Daten</span>'
+            : Object.entries(d.packages).map(([k,v])=>
+                `<span class="chip ${pkgColors[k]||'chip-gray'}" style="font-size:.8125rem;padding:.2rem .625rem;">${pkgLabels[k]||k}: <strong style="margin-left:.25rem;">${v}</strong></span>`
+              ).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header"><span class="mc-card-title">Monatseinnahmen – letzte 12 Monate</span></div>
+      <div class="mc-card-body">${buildBar(d.monthly_revenue,'month','revenue','#16A34A')}</div>
+    </div>`;
+
+  loading.style.display='none'; content.style.display='block';
+}
+
+// ── Marketing Tab ──────────────────────────────────────────────────────────────
+async function loadMarketing() {
+  if (loaded.marketing) return;
+  const loading = document.getElementById('loading-marketing');
+  const content = document.getElementById('content-marketing');
+  loading.style.display='block'; content.style.display='none';
+  let d;
+  try {
+    const r = await fetch('/api/owner/tab/marketing');
+    if (r.status===401) { location.href='/login.html'; return; }
+    d = await r.json();
+  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+
+  loaded.marketing = true;
+  document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
+
+  // Marketing-Ziele (Platzhalter – später konfigurierbar)
+  const ZIEL_REG_MONAT  = 10;
+  const ZIEL_DEMO_MONAT = 20;
+  const regProg  = Math.min(Math.round((d.new_this_month / ZIEL_REG_MONAT) * 100), 100);
+  const demoProg = Math.min(Math.round((d.demo_this_month / ZIEL_DEMO_MONAT) * 100), 100);
+
+  // Top-Quellen (Platzhalter – später per UTM/Analytics)
+  const sources = [
+    { name:'Google',    pct:45, color:'#4285f4' },
+    { name:'Direkt',    pct:25, color:'#6b7280' },
+    { name:'Facebook',  pct:15, color:'#1877f2' },
+    { name:'Instagram', pct:10, color:'#e1306c' },
+    { name:'LinkedIn',  pct:5,  color:'#0a66c2' },
+  ];
+
+  // Länder: sicherstellen absteigend sortiert (Fallback für alte Daten)
+  const demoCountriesSorted = [...(d.demo_countries||[])].sort((a,b)=>b.count-a.count);
+
+  const convCls = conversionCls(d.conversion_rate);
+  const convTxt = conversionTxt(d.conversion_rate);
+  const convAmpelMap = { up:'var(--mc-green-bg)', warn:'var(--mc-yellow-bg)', danger:'var(--mc-red-bg)' };
+  const convAmpelBorder = { up:'#a7f3d0', warn:'#fde68a', danger:'#fecaca' };
+  const convAmpelText = { up:'#14532D', warn:'#92400e', danger:'#991b1b' };
+
+  content.innerHTML = `
+    <div class="kpi-row">
+      ${kpi(fmtNum(d.total_practices),'Registrierungen gesamt')}
+      ${kpi(fmtNum(d.new_this_week),'Neu diese Woche')}
+      ${kpi(fmtNum(d.new_this_month),'Neu diesen Monat',d.new_this_month===0?{cls:'warn',text:'0 – prüfen'}:{cls:'up',text:'aktiv'})}
+      ${kpi(d.active_rate+'%','Aktivierungsrate',{cls:d.active_rate>=70?'up':'warn',text:d.active_rate>=70?'gut':'niedrig'})}
+    </div>
+    <div class="kpi-row kpi-row-3">
+      ${kpi(fmtNum(d.demo_total),'Demo-Anfragen gesamt')}
+      ${kpi(fmtNum(d.demo_this_month),'Demo-Anfragen diesen Monat')}
+      ${kpi(d.conversion_rate+'%','Conversion Demo→Registrierung',{cls:convCls,text:convTxt})}
+    </div>
+
+    <!-- Diagramme mit echten Monatsnamen -->
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 6 Monate</span></div>
+        <div class="mc-card-body">${buildBar(d.registrations_by_month,'month','count','#8b5cf6',monthLabel)}</div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 8 Wochen</span></div>
+        <div class="mc-card-body">${buildBar(d.registrations_by_week,'week','count','#7C3AED')}</div>
+      </div>
+    </div>
+
+    <!-- Demo-Anfragen pro Monat + Länder-Tabelle -->
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Demo-Anfragen pro Monat</span><span class="mc-card-sub">letzte 6 Monate</span></div>
+        <div class="mc-card-body">
+          ${(d.demo_by_month||[]).length===0
+            ? '<span style="color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen</span>'
+            : buildBar(d.demo_by_month,'month','count','#f59e0b',monthLabel)}
+        </div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-title">Demo-Anfragen nach Land</span>
+          <span class="mc-card-sub">absteigend sortiert</span>
+        </div>
+        <div class="mc-card-body" style="padding:0;">
+          ${demoCountriesSorted.length===0
+            ? '<p style="padding:1rem;color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen</p>'
+            : `<table class="mc-table">
+                <thead><tr><th>#</th><th>Land</th><th style="text-align:right;">Anfragen</th></tr></thead>
+                <tbody>
+                  ${demoCountriesSorted.map((r,i)=>`
+                    <tr>
+                      <td style="color:var(--mc-subtle);font-size:.75rem;">${i+1}</td>
+                      <td>${r.country||'—'}</td>
+                      <td style="text-align:right;font-weight:600;">${r.count}</td>
+                    </tr>`).join('')}
+                </tbody>
+              </table>`}
+        </div>
+      </div>
+    </div>
+
+    <!-- Conversion-Ampel -->
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Conversion Demo → Registrierung</span></div>
+        <div class="mc-card-body">
+          <div style="background:${convAmpelMap[convCls]};border:1px solid ${convAmpelBorder[convCls]};border-radius:10px;padding:1rem 1.125rem;display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
+            <div style="width:10px;height:10px;border-radius:50%;background:${convAmpelText[convCls]};flex-shrink:0;box-shadow:0 0 0 3px ${convAmpelBorder[convCls]};"></div>
+            <div>
+              <div style="font-size:1.75rem;font-weight:700;color:${convAmpelText[convCls]};letter-spacing:-.04em;line-height:1;">${d.conversion_rate}%</div>
+              <div style="font-size:.8125rem;color:${convAmpelText[convCls]};margin-top:.125rem;">${convCls==='up'?'Sehr gut – über 50%':convCls==='warn'?'Mittel – zwischen 20% und 50%':'Niedrig – unter 20%'}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.625rem;margin-bottom:.5rem;font-size:.8125rem;">
+            <span style="width:100px;color:var(--mc-muted);">Demo-Anfragen</span>
+            <div style="flex:1;background:#f3f4f6;border-radius:4px;height:8px;"><div style="height:8px;border-radius:4px;background:#f59e0b;width:100%;"></div></div>
+            <strong style="min-width:28px;text-align:right;">${fmtNum(d.demo_total)}</strong>
+          </div>
+          <div style="display:flex;align-items:center;gap:.625rem;font-size:.8125rem;">
+            <span style="width:100px;color:var(--mc-muted);">Registrierungen</span>
+            <div style="flex:1;background:#f3f4f6;border-radius:4px;height:8px;"><div style="height:8px;border-radius:4px;background:#16A34A;width:${d.demo_total>0?Math.min(Math.round((d.total_practices/d.demo_total)*100),100):0}%;"></div></div>
+            <strong style="min-width:28px;text-align:right;">${fmtNum(d.total_practices)}</strong>
+          </div>
+        </div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Märkte & Sprachen</span></div>
+        <div class="mc-card-body">
+          <div class="lang-wrap">
+            ${(d.languages||[]).length===0
+              ? '<span style="color:var(--mc-muted);font-size:.875rem;">Keine Daten</span>'
+              : d.languages.map(r=>`<span class="chip chip-blue" style="font-size:.8125rem;">${LANG_FLAG[r.language]||'🌐'} ${(r.language||'').toUpperCase()} <strong style="margin-left:.25rem;">${r.count}</strong></span>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Marketing-Ziele -->
+    <div class="mc-card" style="margin-bottom:1rem;">
+      <div class="mc-card-header">
+        <span class="mc-card-title">Marketing-Ziele – Diesen Monat</span>
+        <span class="mc-card-sub">Ziele konfigurierbar</span>
+      </div>
+      <div class="mc-card-body">
+        <div style="margin-bottom:1rem;">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.375rem;">
+            <span style="font-size:.875rem;font-weight:500;">Neue Registrierungen</span>
+            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.new_this_month} / ${ZIEL_REG_MONAT} Ziel</span>
+          </div>
+          <div style="background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;">
+            <div style="height:10px;border-radius:6px;background:${regProg>=100?'#16A34A':regProg>=50?'#8b5cf6':'#d97706'};width:${regProg}%;transition:width .4s;"></div>
+          </div>
+          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${regProg}% des Monatsziels erreicht</div>
+        </div>
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.375rem;">
+            <span style="font-size:.875rem;font-weight:500;">Demo-Anfragen</span>
+            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.demo_this_month} / ${ZIEL_DEMO_MONAT} Ziel</span>
+          </div>
+          <div style="background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;">
+            <div style="height:10px;border-radius:6px;background:${demoProg>=100?'#16A34A':demoProg>=50?'#f59e0b':'#dc2626'};width:${demoProg}%;transition:width .4s;"></div>
+          </div>
+          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${demoProg}% des Monatsziels erreicht</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top-Quellen (Platzhalter) -->
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-title">Top-Quellen</span>
+          <span class="mc-card-sub" style="color:#d97706;">Platzhalter · UTM-Tracking geplant</span>
+        </div>
+        <div class="mc-card-body">
+          ${sources.map(s=>`
+            <div style="margin-bottom:.75rem;">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem;">
+                <span style="font-size:.875rem;font-weight:500;">${s.name}</span>
+                <span style="font-size:.8125rem;color:var(--mc-muted);">${s.pct}%</span>
+              </div>
+              <div style="background:#f3f4f6;border-radius:4px;height:7px;overflow:hidden;">
+                <div style="height:7px;border-radius:4px;background:${s.color};width:${s.pct}%;"></div>
+              </div>
+            </div>`).join('')}
+        </div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">SEO-Hinweise</span></div>
+        <div class="mc-card-body">${d.seo_hints.map(h=>`<div class="idea-item">${h}</div>`).join('')}</div>
+      </div>
+    </div>
+    <div class="mc-card" style="margin-bottom:1rem;">
+      <div class="mc-card-header"><span class="mc-card-title">Social-Media-Ideen</span></div>
+      <div class="mc-card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.25rem;">
+        ${d.social_ideas.map(i=>`<div class="idea-item">${i}</div>`).join('')}
+      </div>
+    </div>`;
+
+  loading.style.display='none'; content.style.display='block';
+}
+
+// ── Demo-Anfragen Tab ──────────────────────────────────────────────────────────
+async function loadDemos() {
+  if (loaded.demos) return;
+  const loading = document.getElementById('loading-demos');
+  const content = document.getElementById('content-demos');
+  loading.style.display='block'; content.style.display='none';
+  let d;
+  try {
+    const r = await fetch('/api/owner/tab/demos');
+    if (r.status===401) { location.href='/login.html'; return; }
+    if (r.status===403 || r.status===503) { showAccessError(); return; }
+    if (!r.ok) {
+      loading.innerHTML = `<div class="error-box">Fehler beim Laden (HTTP ${r.status}).</div>`;
+      return;
+    }
+    d = await r.json();
+  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+
+  // Defensive: bei unerwartetem Shape (z. B. Error-Envelope) klare Meldung statt
+  // stilles Crashen im Template-String unten.
+  if (!d || !d.stats || !Array.isArray(d.requests)) {
+    loading.innerHTML = '<div class="error-box">Unerwartete Server-Antwort beim Laden der Demo-Anfragen.</div>';
+    return;
+  }
+
+  loaded.demos = true;
+  document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
+
+  const s = d.stats;
+
+  // Status-Konfiguration
+  const STATUS_LABEL = { neu:'neu', eingeladen:'eingeladen', aktiviert:'aktiviert', kontaktiert:'kontaktiert', erledigt:'erledigt' };
+  const STATUS_CLASS = { neu:'neu', eingeladen:'eingeladen', aktiviert:'aktiviert', kontaktiert:'kontaktiert', erledigt:'erledigt' };
+  // Manuelle Cycle-Schritte (nur kontaktiert ↔ erledigt per Hand)
+  const MANUAL_NEXT  = { neu:'kontaktiert', eingeladen:'kontaktiert', aktiviert:'kontaktiert', kontaktiert:'erledigt', erledigt:'kontaktiert' };
+
+  const statusBadge = st => {
+    const cls = STATUS_CLASS[st] || 'neu';
+    return `<button class="status-btn ${cls}" data-id="" data-status="${st}" title="Klicken zum Weitersetzen">${STATUS_LABEL[st]||st}</button>`;
+  };
+
+  content.innerHTML = `
+    <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
+      ${kpi(fmtNum(s.total),'Anfragen gesamt')}
+      ${kpi(fmtNum(s.this_month),'Diesen Monat')}
+      ${kpi(fmtNum(s.neu),'Neu',s.neu>0?{cls:'warn',text:'offen'}:{cls:'up',text:'keine offenen'})}
+    </div>
+    <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
+      ${kpi(fmtNum(s.eingeladen||0),'Eingeladen',{cls:'neutral',text:'wartet auf Passwort'})}
+      ${kpi(fmtNum(s.aktiviert||0),'Aktiviert',{cls:'up',text:'Konto aktiv'})}
+      ${kpi(fmtNum(s.kontaktiert||0),'Kontaktiert',{cls:'neutral',text:'in Bearbeitung'})}
+      ${kpi(fmtNum(s.erledigt||0),'Erledigt',{cls:'neutral',text:'abgeschlossen'})}
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header">
+        <span class="mc-card-title">Alle Demo-Anfragen</span>
+        <span class="mc-card-sub">Einladung automatisch versendet · Status per Klick anpassen</span>
+      </div>
+      <div class="mc-card-body" style="padding:0;overflow-x:auto;">
+        ${d.requests.length===0
+          ? '<p style="padding:1.25rem;color:var(--mc-muted);">Noch keine Demo-Anfragen.</p>'
+          : `<table class="mc-table">
+              <thead><tr><th>Datum</th><th>Praxis</th><th>Kontaktperson</th><th>E-Mail</th><th>Telefon</th><th>Land</th><th>Sprache</th><th>Status</th><th></th></tr></thead>
+              <tbody>
+                ${d.requests.map(req=>{
+                  const st = req.status||'neu';
+                  const canResend = (st==='eingeladen') && req.invite_pending;
+                  return `
+                  <tr id="demo-row-${req.id}">
+                    <td style="white-space:nowrap;color:var(--mc-muted);">${fmtD(req.created_at)}</td>
+                    <td style="font-weight:500;">${req.practice||'—'}</td>
+                    <td>${req.contact||'—'}</td>
+                    <td><a href="mailto:${req.email}" style="color:var(--mc-blue);">${req.email}</a></td>
+                    <td style="white-space:nowrap;">${req.phone?`<a href="tel:${req.phone}" style="color:var(--mc-muted);">${req.phone}</a>`:'—'}</td>
+                    <td>${req.country||'—'}</td>
+                    <td style="color:var(--mc-muted);">${req.language?(LANG_FLAG[req.language]||'🌐')+' '+(req.language||'').toUpperCase():'—'}</td>
+                    <td style="white-space:nowrap;">
+                      <button class="status-btn ${STATUS_CLASS[st]}" data-id="${req.id}" data-status="${st}"
+                              title="Klicken: manuell auf nächsten Status setzen">
+                        ${STATUS_LABEL[st]||st}
+                      </button>
+                      ${canResend ? `<button class="resend-btn" data-id="${req.id}" data-email="${req.email}" title="Einladung erneut senden">↻ erneut</button>` : ''}
+                    </td>
+                    <td>
+                      <button class="delete-btn" data-id="${req.id}" data-practice="${req.practice||''}"
+                              title="Löschen"
+                              style="background:none;border:none;cursor:pointer;color:var(--mc-muted);font-size:.875rem;padding:.125rem .25rem;border-radius:4px;"
+                              onmouseover="this.style.color='var(--mc-red)'" onmouseout="this.style.color='var(--mc-muted)'">✕</button>
+                    </td>
+                  </tr>`;
+                }).join('')}
+              </tbody>
+            </table>`}
+      </div>
+    </div>`;
+
+  // Status-Cycle per Klick (manuell)
+  document.querySelectorAll('.status-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const id = this.dataset.id;
+      const current = this.dataset.status || 'neu';
+      const next = MANUAL_NEXT[current] || 'kontaktiert';
+      try {
+        const r = await fetch(`/api/owner/demo-requests/${id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status: next }),
+        });
+        if (r.ok) {
+          this.dataset.status = next;
+          this.className = 'status-btn ' + (STATUS_CLASS[next] || 'neu');
+          this.textContent = STATUS_LABEL[next] || next;
+        }
+      } catch {}
+    });
+  });
+
+  // Einladung erneut senden
+  document.querySelectorAll('.resend-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const id = this.dataset.id;
+      const email = this.dataset.email || '';
+      if (!confirm(`Einladung erneut senden an:\n${email}\n\nEin neuer Passwort-Link wird generiert (24h gültig).`)) return;
+      this.disabled = true;
+      this.textContent = '…';
+      try {
+        const r = await fetch(`/api/owner/demo-requests/${id}/resend-invite`, { method: 'POST' });
+        const json = await r.json().catch(()=>({}));
+        if (r.ok) {
+          this.textContent = '✓ gesendet';
+          this.style.color = '#14532D';
+          this.style.background = '#DCFCE7';
+          this.style.borderColor = '#a7f3d0';
+        } else {
+          alert('Fehler: ' + (json.error || 'Unbekannter Fehler'));
+          this.disabled = false;
+          this.textContent = '↻ erneut';
+        }
+      } catch {
+        alert('Netzwerkfehler');
+        this.disabled = false;
+        this.textContent = '↻ erneut';
+      }
+    });
+  });
+
+  // Löschen per ✕-Button
+  document.querySelectorAll('.delete-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const id = this.dataset.id;
+      const practice = this.dataset.practice || id;
+      if (!confirm(`Demo-Anfrage löschen?\n\n„${practice}"\n\nDieser Vorgang kann nicht rückgängig gemacht werden.`)) return;
+      try {
+        const r = await fetch(`/api/owner/demo-requests/${id}`, { method: 'DELETE' });
+        if (r.ok) {
+          const row = document.getElementById('demo-row-' + id);
+          if (row) row.remove();
+          delete loaded.demos;
+        }
+      } catch {}
+    });
+  });
+
+  loading.style.display='none'; content.style.display='block';
+}
+
+// ── CTO Tab ────────────────────────────────────────────────────────────────────
+async function loadCTO() {
+  if (loaded.cto) return;
+  const loading = document.getElementById('loading-cto');
+  const content = document.getElementById('content-cto');
+  loading.style.display='block'; content.style.display='none';
+  let d;
+  try {
+    const r = await fetch('/api/owner/tab/cto');
+    if (r.status===401) { location.href='/login.html'; return; }
+    d = await r.json();
+  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+
+  loaded.cto = true;
+  document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
+
+  const ds  = d.db_stats;
+  const sec = d.security_status;
+
+  const secRows = [
+    { ok: sec.session_secret_configured, warn:!sec.session_secret_configured, label:'SESSION_SECRET konfiguriert' },
+    { ok: sec.owner_email_configured,    warn:false,                           label:'OWNER_EMAIL konfiguriert' },
+    { ok: sec.smtp_configured,           warn:!sec.smtp_configured,            label:`SMTP konfiguriert${!sec.smtp_configured?' – E-Mails werden nicht versendet':''}` },
+    { ok: !sec.setup_token_active,       warn:sec.setup_token_active,          label:`OWNER_SETUP_TOKEN: ${sec.setup_token_active?'AKTIV – bitte entfernen!':'inaktiv (sicher)'}` },
+    { ok: sec.node_env==='production',   warn:sec.node_env!=='production',     label:`NODE_ENV: ${sec.node_env}` },
+    { ok: !sec.email_dev_mode,           warn:sec.email_dev_mode,              label:`E-Mail Dev-Mode: ${sec.email_dev_mode?'AN':'AUS'}` },
+  ];
+
+  content.innerHTML = `
+    <div class="kpi-row">
+      ${kpi(fmtNum(ds.total_practices),'Praxen')}
+      ${kpi(fmtNum(ds.total_users),'Benutzer')}
+      ${kpi(fmtNum(ds.total_appointments),'Termine')}
+      ${kpi(fmtNum(ds.total_invoices),'Rechnungen')}
+      ${kpi(fmtNum(ds.total_payments),'Zahlungen')}
+      ${kpi(fmtNum(ds.total_reviews),'Bewertungen')}
+      ${kpi(fmtNum(ds.total_waitlist),'Warteliste')}
+      ${kpi(fmtNum(ds.total_demo_requests),'Demo-Anfragen')}
+    </div>
+    <div class="mgmt-grid">
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Sicherheitsstatus</span></div>
+        <div class="mc-card-body">
+          ${secRows.map(s=>`<div class="sec-row"><div class="sec-dot ${s.ok?'sec-ok':s.warn?'sec-warn':'sec-err'}"></div><span>${s.label}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="mc-card">
+        <div class="mc-card-header"><span class="mc-card-title">Server & Datenbank</span></div>
+        <div class="mc-card-body">
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Server: online</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>API: erreichbar</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Uptime: ${d.uptime}</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Datenbankgröße: ${d.db_size}</span></div>
+          <div class="sec-row"><div class="sec-dot ${d.backups&&d.backups.length>0?'sec-ok':'sec-warn'}"></div>
+            <span>Backups: ${d.backups&&d.backups.length>0?d.backups.length+' vorhanden (aktuellstes: '+d.backups[0]+')':'keine gefunden'}</span>
+          </div>
+          <div class="sec-row"><div class="sec-dot ${d.last_automation?'sec-ok':'sec-warn'}"></div>
+            <span>Letzte Automation: ${fmtDt(d.last_automation)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header"><span class="mc-card-title">Update-Hinweise</span></div>
+      <div class="mc-card-body">${d.update_hints.map(h=>`<div class="idea-item" style="font-size:.8125rem;">${h}</div>`).join('')}</div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header"><span class="mc-card-title">Letzte Aktivitäten</span><span class="mc-card-sub">Nur Aktionstypen – keine Patientendaten</span></div>
+      <div class="mc-card-body" style="padding:0;">
+        <table class="mc-table">
+          <thead><tr><th>Aktion</th><th>Typ</th><th>Zeit</th></tr></thead>
+          <tbody>
+            ${(d.recent_activity||[]).length===0
+              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">Keine Einträge</td></tr>'
+              : d.recent_activity.map(a=>`<tr><td>${a.action||'—'}</td><td>${a.entity_type||'—'}</td><td style="white-space:nowrap;color:var(--mc-muted);">${fmtDt(a.created_at)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mc-card">
+      <div class="mc-card-header"><span class="mc-card-title">Automation-Log</span></div>
+      <div class="mc-card-body" style="padding:0;">
+        <table class="mc-table">
+          <thead><tr><th>Typ</th><th>Details</th><th>Zeitpunkt</th></tr></thead>
+          <tbody>
+            ${(d.automation_log||[]).length===0
+              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">Keine Einträge</td></tr>'
+              : d.automation_log.map(a=>`<tr><td>${a.type||'—'}</td><td style="color:var(--mc-muted);">${a.details||'—'}</td><td style="white-space:nowrap;color:var(--mc-muted);">${fmtDt(a.ran_at)}</td></tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+
+  loading.style.display='none'; content.style.display='block';
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────────
+function showAccessError() {
+  document.getElementById('main-ui').style.display='none';
+  document.getElementById('access-error').style.display='block';
+}
+
+document.getElementById('btn-logout').addEventListener('click', async () => {
+  await fetch('/api/auth/logout',{method:'POST'});
+  location.href='/login.html';
+});
+
+(async () => {
+  let me;
+  try {
+    const r = await fetch('/api/auth/me');
+    if (r.status===401) { location.href='/login.html'; return; }
+    me = await r.json();
+  } catch { return; }
+
+  if (me) document.getElementById('user-name').textContent = ((me.first_name||'')+' '+(me.last_name||'')).trim();
+
+  const chk = await fetch('/api/owner/check').then(r=>r.json()).catch(()=>({isOwner:false}));
+  if (!chk.isOwner) { showAccessError(); return; }
+
+  document.getElementById('main-ui').style.display='block';
+  loadCEO();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meine Termine – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <span class="logo">PraxisOnline24</span>
+    <nav class="nav" style="gap:.75rem;">
+      <a id="back-to-booking" href="#" style="font-size:.875rem;">← Termin buchen</a>
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main style="flex:1;padding:2rem 1rem 3rem;">
+  <div style="max-width:720px;margin:0 auto;">
+
+    <div class="page-header" style="margin-bottom:1.25rem;">
+      <h1 id="my-title-h1">Meine Termine</h1>
+    </div>
+
+    <div class="card" id="lookup-card" style="margin-bottom:1.25rem;">
+      <p id="my-intro-p" style="color:var(--text-secondary);font-size:.9375rem;margin-bottom:1rem;">
+        Geben Sie Ihre E-Mail-Adresse ein, um Ihre Termine bei dieser Praxis zu sehen.
+      </p>
+      <div id="lookup-alert"></div>
+      <form id="lookup-form" style="display:flex;gap:.75rem;flex-wrap:wrap;align-items:flex-end;">
+        <div class="form-group" style="flex:1;min-width:200px;margin-bottom:0;">
+          <label class="form-label" id="my-email-lbl" for="inp-lookup-email">E-Mail-Adresse</label>
+          <input type="email" id="inp-lookup-email" class="form-control" required autocomplete="email">
+        </div>
+        <button type="submit" id="my-show-btn" class="btn btn-primary">Termine anzeigen</button>
+      </form>
+    </div>
+
+    <div id="results" style="display:none;">
+      <div id="results-alert"></div>
+      <div class="card">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th id="th-date">Datum</th>
+                <th id="th-time">Uhrzeit</th>
+                <th id="th-prac">Behandler</th>
+                <th id="th-type">Art</th>
+                <th id="th-status">Status</th>
+                <th id="th-actions" style="text-align:right;">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="appts-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="empty-state" style="display:none;" class="card">
+      <p id="my-empty-p" style="text-align:center;color:var(--text-secondary);padding:2rem 0;">
+        Keine Termine für diese E-Mail-Adresse gefunden.
+      </p>
+      <div style="text-align:center;">
+        <a id="book-link" href="#" class="btn btn-primary">Termin buchen</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="myapt-agb" href="/agb.html">AGB</a>
+        <a id="myapt-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="myapt-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    applyTranslations();
+
+    const practiceId = getQueryParam('p');
+    const today = new Date().toISOString().split('T')[0];
+
+    if (practiceId) {
+      const lang = pLang();
+      document.getElementById('back-to-booking').href = `/booking.html?p=${practiceId}&lang=${lang}`;
+      document.getElementById('book-link').href = `/booking.html?p=${practiceId}&lang=${lang}`;
+    }
+
+    document.getElementById('lookup-form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = document.getElementById('inp-lookup-email').value.trim();
+      const alertEl = document.getElementById('lookup-alert');
+      alertEl.innerHTML = '';
+
+      if (!practiceId) {
+        alertEl.innerHTML = `<div class="alert alert-danger">${pT('error_no_id')}</div>`;
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/public/my-appointments?email=${encodeURIComponent(email)}&practice_id=${encodeURIComponent(practiceId)}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Fehler');
+
+        if (!data.length) {
+          document.getElementById('results').style.display = 'none';
+          document.getElementById('empty-state').style.display = '';
+          return;
+        }
+
+        document.getElementById('empty-state').style.display = 'none';
+        document.getElementById('results').style.display = '';
+        renderAppointments(data, today, practiceId);
+      } catch (err) {
+        alertEl.innerHTML = `<div class="alert alert-danger">${esc(err.message)}</div>`;
+      }
+    });
+  });
+
+  function applyTranslations() {
+    document.title = pT('my_title') + ' – PraxisOnline24';
+    document.getElementById('my-title-h1').textContent = pT('my_title');
+    document.getElementById('my-intro-p').textContent = pT('my_intro');
+    document.getElementById('my-email-lbl').textContent = pT('my_email');
+    document.getElementById('my-show-btn').textContent = pT('my_show');
+    document.getElementById('back-to-booking').textContent = pT('my_back');
+    document.getElementById('my-empty-p').textContent = pT('my_empty');
+    document.getElementById('book-link').textContent = pT('my_book');
+    document.getElementById('th-date').textContent = pT('my_col_date');
+    document.getElementById('th-time').textContent = pT('my_col_time');
+    document.getElementById('th-prac').textContent = pT('my_col_prac');
+    document.getElementById('th-type').textContent = pT('my_col_type');
+    document.getElementById('th-status').textContent = pT('my_col_status');
+    document.getElementById('th-actions').textContent = pT('my_col_actions');
+    document.getElementById('footer-note').textContent = pT('footer_note');
+    document.getElementById('myapt-agb').textContent = pT('nav_agb');
+    document.getElementById('myapt-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('myapt-sec-comp').textContent = pT('footer.security_compliance');
+  }
+
+  function renderAppointments(appts, today, practiceId) {
+    const lang = pLang();
+    const statusLabels = {
+      scheduled: `<span class="badge badge-scheduled">${pT('st_scheduled')}</span>`,
+      completed:  `<span class="badge badge-completed">${pT('st_completed')}</span>`,
+      cancelled:  `<span class="badge badge-cancelled">${pT('st_cancelled')}</span>`,
+      noshow:     `<span class="badge badge-noshow">${pT('st_noshow')}</span>`,
+    };
+
+    const uhr = pT('uhr');
+
+    document.getElementById('appts-tbody').innerHTML = appts.map(a => {
+      const [y, m, d] = a.appointment_date.split('-');
+      const dateStr = `${d}.${m}.${y}`;
+      const practName = [a.practitioner_title, a.practitioner_first_name, a.practitioner_last_name]
+        .filter(Boolean).join(' ') || '–';
+      const badge = statusLabels[a.status] || `<span class="badge">${esc(a.status)}</span>`;
+      const isFuture = a.appointment_date >= today && a.status === 'scheduled';
+
+      const cancelBtn = isFuture
+        ? `<a href="/cancel.html?token=${esc(a.cancel_token)}&lang=${lang}" class="btn btn-sm" style="color:var(--danger);border:1px solid var(--danger);border-radius:var(--radius);padding:.3rem .75rem;font-size:.8125rem;">${pT('my_cancel')}</a>`
+        : '';
+
+      const reviewBtn = a.status === 'completed' && practiceId
+        ? `<a href="/review.html?p=${esc(practiceId)}&lang=${lang}" class="btn btn-sm btn-secondary" style="font-size:.8125rem;">${pT('my_review')}</a>`
+        : '';
+
+      const icsBtn = isFuture && a.cancel_token
+        ? `<a href="/api/public/ics/${esc(a.cancel_token)}" class="btn btn-sm btn-secondary" style="font-size:.8125rem;" title="📅">📅</a>`
+        : '';
+
+      return `<tr>
+        <td style="white-space:nowrap;">${esc(dateStr)}</td>
+        <td style="white-space:nowrap;">${esc(a.appointment_time)}${uhr ? ' ' + uhr : ' Uhr'}</td>
+        <td>${esc(practName)}</td>
+        <td style="font-size:.875rem;">${esc(a.appointment_type || '–')}</td>
+        <td>${badge}</td>
+        <td style="text-align:right;">
+          <div style="display:flex;gap:.375rem;justify-content:flex-end;flex-wrap:wrap;">
+            ${icsBtn}${reviewBtn}${cancelBtn}
+          </div>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  function esc(str) {
+    if (str == null) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

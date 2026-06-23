@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termin absagen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container-sm" style="padding:2rem 1rem;">
+    <div id="alert-container"></div>
+
+    <div id="cancel-info" class="card" style="display:none;">
+      <h2 class="card-title" id="cancel-title-h2">Termin absagen</h2>
+      <div class="alert alert-warning" id="cancel-confirm-text" style="margin-bottom:1.5rem;">Möchten Sie wirklich Ihren Termin absagen?</div>
+
+      <table style="margin-bottom:1.5rem;">
+        <tr><td style="padding:.5rem 1rem .5rem 0;font-weight:500;" id="cancel-lbl-practice">Praxis:</td><td id="info-practice"></td></tr>
+        <tr><td style="padding:.5rem 1rem .5rem 0;font-weight:500;" id="cancel-lbl-date">Datum:</td><td id="info-date"></td></tr>
+        <tr><td style="padding:.5rem 1rem .5rem 0;font-weight:500;" id="cancel-lbl-time">Uhrzeit:</td><td id="info-time"></td></tr>
+        <tr><td style="padding:.5rem 1rem .5rem 0;font-weight:500;" id="cancel-lbl-patient">Patient:</td><td id="info-patient"></td></tr>
+      </table>
+
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;">
+        <button id="btn-confirm-cancel" class="btn btn-danger">Ja, Termin absagen</button>
+        <a href="/" id="cancel-no-link" class="btn btn-secondary">Nein, zurück</a>
+      </div>
+    </div>
+
+    <div id="success-message" class="card" style="display:none;text-align:center;padding:3rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">✅</div>
+      <h2 id="cancel-success-h2">Termin wurde abgesagt</h2>
+      <p id="cancel-success-p" style="color:var(--text-secondary);margin:1rem 0;">Sie erhalten eine Bestätigungs-E-Mail.</p>
+      <a href="/" id="cancel-success-home" class="btn btn-primary">Zur Startseite</a>
+    </div>
+
+    <div id="error-message" class="card" style="display:none;text-align:center;padding:3rem 2rem;">
+      <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
+      <h2 id="error-text">Termin nicht gefunden</h2>
+      <a href="/" id="cancel-error-home" class="btn btn-secondary" style="margin-top:1rem;">Zur Startseite</a>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="cancel-agb" href="/agb.html">AGB</a>
+        <a id="cancel-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="cancel-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    applyTranslations();
+
+    const token = getQueryParam('token');
+
+    if (!token) {
+      document.getElementById('error-message').style.display = 'block';
+      document.getElementById('error-text').textContent = pT('cancel_invalid_link');
+    } else {
+      loadAppointment(token);
+    }
+
+    document.getElementById('btn-confirm-cancel')?.addEventListener('click', async () => {
+      try {
+        await API.post(`/api/public/cancel/${token}`);
+        document.getElementById('cancel-info').style.display = 'none';
+        document.getElementById('success-message').style.display = 'block';
+      } catch (err) {
+        const el = document.createElement('div');
+        el.className = 'alert alert-danger';
+        el.textContent = err.message;
+        document.getElementById('alert-container').appendChild(el);
+      }
+    });
+  });
+
+  function applyTranslations() {
+    document.title = pT('cancel_title') + ' – PraxisOnline24';
+    document.getElementById('cancel-title-h2').textContent = pT('cancel_title');
+    document.getElementById('cancel-confirm-text').textContent = pT('cancel_confirm_q');
+    document.getElementById('cancel-lbl-practice').textContent = pT('cancel_practice') + ':';
+    document.getElementById('cancel-lbl-date').textContent = pT('cancel_date') + ':';
+    document.getElementById('cancel-lbl-time').textContent = pT('cancel_time') + ':';
+    document.getElementById('cancel-lbl-patient').textContent = pT('cancel_patient') + ':';
+    document.getElementById('btn-confirm-cancel').textContent = pT('cancel_btn');
+    document.getElementById('cancel-no-link').textContent = pT('cancel_no');
+    document.getElementById('cancel-success-h2').textContent = pT('cancel_success_title');
+    document.getElementById('cancel-success-p').textContent = pT('cancel_success_text');
+    document.getElementById('cancel-success-home').textContent = pT('home');
+    document.getElementById('cancel-error-home').textContent = pT('home');
+    document.getElementById('footer-note').textContent = pT('footer_note');
+    document.getElementById('cancel-agb').textContent = pT('nav_agb');
+    document.getElementById('cancel-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('cancel-sec-comp').textContent = pT('footer.security_compliance');
+  }
+
+  async function loadAppointment(token) {
+    try {
+      const data = await API.get(`/api/public/cancel/${token}`);
+      document.getElementById('info-practice').textContent = data.practice_name;
+      document.getElementById('info-date').textContent = formatDate(data.appointment_date);
+      const uhr = pT('uhr');
+      document.getElementById('info-time').textContent = data.appointment_time + (uhr ? ' ' + uhr : ' Uhr');
+      document.getElementById('info-patient').textContent = `${data.patient_first_name} ${data.patient_last_name}`;
+      document.getElementById('cancel-info').style.display = 'block';
+    } catch (err) {
+      document.getElementById('error-message').style.display = 'block';
+      document.getElementById('error-text').textContent = err.message;
+    }
+  }
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

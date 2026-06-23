@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bewertungen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache / Language">
+          <option value="de">🇩🇪</option>
+          <option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option>
+          <option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option>
+          <option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option>
+          <option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option>
+          <option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option>
+          <option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html" class="active"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="page-header">
+      <h1 data-i18n="page_reviews">Bewertungen</h1>
+      <a id="review-link" href="#" target="_blank" class="btn btn-secondary btn-sm" data-i18n="btn_share_review">Bewertungslink teilen</a>
+    </div>
+
+    <!-- Summary card -->
+    <div class="card" style="margin-bottom:1.25rem;">
+      <div style="display:flex;gap:2.5rem;flex-wrap:wrap;align-items:center;">
+        <div style="text-align:center;">
+          <div id="avg-stars" style="font-size:1.75rem;color:var(--warning);letter-spacing:.1em;">☆☆☆☆☆</div>
+          <div id="avg-score" style="font-size:.875rem;color:var(--text-secondary);margin-top:.25rem;">–</div>
+        </div>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;">
+          <div style="text-align:center;">
+            <div id="count-total" style="font-size:1.5rem;font-weight:700;color:var(--primary);">–</div>
+            <div style="font-size:.8125rem;color:var(--text-secondary);" data-i18n="stat_total">Gesamt</div>
+          </div>
+          <div style="text-align:center;">
+            <div id="count-visible" style="font-size:1.5rem;font-weight:700;color:var(--secondary);">–</div>
+            <div style="font-size:.8125rem;color:var(--text-secondary);" data-i18n="stat_visible">Freigegeben</div>
+          </div>
+          <div style="text-align:center;">
+            <div id="count-pending" style="font-size:1.5rem;font-weight:700;color:var(--warning);">–</div>
+            <div style="font-size:.8125rem;color:var(--text-secondary);" data-i18n="stat_pending_r">Ausstehend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="" data-i18n="filter_all">Alle</button>
+      <button class="filter-tab" data-filter="0" data-i18n="filter_pending">Ausstehend</button>
+      <button class="filter-tab" data-filter="1" data-i18n="filter_visible">Freigegeben</button>
+    </div>
+
+    <!-- Reviews table -->
+    <div class="card">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-i18n="th_date">Datum</th>
+              <th data-i18n="th_author">Autor</th>
+              <th data-i18n="th_rating">Bewertung</th>
+              <th data-i18n="th_comment">Kommentar</th>
+              <th data-i18n="th_status">Status</th>
+              <th style="text-align:right;" data-i18n="th_actions">Aktionen</th>
+            </tr>
+          </thead>
+          <tbody id="reviews-tbody">
+            <tr><td colspan="6" style="text-align:center;color:var(--text-secondary);padding:2rem;" data-i18n="loading">Wird geladen…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Security &amp; Compliance</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script src="/js/reviews.js"></script>
+</body>
+</html>

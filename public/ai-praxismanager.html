@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Praxismanager – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* ── AI Praxismanager – Mobile-First SaaS Design ── */
+    :root {
+      --ai-bg: #f9fafb;
+      --ai-surface: #ffffff;
+      --ai-border: #e5e7eb;
+      --ai-text: #111827;
+      --ai-muted: #6b7280;
+      --ai-subtle: #9ca3af;
+      --ai-blue: #7C3AED;
+      --ai-green: #16A34A;
+      --ai-yellow: #d97706;
+      --ai-red: #dc2626;
+      --ai-green-bg: #DCFCE7;
+      --ai-yellow-bg: #fef3c7;
+      --ai-red-bg: #fee2e2;
+      --ai-blue-bg: #EDE9FE;
+    }
+
+    body { background: var(--ai-bg); }
+
+    /* ── Page header ── */
+    .ai-page-header {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      padding: 1.25rem 0 1rem;
+      margin-bottom: 0;
+      flex-wrap: wrap;
+    }
+    .ai-page-title { font-size: 1.1875rem; font-weight: 700; color: var(--ai-text); letter-spacing: -.02em; }
+    .ai-page-sub { font-size: .8125rem; color: var(--ai-muted); margin-top: .125rem; }
+    .ai-page-right { margin-left: auto; display: flex; align-items: center; gap: .625rem; flex-shrink: 0; }
+    .ai-ts { font-size: .75rem; color: var(--ai-subtle); }
+    .ai-badge-live {
+      display: inline-flex; align-items: center; gap: .3rem;
+      font-size: .6875rem; font-weight: 600; color: var(--ai-green);
+      background: var(--ai-green-bg); border-radius: 9999px; padding: .2rem .625rem;
+    }
+    .ai-badge-live::before {
+      content: ''; display: block; width: 6px; height: 6px;
+      background: var(--ai-green); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    /* ── Section card ── */
+    .ai-card {
+      background: var(--ai-surface);
+      border: 1px solid var(--ai-border);
+      border-radius: 12px;
+      margin-bottom: .875rem;
+      overflow: hidden;
+    }
+    .ai-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .875rem 1rem;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .ai-card-title { font-size: .9375rem; font-weight: 600; color: var(--ai-text); display: flex; align-items: center; gap: .5rem; }
+    .ai-card-count {
+      font-size: .75rem; font-weight: 600;
+      background: #f3f4f6; color: var(--ai-muted);
+      border-radius: 9999px; padding: .1rem .5rem;
+    }
+    .ai-card-count.red { background: var(--ai-red-bg); color: var(--ai-red); }
+    .ai-card-count.yellow { background: var(--ai-yellow-bg); color: var(--ai-yellow); }
+    .ai-card-count.green { background: var(--ai-green-bg); color: var(--ai-green); }
+    .ai-card-body { padding: 1rem; }
+    .ai-card-body-flush { padding: 0; }
+
+    /* ── Grid layouts ── */
+    .ai-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .875rem;
+    }
+    @media (min-width: 700px) { .ai-grid-2 { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 1000px) { .ai-grid-main { grid-template-columns: 3fr 2fr; } }
+
+    /* ── Prioritäten ── */
+    .prio-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid #f9fafb;
+      cursor: pointer;
+      transition: background .1s;
+      text-decoration: none;
+    }
+    .prio-item:last-child { border-bottom: none; }
+    .prio-item:hover { background: #fafafa; }
+    .prio-badge {
+      flex-shrink: 0; font-size: .6875rem; font-weight: 700;
+      padding: .2rem .5rem; border-radius: 4px;
+      text-transform: uppercase; letter-spacing: .04em;
+      white-space: nowrap; margin-top: .05rem;
+    }
+    .prio-badge.kritisch { background: #fee2e2; color: #991b1b; }
+    .prio-badge.dringend { background: #fef3c7; color: #92400e; }
+    .prio-badge.heute    { background: #EDE9FE; color: #6D28D9; }
+    .prio-badge.info     { background: #f3f4f6; color: #374151; }
+    .prio-badge.ok       { background: var(--ai-green-bg); color: #14532D; }
+    .prio-text { font-size: .9rem; color: var(--ai-text); line-height: 1.45; flex: 1; }
+    .prio-arrow { color: var(--ai-subtle); font-size: .875rem; flex-shrink: 0; margin-top: .1rem; }
+
+    /* ── Ampel-Karten ── */
+    .ampel-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .625rem;
+    }
+    @media (min-width: 800px) { .ampel-grid { grid-template-columns: repeat(4, 1fr); } }
+    .ampel-card {
+      border-radius: 10px; padding: .875rem;
+      border: 1px solid transparent;
+      display: flex; flex-direction: column; gap: .375rem;
+    }
+    .ampel-card.gruen  { background: #f0fdf4; border-color: #bbf7d0; }
+    .ampel-card.gelb   { background: #fffbeb; border-color: #fde68a; }
+    .ampel-card.rot    { background: #fef2f2; border-color: #fecaca; }
+    .ampel-dot-row { display: flex; align-items: center; gap: .5rem; }
+    .ampel-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .ampel-card.gruen .ampel-dot { background: var(--ai-green); box-shadow: 0 0 0 3px #bbf7d060; }
+    .ampel-card.gelb  .ampel-dot { background: var(--ai-yellow); box-shadow: 0 0 0 3px #fde68a60; }
+    .ampel-card.rot   .ampel-dot { background: var(--ai-red); box-shadow: 0 0 0 3px #fecaca60; }
+    .ampel-bereich { font-size: .6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+    .ampel-card.gruen .ampel-bereich { color: #047857; }
+    .ampel-card.gelb  .ampel-bereich { color: #b45309; }
+    .ampel-card.rot   .ampel-bereich { color: #b91c1c; }
+    .ampel-card-text { font-size: .8125rem; color: var(--ai-text); line-height: 1.45; }
+    .ampel-card-detail { font-size: .6875rem; color: var(--ai-muted); }
+    .ampel-card-link {
+      display: inline-flex; align-items: center; gap: .25rem;
+      font-size: .75rem; font-weight: 600; margin-top: .25rem;
+      text-decoration: none;
+    }
+    .ampel-card.gruen .ampel-card-link { color: #047857; }
+    .ampel-card.gelb  .ampel-card-link { color: #b45309; }
+    .ampel-card.rot   .ampel-card-link { color: #b91c1c; }
+
+    /* ── Warnungen ── */
+    .warn-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 1rem;
+      border-bottom: 1px solid #f9fafb;
+    }
+    .warn-item:last-child { border-bottom: none; }
+    .warn-icon { flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .875rem; }
+    .warn-icon.rot    { background: var(--ai-red-bg); }
+    .warn-icon.gelb   { background: var(--ai-yellow-bg); }
+    .warn-icon.gruen  { background: var(--ai-green-bg); }
+    .warn-text { flex: 1; font-size: .875rem; color: var(--ai-text); line-height: 1.45; }
+    .warn-action {
+      flex-shrink: 0; font-size: .75rem; font-weight: 600;
+      padding: .25rem .625rem; border-radius: 6px; cursor: pointer;
+      border: none; text-decoration: none; display: inline-flex; align-items: center;
+      white-space: nowrap;
+    }
+    .warn-action.rot   { background: var(--ai-red-bg);    color: #991b1b; }
+    .warn-action.gelb  { background: var(--ai-yellow-bg); color: #92400e; }
+    .warn-action.gruen { background: var(--ai-green-bg);  color: #14532D; }
+
+    /* ── KI-Empfehlungen ── */
+    .empf-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 1rem; border-bottom: 1px solid #f9fafb;
+    }
+    .empf-item:last-child { border-bottom: none; }
+    .empf-impact {
+      flex-shrink: 0; font-size: .6875rem; font-weight: 700;
+      padding: .2rem .5rem; border-radius: 4px; text-transform: uppercase;
+      letter-spacing: .04em; white-space: nowrap;
+    }
+    .empf-impact.hoch   { background: #fef3c7; color: #92400e; }
+    .empf-impact.mittel { background: var(--ai-blue-bg); color: #6D28D9; }
+    .empf-impact.niedrig{ background: #f3f4f6; color: #374151; }
+    .empf-impact.gut    { background: var(--ai-green-bg); color: #14532D; }
+    .empf-impact.setup  { background: var(--ai-blue-bg); color: #6D28D9; }
+    .empf-text { font-size: .875rem; color: var(--ai-text); line-height: 1.5; word-break: break-word; }
+
+    /* ── To-do Liste ── */
+    .todo-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 1rem; border-bottom: 1px solid #f9fafb;
+      text-decoration: none;
+    }
+    .todo-item:last-child { border-bottom: none; }
+    .todo-item:hover { background: #fafafa; }
+    .todo-check {
+      flex-shrink: 0; width: 18px; height: 18px;
+      border: 2px solid var(--ai-border); border-radius: 4px;
+      margin-top: .1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: border-color .15s, background .15s;
+    }
+    .todo-item:hover .todo-check { border-color: var(--ai-blue); }
+    .todo-priority {
+      flex-shrink: 0; width: 4px; height: 4px; border-radius: 50%;
+      margin-top: .55rem;
+    }
+    .todo-priority.kritisch { background: var(--ai-red); }
+    .todo-priority.hoch     { background: #f97316; }
+    .todo-priority.mittel   { background: var(--ai-yellow); }
+    .todo-priority.heute    { background: var(--ai-blue); }
+    .todo-priority.niedrig  { background: var(--ai-subtle); }
+    .todo-text { font-size: .875rem; color: var(--ai-text); line-height: 1.45; flex: 1; }
+    .todo-link-arrow { color: var(--ai-subtle); font-size: .75rem; flex-shrink: 0; margin-top: .15rem; }
+    /* Setup-Optimierungs-Zeilen: kein Checkbox, ganzer Block klickbar */
+    .setup-item {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .75rem 1rem; border-bottom: 1px solid #f9fafb;
+      text-decoration: none; cursor: pointer;
+      transition: background .12s;
+    }
+    .setup-item:last-child { border-bottom: none; }
+    .setup-item:hover { background: #f8fafc; }
+    .setup-icon { flex-shrink: 0; font-size: 1.05rem; line-height: 1; }
+    .todo-cat {
+      flex-shrink: 0; font-size: .6875rem; font-weight: 600;
+      padding: .15rem .45rem; border-radius: 99px;
+      background: #f1f5f9; color: #64748b;
+      white-space: nowrap;
+    }
+    .todo-cat.profil          { background: #F5F3FF; color: #7C3AED; }
+    .todo-cat.oeffnungszeiten { background: #f0fdf4; color: #16a34a; }
+    .todo-cat.behandler       { background: #faf5ff; color: #7c3aed; }
+    .todo-cat.bewertungen     { background: #fffbeb; color: #d97706; }
+    .todo-cat.warteliste      { background: #fff7ed; color: #ea580c; }
+    .todo-cat.auslastung      { background: #fdf2f8; color: #9d174d; }
+
+    /* ── Umsatzprognose ── */
+    .forecast-main {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 600px) { .forecast-main { grid-template-columns: repeat(3, 1fr); } }
+    .forecast-kpi { padding: .75rem; background: #f9fafb; border-radius: 8px; border: 1px solid var(--ai-border); }
+    .forecast-val { font-size: 1.375rem; font-weight: 700; color: var(--ai-text); letter-spacing: -.02em; }
+    .forecast-lbl { font-size: .6875rem; color: var(--ai-muted); margin-top: .125rem; }
+    .forecast-trend {
+      display: inline-flex; align-items: center; gap: .2rem;
+      font-size: .75rem; font-weight: 600; margin-top: .25rem;
+      padding: .1rem .375rem; border-radius: 4px;
+    }
+    .forecast-trend.up   { background: var(--ai-green-bg); color: #14532D; }
+    .forecast-trend.down { background: var(--ai-red-bg);   color: #991b1b; }
+    .forecast-trend.flat { background: #f3f4f6;             color: #374151; }
+
+    .progress-month {
+      height: 6px; background: #f3f4f6; border-radius: 9999px;
+      overflow: hidden; margin: .75rem 0 .25rem;
+    }
+    .progress-month-fill { height: 100%; background: var(--ai-blue); border-radius: 9999px; transition: width .5s ease; }
+
+    /* ── Bar chart ── */
+    .bar-chart-area { display: flex; align-items: flex-end; gap: 5px; height: 72px; margin-top: .75rem; }
+    .bar-col { display: flex; flex-direction: column; align-items: center; flex: 1; height: 100%; justify-content: flex-end; }
+    .bar-fill { border-radius: 4px 4px 0 0; width: 100%; min-height: 3px; }
+    .bar-fill.blue   { background: var(--ai-blue); opacity: .75; }
+    .bar-fill.green  { background: var(--ai-green); opacity: .75; }
+    .bar-fill.yellow { background: var(--ai-yellow); opacity: .75; }
+    .bar-fill.red    { background: var(--ai-red); opacity: .75; }
+    .bar-fill.today  { background: var(--ai-blue); opacity: 1; }
+    .bar-lbl { font-size: .5625rem; color: var(--ai-subtle); margin-top: 4px; text-align: center; }
+    .bar-lbl.today-lbl { color: var(--ai-blue); font-weight: 700; }
+
+    /* ── 7-day forecast ── */
+    .forecast-7d { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    @media (max-width: 500px) { .forecast-7d { grid-template-columns: repeat(4, 1fr); } }
+    .f7-col { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .f7-bar-wrap { width: 100%; height: 60px; display: flex; align-items: flex-end; }
+    .f7-bar { width: 100%; border-radius: 4px 4px 0 0; min-height: 3px; transition: height .4s ease; }
+    .f7-bar.low    { background: #e5e7eb; }
+    .f7-bar.ok     { background: #6ee7b7; }
+    .f7-bar.good   { background: var(--ai-green); }
+    .f7-bar.high   { background: var(--ai-yellow); }
+    .f7-bar.over   { background: var(--ai-red); }
+    .f7-bar.today  { box-shadow: 0 0 0 2px var(--ai-blue); }
+    .f7-count { font-size: .75rem; font-weight: 700; color: var(--ai-text); }
+    .f7-day { font-size: .5625rem; color: var(--ai-subtle); text-align: center; }
+    .f7-day.today-lbl { color: var(--ai-blue); font-weight: 700; }
+
+    /* ── Loading / Error ── */
+    .ai-loading {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 3.5rem 1rem; gap: 1rem; color: var(--ai-muted); font-size: .9375rem;
+    }
+    .ai-spinner {
+      width: 32px; height: 32px; border: 3px solid #e5e7eb;
+      border-top-color: var(--ai-blue); border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .ai-error {
+      background: var(--ai-red-bg); border: 1px solid #fecaca;
+      border-radius: 10px; padding: 1.25rem; color: #991b1b;
+      text-align: center; font-size: .9375rem; margin: 1rem 0;
+    }
+
+    /* ── Section label ── */
+    .section-eyebrow {
+      font-size: .6875rem; font-weight: 700; color: var(--ai-subtle);
+      text-transform: uppercase; letter-spacing: .07em; margin-bottom: .5rem;
+    }
+
+    /* ── 7d legend ── */
+    .f7-legend { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: .875rem; }
+    .f7-legend span { display: flex; align-items: center; gap: .375rem; font-size: .6875rem; color: var(--ai-muted); }
+    .f7-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+    /* ── Empty states ── */
+    .ai-empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 2.25rem 1.5rem; gap: .5rem;
+    }
+    .ai-empty-icon { font-size: 2.5rem; opacity: .4; line-height: 1; margin-bottom: .25rem; }
+    .ai-empty-text {
+      font-size: .875rem; color: var(--ai-muted); line-height: 1.6;
+      max-width: 280px;
+    }
+    .ai-empty-action {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .8125rem; font-weight: 600; color: var(--ai-blue);
+      background: var(--ai-blue-bg); padding: .4rem .9rem;
+      border-radius: 6px; text-decoration: none; margin-top: .625rem;
+      transition: background .15s;
+    }
+    .ai-empty-action:hover { background: #DDD6FE; text-decoration: none; }
+
+    /* ── Praxis-Optimierung: Prioritätsgruppen ── */
+    .setup-group-header {
+      display: flex; align-items: center; gap: .375rem;
+      padding: .4375rem 1rem;
+      font-size: .6875rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      color: #6b7280; background: #f9fafb;
+      border-top: 1px solid #f3f4f6;
+      border-bottom: 1px solid #f3f4f6;
+    }
+    .setup-group-header:first-child { border-top: none; }
+
+    /* ── KI-Empfehlungen: klickbares Element ── */
+    .empf-body { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+    .empf-clickable { text-decoration: none; transition: background .12s; cursor: pointer; }
+    .empf-clickable:hover { background: #f8fafc; }
+    .empf-cta-row { margin-top: .4rem; }
+    .empf-cta {
+      font-size: .8125rem; font-weight: 600; color: var(--ai-blue);
+      display: inline-flex; align-items: center; gap: .25rem;
+    }
+
+    /* ── Responsive padding ── */
+    .app-content { padding: 0 1rem 2rem; overflow-x: hidden; }
+    @media (min-width: 600px) { .app-content { padding: 0 1.5rem 2rem; } }
+
+    /* ── Responsive overflow fixes ── */
+    .ai-card { min-width: 0; }
+    .prio-text, .warn-text, .empf-text, .todo-text { word-break: break-word; min-width: 0; }
+    .ampel-card-text { word-break: break-word; }
+    .bar-col { min-width: 0; }
+    .f7-col { min-width: 0; }
+    .forecast-main { min-width: 0; }
+    @media (max-width: 499px) {
+      .forecast-7d { grid-template-columns: repeat(4, 1fr); }
+      .f7-col:nth-child(n+5) { display: none; }
+    }
+    @media (max-width: 380px) {
+      .forecast-main { grid-template-columns: 1fr; }
+      .ampel-grid { grid-template-columns: 1fr; }
+      .prio-badge, .empf-impact { font-size: .625rem; padding: .15rem .4rem; }
+      .todo-cat { font-size: .625rem; padding: .1rem .35rem; }
+      .btn-sm { font-size: .6875rem; padding: .3rem .5rem; }
+      .setup-icon { font-size: .875rem; }
+      .ai-page-title { font-size: 1rem; }
+      .ai-badge-live, .ai-ts { display: none; }
+      .todo-link-arrow, .prio-arrow { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1rem;">
+    <a href="/dashboard.html" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;display:none;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache">
+          <option value="de">🇩🇪</option><option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option><option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option><option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option><option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option><option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option><option value="id">🇮🇩</option>
+        </select>
+      </div>
+      <button id="btn-logout" class="btn btn-secondary btn-sm">Abmelden</button>
+    </nav>
+  </div>
+</header>
+
+<div class="app-layout">
+  <aside class="sidebar">
+    <ul class="sidebar-nav">
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> Übersicht</a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> Kalender</a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> Rechnungen</a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> Rezepte</a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> Bewertungen</a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> Patienten</a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> Behandler</a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> Warteliste</a></li>
+      <li><a href="/ai-praxismanager.html" class="active"><span class="nav-icon">🤖</span> AI Praxismanager</a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> Einstellungen</a></li>
+    </ul>
+  </aside>
+
+  <div class="app-content">
+
+    <div class="ai-page-header">
+      <div>
+        <div class="ai-page-title">AI Praxismanager</div>
+        <div class="ai-page-sub" id="practice-name">Intelligenter Assistent für Ihre Praxis</div>
+      </div>
+      <div class="ai-page-right">
+        <span class="ai-badge-live">Live</span>
+        <span class="ai-ts" id="ai-ts"></span>
+        <button class="btn btn-secondary btn-sm" id="btn-refresh">↻</button>
+      </div>
+    </div>
+
+    <div id="ai-loading" class="ai-loading">
+      <div class="ai-spinner"></div>
+      KI analysiert Praxisdaten…
+    </div>
+    <div id="ai-error" class="ai-error" style="display:none;"></div>
+
+    <div id="ai-content" style="display:none;">
+
+      <!-- ── 1. Prioritäten heute ── -->
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span class="ai-card-title">Prioritäten heute</span>
+          <span class="ai-card-count" id="prio-count">0</span>
+        </div>
+        <div class="ai-card-body-flush" id="prio-list"></div>
+      </div>
+
+      <!-- ── 2. Ampel-Handlungsempfehlungen ── -->
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span class="ai-card-title">Handlungsempfehlungen</span>
+        </div>
+        <div class="ai-card-body">
+          <div class="ampel-grid" id="ampel-grid"></div>
+        </div>
+      </div>
+
+      <!-- ── 3. Warnungen + KI-Empfehlungen ── -->
+      <div class="ai-grid-2">
+
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <span class="ai-card-title">Automatische Warnungen</span>
+            <span class="ai-card-count" id="warn-count">0</span>
+          </div>
+          <div class="ai-card-body-flush" id="warn-list"></div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <span class="ai-card-title">KI-Empfehlungen</span>
+          </div>
+          <div class="ai-card-body-flush" id="empf-list"></div>
+        </div>
+
+      </div>
+
+      <!-- ── 4. Prognosen ── -->
+      <div class="ai-grid-2">
+
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <span class="ai-card-title">Umsatzprognose</span>
+          </div>
+          <div class="ai-card-body" id="forecast-body">
+            <div class="forecast-main" id="forecast-kpis"></div>
+            <div class="section-eyebrow">Monatsfortschritt</div>
+            <div class="progress-month">
+              <div class="progress-month-fill" id="month-progress-bar" style="width:0%"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:.6875rem;color:var(--ai-subtle);">
+              <span>Monatsbeginn</span>
+              <span id="month-progress-label">0%</span>
+              <span>Monatsende</span>
+            </div>
+            <div class="section-eyebrow" style="margin-top:1rem;">Umsatz letzte 6 Monate</div>
+            <div class="bar-chart-area" id="revenue-chart"></div>
+          </div>
+        </div>
+
+        <div class="ai-card">
+          <div class="ai-card-header">
+            <span class="ai-card-title">Auslastung nächste 7 Tage</span>
+          </div>
+          <div class="ai-card-body" id="auslastung-body">
+            <div class="section-eyebrow" style="margin-bottom:.75rem;">Termine pro Tag vs. Ø letzter 30 Tage</div>
+            <div class="forecast-7d" id="forecast-7d"></div>
+            <div class="f7-legend">
+              <span><span class="f7-dot" style="background:#6ee7b7;"></span> Normal</span>
+              <span><span class="f7-dot" style="background:var(--ai-green);"></span> Gut</span>
+              <span><span class="f7-dot" style="background:var(--ai-yellow);"></span> Hoch</span>
+              <span><span class="f7-dot" style="background:var(--ai-red);"></span> Überbucht</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── 5. To-do Liste (operativ) ── -->
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span class="ai-card-title">To-do Liste</span>
+          <span class="ai-card-count" id="todo-count">0</span>
+        </div>
+        <div class="ai-card-body-flush" id="todo-list"></div>
+      </div>
+
+      <!-- ── 6. Praxis-Optimierung ── -->
+      <div class="ai-card">
+        <div class="ai-card-header">
+          <span class="ai-card-title">Praxis-Optimierung</span>
+          <span class="ai-card-count" id="setup-count">0</span>
+        </div>
+        <div class="ai-card-body-flush" id="setup-list"></div>
+      </div>
+
+    </div><!-- #ai-content -->
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen und Rechnungsinhalte.</p>
+      <div class="footer-links">
+        <a href="/agb.html">AGB</a>
+        <a href="/datenschutz.html">Datenschutz</a>
+        <a href="/security-compliance.html">Sicherheit</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/hamburger.js"></script>
+<script src="/js/lang-switcher.js"></script>
+<script>
+(function () {
+
+  // ── Helpers ─────────────────────────────────────────────────────────────────
+  const fmtEur = n => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
+  const fmtEurDec = n => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n || 0);
+  const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+
+  function setHtml(id, html) {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = html;
+  }
+
+  // ── Render functions ─────────────────────────────────────────────────────────
+
+  function renderPrioritaeten(items) {
+    const el = document.getElementById('prio-list');
+    const cnt = document.getElementById('prio-count');
+    const critCount = items.filter(i => i.level !== 'ok' && i.level !== 'info').length;
+    if (cnt) {
+      cnt.textContent = critCount;
+      cnt.className = 'ai-card-count ' + (critCount > 2 ? 'red' : critCount > 0 ? 'yellow' : 'green');
+    }
+    if (!el) return;
+    el.innerHTML = items.map(item => {
+      const href = item.link ? `href="${esc(item.link)}"` : '';
+      const tag = item.link ? 'a' : 'div';
+      return `<${tag} class="prio-item" ${href}>
+        <span class="prio-badge ${esc(item.level)}">${badgeLabel(item.level)}</span>
+        <span class="prio-text">${esc(item.text)}</span>
+        ${item.link ? '<span class="prio-arrow">→</span>' : ''}
+      </${tag}>`;
+    }).join('');
+  }
+
+  function badgeLabel(l) {
+    return { kritisch:'Kritisch', dringend:'Dringend', heute:'Heute', info:'Info', ok:'OK' }[l] || l;
+  }
+
+  function renderAmpel(items) {
+    const el = document.getElementById('ampel-grid');
+    if (!el) return;
+    el.innerHTML = items.map(item => `
+      <div class="ampel-card ${esc(item.status)}">
+        <div class="ampel-dot-row">
+          <div class="ampel-dot"></div>
+          <span class="ampel-bereich">${esc(item.bereich)}</span>
+        </div>
+        <div class="ampel-card-text">${esc(item.text)}</div>
+        <div class="ampel-card-detail">${esc(item.detail)}</div>
+        ${item.action && item.link
+          ? `<a href="${esc(item.link)}" class="ampel-card-link">${esc(item.action)} →</a>`
+          : ''}
+      </div>`).join('');
+  }
+
+  function renderWarnungen(items) {
+    const el = document.getElementById('warn-list');
+    const cnt = document.getElementById('warn-count');
+    const redCount = items.filter(i => i.level === 'rot').length;
+    if (cnt) {
+      cnt.textContent = items.filter(i => i.level !== 'gruen').length;
+      cnt.className = 'ai-card-count ' + (redCount > 0 ? 'red' : items.length > 1 ? 'yellow' : 'green');
+    }
+    if (!el) return;
+    const icons = { rot: '⚠', gelb: '⚡', gruen: '✓' };
+    el.innerHTML = items.map(item => `
+      <div class="warn-item">
+        <div class="warn-icon ${esc(item.level)}">${icons[item.level] || '•'}</div>
+        <span class="warn-text">${esc(item.text)}</span>
+        ${item.action && item.link
+          ? `<a href="${esc(item.link)}" class="warn-action ${esc(item.level)}">${esc(item.action)}</a>`
+          : ''}
+      </div>`).join('');
+  }
+
+  function renderEmpfehlungen(items) {
+    const el = document.getElementById('empf-list');
+    if (!el) return;
+    const impactLabel = { hoch:'Hoch', mittel:'Mittel', niedrig:'Niedrig', gut:'OK', setup:'Tipp' };
+    el.innerHTML = items.map(item => {
+      const isSetup = item.impact === 'setup' && item.link;
+      const tag = isSetup ? 'a' : 'div';
+      const hrefAttr = isSetup ? ` href="${esc(item.link)}"` : '';
+      const ctaHtml = isSetup
+        ? `<div class="empf-cta-row"><span class="empf-cta">Praxisprofil vervollständigen →</span></div>`
+        : '';
+      return `<${tag} class="empf-item${isSetup ? ' empf-clickable' : ''}"${hrefAttr}>
+        <span class="empf-impact ${esc(item.impact)}">${impactLabel[item.impact] || item.impact}</span>
+        <div class="empf-body">
+          <span class="empf-text">${esc(item.text)}</span>${ctaHtml}
+        </div>
+      </${tag}>`;
+    }).join('');
+  }
+
+  function renderUmsatzprognose(p) {
+    const body = document.getElementById('forecast-body');
+    if (!body) return;
+
+    if (p.no_data) {
+      body.innerHTML = `
+        <div class="ai-empty-state">
+          <span class="ai-empty-icon">💶</span>
+          <p class="ai-empty-text">Noch keine Rechnungsdaten vorhanden.<br>Die Umsatzprognose erscheint automatisch nach den ersten Abrechnungen.</p>
+          <a href="/invoices.html" class="ai-empty-action">Erste Rechnung erstellen →</a>
+        </div>`;
+      return;
+    }
+
+    const trend = p.trend_prozent;
+    const trendCls = trend > 3 ? 'up' : trend < -3 ? 'down' : 'flat';
+    const trendLabel = trend > 0 ? `+${trend}%` : `${trend}%`;
+
+    setHtml('forecast-kpis', `
+      <div class="forecast-kpi">
+        <div class="forecast-val">${fmtEur(p.diesen_monat_bisher)}</div>
+        <div class="forecast-lbl">Bisher diesen Monat</div>
+      </div>
+      <div class="forecast-kpi">
+        <div class="forecast-val">${fmtEur(p.prognose_monatsende)}</div>
+        <div class="forecast-lbl">KI-Prognose Monatsende</div>
+        <div class="forecast-trend ${trendCls}">${trendLabel} vs. Vormonat</div>
+      </div>
+      <div class="forecast-kpi">
+        <div class="forecast-val">${fmtEur(p.vormonat)}</div>
+        <div class="forecast-lbl">Vormonat tatsächlich</div>
+      </div>
+    `);
+
+    const bar = document.getElementById('month-progress-bar');
+    if (bar) bar.style.width = Math.min(p.monat_progress_pct, 100) + '%';
+    const lbl = document.getElementById('month-progress-label');
+    if (lbl) lbl.textContent = p.monat_progress_pct + '%';
+
+    const chartEl = document.getElementById('revenue-chart');
+    if (!chartEl) return;
+    const rows = p.verlauf || [];
+    if (rows.length === 0) { chartEl.innerHTML = '<span style="color:var(--ai-subtle);font-size:.8125rem;">Keine Daten</span>'; return; }
+    const max = Math.max(...rows.map(r => r.revenue || 0), 1);
+    chartEl.innerHTML = rows.map(r => {
+      const pct = Math.max(Math.round(((r.revenue || 0) / max) * 100), 2);
+      const lbl = String(r.month || '').slice(-5);
+      return `<div class="bar-col">
+        <div class="bar-fill green" style="height:${pct}%;" title="${fmtEurDec(r.revenue)}"></div>
+        <div class="bar-lbl">${esc(lbl)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderAuslastung7d(days, hasData) {
+    const body = document.getElementById('auslastung-body');
+    if (!body) return;
+
+    if (!hasData) {
+      body.innerHTML = `
+        <div class="ai-empty-state">
+          <span class="ai-empty-icon">📅</span>
+          <p class="ai-empty-text">Noch keine ausreichenden Termindaten vorhanden.<br>Die Auslastungsanalyse startet automatisch nach den ersten Buchungen.</p>
+          <a href="/appointments.html" class="ai-empty-action">Ersten Termin anlegen →</a>
+        </div>`;
+      return;
+    }
+
+    const el = document.getElementById('forecast-7d');
+    if (!el) return;
+    const max = Math.max(...days.map(d => d.count), 1);
+    el.innerHTML = days.map(d => {
+      const pct = Math.max(Math.round((d.count / max) * 100), d.count > 0 ? 8 : 4);
+      let cls = 'low';
+      if (d.count > 0) {
+        if (d.pct >= 120) cls = 'over';
+        else if (d.pct >= 80) cls = 'good';
+        else cls = 'ok';
+      }
+      if (d.isToday) cls += ' today';
+      return `<div class="f7-col">
+        <div class="f7-bar-wrap">
+          <div class="f7-bar ${cls}" style="height:${pct}%;"></div>
+        </div>
+        <div class="f7-count">${d.count}</div>
+        <div class="f7-day ${d.isToday ? 'today-lbl' : ''}">${esc(d.label)}</div>
+      </div>`;
+    }).join('');
+  }
+
+  const CATEGORY_LABELS = {
+    profil: 'Profil', oeffnungszeiten: 'Öffnungszeiten', behandler: 'Behandler',
+    bewertungen: 'Bewertungen', warteliste: 'Warteliste', auslastung: 'Auslastung',
+  };
+
+  function renderTodos(items) {
+    const el = document.getElementById('todo-list');
+    const cnt = document.getElementById('todo-count');
+    if (cnt) {
+      cnt.textContent = items.length;
+      cnt.className = 'ai-card-count ' + (items.length > 3 ? 'red' : items.length > 0 ? 'yellow' : 'green');
+    }
+    if (!el) return;
+    if (items.length === 0) {
+      el.innerHTML = '<div class="todo-item"><span class="todo-text" style="color:var(--ai-subtle);">Keine offenen Aufgaben – alles erledigt.</span></div>';
+      return;
+    }
+    el.innerHTML = items.map((t, i) => {
+      const tag = t.link ? 'a' : 'div';
+      const href = t.link ? `href="${esc(t.link)}"` : '';
+      return `<${tag} class="todo-item" ${href} data-idx="${i}">
+        <div class="todo-check" onclick="toggleTodo(event,${i})"></div>
+        <div class="todo-priority ${esc(t.priority)}"></div>
+        <span class="todo-text" id="todo-text-${i}">${esc(t.text)}</span>
+        ${t.link ? '<span class="todo-link-arrow">→</span>' : ''}
+      </${tag}>`;
+    }).join('');
+  }
+
+  const PRIORITY_GROUPS = [
+    { key: 'kritisch', emoji: '🔴', label: 'Kritisch' },
+    { key: 'hoch',     emoji: '🟠', label: 'Wichtig' },
+    { key: 'mittel',   emoji: '🟡', label: 'Empfohlen' },
+    { key: 'niedrig',  emoji: '⚪', label: 'Optional' },
+  ];
+
+  function renderSetupTodos(items) {
+    const el = document.getElementById('setup-list');
+    const cnt = document.getElementById('setup-count');
+    if (cnt) {
+      cnt.textContent = items.length;
+      cnt.className = 'ai-card-count ' + (items.length > 4 ? 'red' : items.length > 0 ? 'yellow' : 'green');
+    }
+    if (!el) return;
+    if (items.length === 0) {
+      el.innerHTML = '<div class="setup-item" style="padding:.875rem 1rem;font-size:.875rem;color:var(--ai-subtle);">Praxis vollständig eingerichtet – keine offenen Punkte.</div>';
+      return;
+    }
+    let html = '';
+    PRIORITY_GROUPS.forEach(function(group) {
+      const groupItems = items.filter(function(t) { return t.priority === group.key; });
+      if (groupItems.length === 0) return;
+      html += `<div class="setup-group-header">${group.emoji} ${group.label}</div>`;
+      groupItems.forEach(function(t) {
+        const catLabel = t.category ? CATEGORY_LABELS[t.category] || t.category : null;
+        const catChip = catLabel ? `<span class="todo-cat ${esc(t.category)}">${esc(catLabel)}</span>` : '';
+        html += `<a class="setup-item" href="${esc(t.link || '#')}">
+          <span class="setup-icon">${t.icon || ''}</span>
+          <span class="todo-text">${esc(t.text)}</span>
+          ${catChip}
+          <span class="todo-link-arrow">→</span>
+        </a>`;
+      });
+    });
+    el.innerHTML = html;
+  }
+
+  // ── Main load ────────────────────────────────────────────────────────────────
+  function load() {
+    document.getElementById('ai-loading').style.display = 'flex';
+    document.getElementById('ai-content').style.display = 'none';
+    document.getElementById('ai-error').style.display = 'none';
+
+    API.get('/api/ai-praxismanager')
+      .then(d => {
+        document.getElementById('ai-loading').style.display = 'none';
+
+        if (d.practice && d.practice.name) {
+          document.getElementById('practice-name').textContent = d.practice.name;
+        }
+        if (d.generated_at) {
+          const ts = new Date(d.generated_at);
+          document.getElementById('ai-ts').textContent =
+            ts.toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' }) + ' Uhr';
+        }
+
+        renderPrioritaeten(d.prioritaeten_heute || []);
+        renderAmpel(d.ampel_empfehlungen || []);
+        renderWarnungen(d.warnungen || []);
+        renderEmpfehlungen(d.ki_empfehlungen || []);
+        renderUmsatzprognose(d.umsatzprognose || {});
+        renderAuslastung7d(d.auslastungsprognose_7d || [], d.auslastung_has_data !== false);
+        renderTodos(d.todos || []);
+        renderSetupTodos(d.setup_todos || []);
+
+        document.getElementById('ai-content').style.display = 'block';
+      })
+      .catch(err => {
+        document.getElementById('ai-loading').style.display = 'none';
+        const errEl = document.getElementById('ai-error');
+        errEl.textContent = err && err.message ? err.message : 'Fehler beim Laden der Daten.';
+        errEl.style.display = 'block';
+      });
+  }
+
+  // ── Todo toggle (visual only, no persistence) ────────────────────────────────
+  window.toggleTodo = function(e, idx) {
+    e.preventDefault();
+    e.stopPropagation();
+    const check = e.currentTarget;
+    const text = document.getElementById('todo-text-' + idx);
+    if (check.dataset.done === '1') {
+      check.dataset.done = '0';
+      check.innerHTML = '';
+      check.style.background = '';
+      check.style.borderColor = '';
+      if (text) text.style.textDecoration = '';
+    } else {
+      check.dataset.done = '1';
+      check.innerHTML = '<svg width="10" height="8" viewBox="0 0 10 8" fill="none"><path d="M1 4L4 7L9 1" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      check.style.background = '#7C3AED';
+      check.style.borderColor = '#7C3AED';
+      if (text) text.style.textDecoration = 'line-through';
+    }
+  };
+
+  // ── Auth + init ──────────────────────────────────────────────────────────────
+  document.getElementById('btn-refresh').addEventListener('click', load);
+
+  checkAuth().then(ok => {
+    if (!ok) return;
+    API.get('/api/auth/me').then(user => {
+      const el = document.getElementById('user-name');
+      if (el) {
+        el.textContent = ((user.first_name || '') + ' ' + (user.last_name || '')).trim();
+        el.style.display = '';
+      }
+    }).catch(() => {});
+    document.getElementById('btn-logout').addEventListener('click', () => {
+      API.post('/api/auth/logout').catch(() => {}).finally
+        ? API.post('/api/auth/logout').catch(() => {}).finally(() => { window.location.href = '/login.html'; })
+        : API.post('/api/auth/logout').then(() => { window.location.href = '/login.html'; }).catch(() => { window.location.href = '/login.html'; });
+    });
+    load();
+  });
+
+})();
+</script>
+</body>
+</html>

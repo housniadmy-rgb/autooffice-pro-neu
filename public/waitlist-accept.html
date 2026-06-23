@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Termin annehmen – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body style="background:var(--bg);min-height:100vh;display:flex;flex-direction:column;">
+
+<header class="site-header">
+  <div class="container" style="max-width:100%;padding:0 1.5rem;">
+    <span class="logo">PraxisOnline24</span>
+  </div>
+</header>
+
+<main style="flex:1;display:flex;align-items:center;justify-content:center;padding:2rem 1rem;">
+  <div class="card" style="max-width:480px;width:100%;text-align:center;">
+    <div id="loading" style="padding:2rem;color:var(--text-secondary);">Wird geprüft…</div>
+
+    <div id="success" style="display:none;padding:2rem 0;">
+      <div style="font-size:2.5rem;margin-bottom:.75rem;">✓</div>
+      <h2 id="wla-success-h2" style="margin-bottom:.5rem;">Termin bestätigt!</h2>
+      <p id="appt-info" style="color:var(--text-secondary);"></p>
+      <p id="wla-success-email" style="margin-top:1rem;font-size:.875rem;color:var(--text-secondary);">Sie erhalten in Kürze eine Bestätigungs-E-Mail.</p>
+    </div>
+
+    <div id="error" style="display:none;padding:2rem 0;">
+      <div style="font-size:2.5rem;margin-bottom:.75rem;">✗</div>
+      <h2 id="error-title" style="margin-bottom:.5rem;">Angebot abgelaufen</h2>
+      <p id="error-msg" style="color:var(--text-secondary);"></p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="wla-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="wla-agb" href="/agb.html">AGB</a>
+        <a id="wla-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="wla-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/public-i18n.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    pApplyDir();
+    document.getElementById('loading').textContent = pT('wla_loading');
+    document.getElementById('wla-success-h2').textContent = pT('wla_success_h2');
+    document.getElementById('wla-success-email').textContent = pT('wla_success_email');
+    document.getElementById('wla-footer-note').textContent = pT('footer_note');
+    document.getElementById('wla-agb').textContent = pT('nav_agb');
+    document.getElementById('wla-datenschutz').textContent = pT('nav_datenschutz');
+    document.getElementById('wla-sec-comp').textContent = pT('footer.security_compliance');
+  });
+</script>
+<script src="/js/main.js"></script>
+<script>
+  const token = getQueryParam('token');
+
+  async function acceptOffer() {
+    if (!token) {
+      showError(pT('wla_invalid_token'), pT('wla_no_token'));
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/waitlist/accept?token=${encodeURIComponent(token)}`);
+      const json = await res.json();
+
+      if (!res.ok) {
+        const title = res.status === 410 ? pT('wla_error_expired') : pT('wla_error_generic');
+        showError(title, json.error || pT('wla_server_error'));
+        return;
+      }
+
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+      const appt = json.appointment;
+      const bookedFn = pT('wla_appt_booked');
+      document.getElementById('appt-info').textContent =
+        typeof bookedFn === 'function'
+          ? bookedFn(appt.date, appt.time)
+          : `${appt.date} ${appt.time}`;
+    } catch {
+      showError(pT('wla_conn_error'), pT('wla_conn_msg'));
+    }
+  }
+
+  function showError(title, msg) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error-title').textContent = title;
+    document.getElementById('error-msg').textContent = msg;
+  }
+
+  acceptOffer();
+</script>
+</body>
+</html>

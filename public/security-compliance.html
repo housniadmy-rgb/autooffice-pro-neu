@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security & Compliance – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .sec-section { margin-bottom: 2rem; }
+    .sec-section h2 { font-size: 1.2rem; font-weight: 600; margin-bottom: .75rem; color: var(--primary, #7C3AED); }
+    .sec-badge { display: inline-block; padding: .25rem .6rem; border-radius: 999px; font-size: .8rem; font-weight: 600; background: #e8f5e9; color: #2e7d32; margin-right: .35rem; margin-bottom: .35rem; }
+    .sec-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; margin-top: 1rem; }
+    .sec-card { background: #f8f9fa; border-radius: 8px; padding: 1.1rem 1.25rem; border-left: 4px solid var(--primary, #7C3AED); }
+    .sec-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: .5rem; }
+    .sec-card ul { margin: 0; padding-left: 1.2rem; }
+    .sec-card ul li { font-size: .9rem; margin-bottom: .3rem; color: #444; }
+    .sec-updated { font-size: .85rem; color: #888; margin-top: 2rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+      <!-- Desktop-visible links -->
+      <a id="sc-nav-preise" href="/preise.html">Preise</a>
+      <a id="sc-nav-login" href="/login.html">Anmelden</a>
+      <!-- Hidden on desktop; hamburger picks these up for mobile drawer -->
+      <a id="sc-nav-home"        href="/"                         style="display:none">Startseite</a>
+      <a id="sc-nav-register"    href="/register.html"            style="display:none">Kostenlos starten</a>
+      <a id="sc-nav-agb"         href="/agb.html"                 style="display:none">AGB</a>
+      <a id="sc-nav-datenschutz" href="/datenschutz.html"         style="display:none">Datenschutz</a>
+      <a id="sc-nav-sec"         href="/security-compliance.html" style="display:none">Security &amp; Compliance</a>
+      <a id="sc-impressum"       href="/impressum.html"           style="display:none">Impressum</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container-sm" style="padding:2rem 1rem;">
+    <div class="card">
+      <h1 id="sc-h1" style="margin-bottom:.5rem;">Security &amp; Compliance</h1>
+      <p id="sc-intro" style="color:#666;margin-bottom:2rem;font-size:.95rem;">PraxisOnline24 wurde mit dem Schutz medizinischer Praxisdaten als oberste Priorität entwickelt.</p>
+
+      <!-- Badges -->
+      <div style="margin-bottom:2rem;">
+        <span id="sc-badge-encrypt" class="sec-badge">&#x1F512; Datenverschlüsselung</span>
+        <span id="sc-badge-gdpr" class="sec-badge">&#x1F6E1; DSGVO-konform</span>
+        <span id="sc-badge-roles" class="sec-badge">&#x1F511; Rollenbasierter Zugriff</span>
+        <span id="sc-badge-audit" class="sec-badge">&#x1F4CB; Audit-Log</span>
+        <span id="sc-badge-ratelimit" class="sec-badge">&#x26A1; Rate Limiting</span>
+        <span id="sc-badge-isolation" class="sec-badge">&#x1F4E6; Praxis-Isolation</span>
+      </div>
+
+      <!-- Grid cards -->
+      <div class="sec-grid">
+
+        <div class="sec-card">
+          <h3 id="sc-card1-h3">&#x1F512; Datensicherheit</h3>
+          <ul>
+            <li id="sc-card1-li1">Alle Passwörter mit bcrypt gehasht (Faktor 12)</li>
+            <li id="sc-card1-li2">Session-basierte Authentifizierung mit HTTP-only Cookies</li>
+            <li id="sc-card1-li3">Strikte Praxis-Isolation: kein Datenzugriff auf fremde Praxen</li>
+            <li id="sc-card1-li4">Keine Speicherung von Klartextkennwörtern</li>
+          </ul>
+        </div>
+
+        <div class="sec-card">
+          <h3 id="sc-card2-h3">&#x1F9D1;&#x200D;&#x1F4BB; Zugangskontrolle</h3>
+          <ul>
+            <li id="sc-card2-li1">Rollenbasiertes System: Admin, Arzt, Personal, Patient</li>
+            <li id="sc-card2-li2">Sensitive Operationen erfordern Admin-Rolle</li>
+            <li id="sc-card2-li3">Automatischer Logout bei Inaktivität</li>
+            <li id="sc-card2-li4">Sichere Passwort-Zurücksetzen-Funktion per E-Mail-Token</li>
+          </ul>
+        </div>
+
+        <div class="sec-card">
+          <h3 id="sc-card3-h3">&#x26A1; Angriffsschutz</h3>
+          <ul>
+            <li id="sc-card3-li1">Rate Limiting: max. 5 Login-Versuche pro Minute</li>
+            <li id="sc-card3-li2">Schutz vor Brute-Force-Angriffen</li>
+            <li id="sc-card3-li3">Security-Header: X-Content-Type-Options, X-Frame-Options, XSS-Protection</li>
+            <li id="sc-card3-li4">Referrer-Policy und Permissions-Policy gesetzt</li>
+          </ul>
+        </div>
+
+        <div class="sec-card">
+          <h3 id="sc-card4-h3">&#x1F4CB; Protokollierung &amp; Audit</h3>
+          <ul>
+            <li id="sc-card4-li1">Alle Admin-Aktionen werden im Activity-Log erfasst</li>
+            <li id="sc-card4-li2">Keine Patientennamen in Logs – nur IDs und Zeitstempel</li>
+            <li id="sc-card4-li3">Zugriff auf Audit-Log nur für Administratoren</li>
+            <li id="sc-card4-li4">Unveränderliche Protokolleinträge</li>
+          </ul>
+        </div>
+
+        <div class="sec-card">
+          <h3 id="sc-card5-h3">&#x1F1EA;&#x1F1FA; DSGVO &amp; Datenschutz</h3>
+          <ul>
+            <li id="sc-card5-li1">Hosting in Deutschland / EU-Rechenzentren</li>
+            <li id="sc-card5-li2">Datensparsamkeit: nur notwendige Daten werden gespeichert</li>
+            <li id="sc-card5-li3">Keine Weitergabe von Patientendaten an Dritte</li>
+            <li id="sc-card5-li4">Automatische Terminarchivierung statt Löschung (Nachweisbarkeit)</li>
+          </ul>
+        </div>
+
+        <div class="sec-card">
+          <h3 id="sc-card6-h3">&#x1F504; Betrieb &amp; Verfügbarkeit</h3>
+          <ul>
+            <li id="sc-card6-li1">Automatische tägliche Datensicherung</li>
+            <li id="sc-card6-li2">Cron-Jobs für Wartungs- und Bereinigungsaufgaben</li>
+            <li id="sc-card6-li3">Keine Speicherung von Secrets im Versionsverwaltungssystem</li>
+            <li id="sc-card6-li4">HSTS im Produktionsbetrieb aktiviert</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Responsible disclosure -->
+      <div class="sec-section" style="margin-top:2.5rem;">
+        <h2 id="sc-disclose-h2">Sicherheitslücken melden</h2>
+        <p id="sc-disclose-p" style="font-size:.95rem;color:#555;">
+          Wenn Sie eine Sicherheitslücke in PraxisOnline24 entdecken, bitten wir Sie, diese verantwortungsvoll zu melden.
+          Bitte senden Sie Ihre Meldung an <strong>security@praxisonline24.de</strong> mit einer detaillierten Beschreibung des Problems.
+          Wir werden uns innerhalb von 48 Stunden bei Ihnen melden und das Problem so schnell wie möglich beheben.
+        </p>
+      </div>
+
+      <!-- Compliance note -->
+      <div class="sec-section">
+        <h2 id="sc-liability-h2">Haftungshinweis</h2>
+        <p id="sc-liability-p" style="font-size:.95rem;color:#555;">
+          PraxisOnline24 ist ein Werkzeug zur Terminverwaltung und Praxisorganisation.
+          Die Praxis ist allein verantwortlich für die Einhaltung der geltenden Datenschutzgesetze
+          (insbesondere DSGVO / BDSG), für den ordnungsgemäßen Umgang mit Patientendaten
+          und für medizinische Entscheidungen.
+        </p>
+      </div>
+
+      <p id="sc-updated" class="sec-updated">Stand: Juni 2025</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="sc-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="sc-agb" href="/agb.html">AGB</a>
+        <a id="sc-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="sc-sec-comp" href="/security-compliance.html" style="font-weight:600;">Security &amp; Compliance</a>
+        <a id="sc-impressum" href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+
+    // Header nav labels (desktop-visible + hidden hamburger links)
+    document.getElementById('sc-nav-preise').textContent     = pT('nav_preise')              || 'Preise';
+    document.getElementById('sc-nav-login').textContent      = pT('idx_login')              || 'Anmelden';
+    document.getElementById('sc-nav-home').textContent       = pT('nav_home')               || 'Startseite';
+    document.getElementById('sc-nav-register').textContent   = pT('idx_start')              || 'Kostenlos starten';
+    document.getElementById('sc-nav-agb').textContent        = pT('nav_agb')                || 'AGB';
+    document.getElementById('sc-nav-datenschutz').textContent = pT('nav_datenschutz')       || 'Datenschutz';
+    document.getElementById('sc-nav-sec').textContent        = pT('footer.security_compliance') || 'Security & Compliance';
+
+    // Page content
+    document.getElementById('sc-h1').textContent             = pT('sc_h1');
+    document.getElementById('sc-intro').textContent          = pT('sc_intro');
+    document.getElementById('sc-badge-encrypt').textContent  = '🔒 ' + pT('sc_badge_encrypt');
+    document.getElementById('sc-badge-gdpr').textContent     = '🛡️ ' + pT('sc_badge_gdpr');
+    document.getElementById('sc-badge-roles').textContent    = '🔑 ' + pT('sc_badge_roles');
+    document.getElementById('sc-badge-audit').textContent    = '📋 ' + pT('sc_badge_audit');
+    document.getElementById('sc-badge-ratelimit').textContent = '⚡ ' + pT('sc_badge_ratelimit');
+    document.getElementById('sc-badge-isolation').textContent = '📦 ' + pT('sc_badge_isolation');
+    document.getElementById('sc-card1-h3').textContent       = '🔒 ' + pT('sc_card1_h3');
+    document.getElementById('sc-card1-li1').textContent      = pT('sc_card1_li1');
+    document.getElementById('sc-card1-li2').textContent      = pT('sc_card1_li2');
+    document.getElementById('sc-card1-li3').textContent      = pT('sc_card1_li3');
+    document.getElementById('sc-card1-li4').textContent      = pT('sc_card1_li4');
+    document.getElementById('sc-card2-h3').textContent       = '🧑‍💻 ' + pT('sc_card2_h3');
+    document.getElementById('sc-card2-li1').textContent      = pT('sc_card2_li1');
+    document.getElementById('sc-card2-li2').textContent      = pT('sc_card2_li2');
+    document.getElementById('sc-card2-li3').textContent      = pT('sc_card2_li3');
+    document.getElementById('sc-card2-li4').textContent      = pT('sc_card2_li4');
+    document.getElementById('sc-card3-h3').textContent       = '⚡ ' + pT('sc_card3_h3');
+    document.getElementById('sc-card3-li1').textContent      = pT('sc_card3_li1');
+    document.getElementById('sc-card3-li2').textContent      = pT('sc_card3_li2');
+    document.getElementById('sc-card3-li3').textContent      = pT('sc_card3_li3');
+    document.getElementById('sc-card3-li4').textContent      = pT('sc_card3_li4');
+    document.getElementById('sc-card4-h3').textContent       = '📋 ' + pT('sc_card4_h3');
+    document.getElementById('sc-card4-li1').textContent      = pT('sc_card4_li1');
+    document.getElementById('sc-card4-li2').textContent      = pT('sc_card4_li2');
+    document.getElementById('sc-card4-li3').textContent      = pT('sc_card4_li3');
+    document.getElementById('sc-card4-li4').textContent      = pT('sc_card4_li4');
+    document.getElementById('sc-card5-h3').textContent       = '🇪🇺 ' + pT('sc_card5_h3');
+    document.getElementById('sc-card5-li1').textContent      = pT('sc_card5_li1');
+    document.getElementById('sc-card5-li2').textContent      = pT('sc_card5_li2');
+    document.getElementById('sc-card5-li3').textContent      = pT('sc_card5_li3');
+    document.getElementById('sc-card5-li4').textContent      = pT('sc_card5_li4');
+    document.getElementById('sc-card6-h3').textContent       = '🔄 ' + pT('sc_card6_h3');
+    document.getElementById('sc-card6-li1').textContent      = pT('sc_card6_li1');
+    document.getElementById('sc-card6-li2').textContent      = pT('sc_card6_li2');
+    document.getElementById('sc-card6-li3').textContent      = pT('sc_card6_li3');
+    document.getElementById('sc-card6-li4').textContent      = pT('sc_card6_li4');
+    document.getElementById('sc-disclose-h2').textContent    = pT('sc_disclose_h2');
+    document.getElementById('sc-disclose-p').textContent     = pT('sc_disclose_p');
+    document.getElementById('sc-liability-h2').textContent   = pT('sc_liability_h2');
+    document.getElementById('sc-liability-p').textContent    = pT('sc_liability_p');
+    document.getElementById('sc-updated').textContent        = pT('sc_updated');
+    document.getElementById('sc-footer-note').textContent    = pT('footer_note');
+    document.getElementById('sc-agb').textContent            = pT('nav_agb');
+    document.getElementById('sc-datenschutz').textContent    = pT('nav_datenschutz');
+    document.getElementById('sc-sec-comp').textContent       = pT('footer.security_compliance');
+    document.getElementById('sc-impressum').textContent = pT('nav_impressum') || 'Impressum';
+  })();
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

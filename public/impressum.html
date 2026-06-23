@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impressum – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    .impr-label {
+      font-size: .8125rem; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: .04em; margin-bottom: .25rem;
+    }
+    .impr-block { margin-bottom: 1.5rem; }
+    .impr-block p { line-height: 1.7; color: var(--text-secondary); font-size: .9375rem; }
+    .impr-divider { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
+    .impr-section-title {
+      font-size: 1rem; font-weight: 600; color: var(--text-primary);
+      margin: 1.75rem 0 .625rem;
+    }
+    .impr-intro { font-size: .875rem; color: var(--text-secondary); margin-bottom: 1.75rem; }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+      <a id="impr-nav-preise" href="/preise.html">Preise</a>
+      <a id="impr-nav-login" href="/login.html">Anmelden</a>
+      <!-- Hidden; hamburger picks these up for mobile drawer -->
+      <a id="impr-nav-home"        href="/"                         style="display:none">Startseite</a>
+      <a id="impr-nav-register"    href="/register.html"            style="display:none">Kostenlos starten</a>
+      <a id="impr-nav-agb"         href="/agb.html"                 style="display:none">AGB</a>
+      <a id="impr-nav-datenschutz" href="/datenschutz.html"         style="display:none">Datenschutz</a>
+      <a id="impr-nav-sec"         href="/security-compliance.html" style="display:none">Sicherheit</a>
+      <a id="impr-nav-impressum"   href="/impressum.html"           style="display:none">Impressum</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="container-sm" style="padding:2rem 1rem;">
+    <div class="card">
+
+      <h1 id="impr-h1" style="margin-bottom:.375rem;">Impressum</h1>
+      <p id="impr-intro" class="impr-intro">Angaben gemäß § 5 TMG</p>
+
+      <hr class="impr-divider">
+
+      <!-- Verantwortlich -->
+      <h2 id="impr-h2" class="impr-section-title">Verantwortlich</h2>
+      <div class="impr-block">
+        <p>PraxisOnline24<br>Admy Housni</p>
+      </div>
+
+      <!-- Anschrift -->
+      <h2 id="impr-h3" class="impr-section-title">Anschrift</h2>
+      <div class="impr-block">
+        <p>Berlinstraße 37<br>55411 Bingen am Rhein<br>Deutschland</p>
+      </div>
+
+      <!-- Kontakt -->
+      <h2 id="impr-h4" class="impr-section-title">Kontakt</h2>
+      <div class="impr-block">
+        <p><span id="impr-email-label">E-Mail:</span> <a href="mailto:translationadmy@web.de">translationadmy@web.de</a></p>
+      </div>
+
+      <hr class="impr-divider">
+
+      <!-- USt-IdNr -->
+      <h2 id="impr-h5" class="impr-section-title">Umsatzsteuer-Identifikationsnummer</h2>
+      <div class="impr-block">
+        <p id="impr-vat-text">Gemäß § 27a UStG: DE410290042</p>
+      </div>
+
+      <!-- MStV -->
+      <h2 id="impr-h6" class="impr-section-title">Verantwortlich für den Inhalt</h2>
+      <div class="impr-block">
+        <p id="impr-mstv-text">Gemäß § 18 Abs. 2 MStV:</p>
+        <p>Admy Housni<br>Berlinstraße 37<br>55411 Bingen am Rhein</p>
+      </div>
+
+      <p id="impr-updated" style="margin-top:2rem;color:var(--text-secondary);font-size:.875rem;">Stand: Juni 2026</p>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="impr-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="impr-agb"         href="/agb.html">AGB</a>
+        <a id="impr-datenschutz" href="/datenschutz.html">Datenschutz</a>
+        <a id="impr-sec-comp"    href="/security-compliance.html">Sicherheit</a>
+        <a id="impr-impressum"   href="/impressum.html" style="font-weight:600;">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/main.js"></script>
+<script src="/js/public-i18n.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+
+    // Header nav
+    document.getElementById('impr-nav-login').textContent       = pT('idx_login')              || 'Anmelden';
+    document.getElementById('impr-nav-home').textContent        = pT('nav_home')               || 'Startseite';
+    document.getElementById('impr-nav-register').textContent    = pT('idx_start')              || 'Kostenlos starten';
+    document.getElementById('impr-nav-agb').textContent         = pT('nav_agb')                || 'AGB';
+    document.getElementById('impr-nav-datenschutz').textContent = pT('nav_datenschutz')        || 'Datenschutz';
+    document.getElementById('impr-nav-sec').textContent         = pT('footer.security_compliance') || 'Sicherheit';
+    document.getElementById('impr-nav-preise').textContent = pT('nav_preise') || 'Preise';
+    document.getElementById('impr-nav-impressum').textContent   = pT('nav_impressum')          || 'Impressum';
+
+    // Page content
+    document.getElementById('impr-h1').textContent        = pT('impr_h1')          || 'Impressum';
+    document.getElementById('impr-intro').textContent     = pT('impr_intro')        || 'Angaben gemäß § 5 TMG';
+    document.getElementById('impr-h2').textContent        = pT('impr_h2')           || 'Verantwortlich';
+    document.getElementById('impr-h3').textContent        = pT('impr_h3')           || 'Anschrift';
+    document.getElementById('impr-h4').textContent        = pT('impr_h4')           || 'Kontakt';
+    document.getElementById('impr-email-label').textContent = pT('impr_email_label') || 'E-Mail:';
+    document.getElementById('impr-h5').textContent        = pT('impr_h5')           || 'Umsatzsteuer-Identifikationsnummer';
+    document.getElementById('impr-vat-text').textContent  = pT('impr_vat_text')     || 'Gemäß § 27a UStG: DE410290042';
+    document.getElementById('impr-h6').textContent        = pT('impr_h6')           || 'Verantwortlich für den Inhalt';
+    document.getElementById('impr-mstv-text').textContent = pT('impr_mstv_text')    || 'Gemäß § 18 Abs. 2 MStV:';
+    document.getElementById('impr-updated').textContent   = pT('impr_updated')      || 'Stand: Juni 2026';
+
+    // Footer
+    document.getElementById('impr-footer-note').textContent = pT('footer_note') || '';
+    document.getElementById('impr-agb').textContent         = pT('nav_agb')         || 'AGB';
+    document.getElementById('impr-datenschutz').textContent = pT('nav_datenschutz') || 'Datenschutz';
+    document.getElementById('impr-sec-comp').textContent    = pT('footer.security_compliance') || 'Sicherheit';
+    document.getElementById('impr-impressum').textContent   = pT('nav_impressum')   || 'Impressum';
+  })();
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>

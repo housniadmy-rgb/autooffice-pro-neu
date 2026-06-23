@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Praxis registrieren – PraxisOnline24</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="auth-page">
+
+<div class="auth-container" style="padding:2rem 1rem;">
+  <div class="auth-card" style="max-width:560px;">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem;">
+      <div id="pub-lang-switcher" class="lang-switcher"></div>
+    </div>
+
+    <div class="auth-logo">
+      <a href="/" class="auth-logo-link">
+        <div class="logo-text">PraxisOnline24</div>
+        <div id="reg-slogan" class="logo-sub">Praxis kostenlos 30 Tage testen</div>
+      </a>
+    </div>
+
+    <div id="alert-container"></div>
+
+    <form id="register-form">
+      <h3 id="reg-section-info" class="form-section-title">Ihre Angaben</h3>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" for="first_name"><span id="reg-fn-label">Vorname</span> <span class="required">*</span></label>
+          <input type="text" id="first_name" name="first_name" class="form-control" required autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="last_name"><span id="reg-ln-label">Nachname</span> <span class="required">*</span></label>
+          <input type="text" id="last_name" name="last_name" class="form-control" required autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email"><span id="reg-email-label">E-Mail</span> <span class="required">*</span></label>
+        <input type="email" id="email" name="email" class="form-control" placeholder="praxis@example.com" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password"><span id="reg-pw-label">Passwort</span> <span class="required">*</span></label>
+        <input type="password" id="password" name="password" class="form-control" required autocomplete="new-password">
+        <span id="reg-pw-hint" class="form-text">Mindestens 8 Zeichen</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="language"><span id="reg-lang-label-el">Sprache / Language</span> <span class="required">*</span></label>
+        <select id="language" name="language" class="form-control">
+          <option value="de" selected>🇩🇪 Deutsch</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="fr">🇫🇷 Français</option>
+          <option value="es">🇪🇸 Español</option>
+          <option value="pt">🇧🇷 Português</option>
+          <option value="ar">🇸🇦 العربية</option>
+          <option value="tr">🇹🇷 Türkçe</option>
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+          <option value="ru">🇷🇺 Русский</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="th">🇹🇭 ภาษาไทย</option>
+        </select>
+      </div>
+
+      <h3 id="reg-section-practice" class="form-section-title" style="margin-top:1.5rem;">Ihre Praxis</h3>
+
+      <div class="form-group">
+        <label class="form-label" for="practice_name"><span id="reg-pn-label">Praxisname</span> <span class="required">*</span></label>
+        <input type="text" id="practice_name" name="practice_name" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="practice_address"><span id="reg-addr-label">Adresse</span></label>
+        <input type="text" id="practice_address" name="practice_address" class="form-control" placeholder="Musterstraße 1">
+      </div>
+
+      <div style="display:grid;grid-template-columns:120px 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" for="practice_zip"><span id="reg-zip-label-el">PLZ</span></label>
+          <input type="text" id="practice_zip" name="practice_zip" class="form-control" placeholder="12345">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="practice_city"><span id="reg-city-label">Stadt</span></label>
+          <input type="text" id="practice_city" name="practice_city" class="form-control" placeholder="Berlin">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="practice_phone"><span id="reg-phone-label">Telefon</span></label>
+        <input type="tel" id="practice_phone" name="practice_phone" class="form-control" placeholder="+49 30 12345678">
+      </div>
+
+      <h3 id="reg-section-package" class="form-section-title" style="margin-top:1.5rem;">Paket wählen</h3>
+
+      <div class="package-grid">
+        <label class="package-card">
+          <input type="radio" name="package" value="BASIC" checked>
+          <div class="package-inner">
+            <div class="package-name">Basic</div>
+            <div id="reg-price-basic" class="package-price">$19 / Monat</div>
+            <ul class="package-features">
+              <li id="reg-basic-f1">Bis 200 Termine pro Monat</li>
+              <li id="reg-basic-f2">Bis 3 Behandler</li>
+              <li id="reg-basic-f3">Online-Buchung</li>
+              <li id="reg-basic-f4">Rechnungen &amp; Rezepte</li>
+              <li id="reg-basic-f5">Bewertungen</li>
+            </ul>
+          </div>
+        </label>
+        <label class="package-card">
+          <input type="radio" name="package" value="PROFESSIONAL">
+          <div class="package-inner">
+            <div class="package-badge" id="reg-pro-badge">Beliebteste Wahl</div>
+            <div class="package-name">Pro</div>
+            <div id="reg-price-pro" class="package-price">$39 / Monat</div>
+            <ul class="package-features">
+              <li id="reg-pro-f1">Bis 500 Termine pro Monat</li>
+              <li id="reg-pro-f2">Bis 10 Behandler</li>
+              <li id="reg-pro-f3">Online-Buchung</li>
+              <li id="reg-pro-f4">Rechnungen &amp; Rezepte</li>
+              <li id="reg-pro-f5">Bewertungen</li>
+              <li id="reg-pro-f6">Warteliste</li>
+              <li id="reg-pro-f7">KI-Praxismanager</li>
+            </ul>
+          </div>
+        </label>
+        <label class="package-card">
+          <input type="radio" name="package" value="UNLIMITED">
+          <div class="package-inner">
+            <div class="package-name">Unlimited</div>
+            <div id="reg-price-unl" class="package-price">$79 / Monat</div>
+            <ul class="package-features">
+              <li id="reg-unl-f1">Unbegrenzte Termine</li>
+              <li id="reg-unl-f2">Unbegrenzte Behandler</li>
+              <li id="reg-unl-f3">Online-Buchung</li>
+              <li id="reg-unl-f4">Rechnungen &amp; Rezepte</li>
+              <li id="reg-unl-f5">Bewertungen</li>
+              <li id="reg-unl-f6">Warteliste</li>
+              <li id="reg-unl-f7">KI-Praxismanager</li>
+              <li id="reg-unl-f8">Prioritäts-Support</li>
+            </ul>
+          </div>
+        </label>
+      </div>
+
+      <p id="reg-trial-note" style="font-size:.8125rem;color:var(--text-secondary);margin-bottom:1.5rem;">
+        30 Tage kostenlos testen – keine Kreditkarte erforderlich. Alle Preise zzgl. MwSt.
+      </p>
+
+      <div class="form-group">
+        <label style="display:flex;align-items:flex-start;gap:.625rem;cursor:pointer;font-size:.9375rem;">
+          <input type="checkbox" id="accept_agb" required style="margin-top:.2rem;flex-shrink:0;">
+          <span id="reg-agb-span">Ich habe die <a href="/agb.html" target="_blank">AGB</a> und <a href="/datenschutz.html" target="_blank">Datenschutzerklärung</a> gelesen und akzeptiere diese.</span>
+        </label>
+      </div>
+
+      <button type="submit" class="btn btn-primary" style="width:100%;" id="submit-btn">Praxis registrieren</button>
+    </form>
+
+    <p style="text-align:center;margin-top:1.25rem;font-size:.9375rem;">
+      <span id="reg-already-text">Bereits registriert?</span> <a id="reg-login-link" href="/login.html">Anmelden</a>
+    </p>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-inner">
+      <p id="reg-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <div class="footer-links">
+        <a id="reg-agb-link" href="/agb.html">AGB</a>
+        <a id="reg-ds-link" href="/datenschutz.html">Datenschutz</a>
+        <a id="reg-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
+        <a id="reg-impressum" href="/impressum.html">Impressum</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="/js/public-i18n.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/password-toggle.js"></script>
+<script>
+  (function () {
+    pApplyDir();
+    renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    document.getElementById('reg-slogan').textContent = pT('reg_subtitle');
+    document.getElementById('reg-section-info').textContent = pT('reg_your_info');
+    document.getElementById('reg-fn-label').textContent = pT('first_name_label');
+    document.getElementById('reg-ln-label').textContent = pT('last_name_label');
+    document.getElementById('reg-email-label').textContent = pT('email_label');
+    document.getElementById('reg-pw-label').textContent = pT('password_label');
+    document.getElementById('reg-pw-hint').textContent = pT('reg_password_hint');
+    document.getElementById('password').placeholder = pT('reg_password_hint');
+    document.getElementById('reg-lang-label-el').textContent = pT('reg_lang_label');
+    document.getElementById('reg-section-practice').textContent = pT('reg_your_practice');
+    document.getElementById('reg-pn-label').textContent = pT('reg_practice_name_label');
+    document.getElementById('practice_name').placeholder = pT('reg_practice_name_ph');
+    document.getElementById('reg-addr-label').textContent = pT('address_label');
+    document.getElementById('reg-zip-label-el').textContent = pT('reg_zip_label');
+    document.getElementById('reg-city-label').textContent = pT('city_label');
+    document.getElementById('reg-phone-label').textContent = pT('phone_label');
+    document.getElementById('reg-section-package').textContent = pT('reg_package_title');
+    // Prices
+    var perMonth = pT('preise_per_month') || ' / Monat';
+    document.getElementById('reg-price-basic').textContent = '$19' + perMonth;
+    document.getElementById('reg-price-pro').textContent   = '$39' + perMonth;
+    document.getElementById('reg-price-unl').textContent   = '$79' + perMonth;
+    // Basic features
+    document.getElementById('reg-basic-f1').textContent = pT('preise_f_appt200');
+    document.getElementById('reg-basic-f2').textContent = pT('preise_f_treat3');
+    document.getElementById('reg-basic-f3').textContent = pT('preise_f_booking');
+    document.getElementById('reg-basic-f4').textContent = pT('preise_f_invoices');
+    document.getElementById('reg-basic-f5').textContent = pT('preise_f_reviews');
+    // Pro badge + features
+    document.getElementById('reg-pro-badge').textContent = pT('preise_badge');
+    document.getElementById('reg-pro-f1').textContent = pT('preise_f_appt500');
+    document.getElementById('reg-pro-f2').textContent = pT('preise_f_treat10');
+    document.getElementById('reg-pro-f3').textContent = pT('preise_f_booking');
+    document.getElementById('reg-pro-f4').textContent = pT('preise_f_invoices');
+    document.getElementById('reg-pro-f5').textContent = pT('preise_f_reviews');
+    document.getElementById('reg-pro-f6').textContent = pT('preise_f_waitlist');
+    document.getElementById('reg-pro-f7').textContent = pT('preise_f_ai');
+    // Unlimited features
+    document.getElementById('reg-unl-f1').textContent = pT('preise_f_appt_unlimited');
+    document.getElementById('reg-unl-f2').textContent = pT('preise_f_treat_unlimited');
+    document.getElementById('reg-unl-f3').textContent = pT('preise_f_booking');
+    document.getElementById('reg-unl-f4').textContent = pT('preise_f_invoices');
+    document.getElementById('reg-unl-f5').textContent = pT('preise_f_reviews');
+    document.getElementById('reg-unl-f6').textContent = pT('preise_f_waitlist');
+    document.getElementById('reg-unl-f7').textContent = pT('preise_f_ai');
+    document.getElementById('reg-unl-f8').textContent = pT('preise_f_support');
+    document.getElementById('reg-trial-note').textContent = pT('reg_trial_note');
+    // Pre-select package from URL ?plan=
+    var urlPlan = new URLSearchParams(window.location.search).get('plan');
+    if (urlPlan) {
+      var radio = document.querySelector('input[name="package"][value="' + urlPlan.toUpperCase() + '"]');
+      if (radio) radio.checked = true;
+    }
+    var agbLink = '<a href="/agb.html" target="_blank">' + pT('nav_agb') + '</a>';
+    var dsLink = '<a href="/datenschutz.html" target="_blank">' + pT('nav_datenschutz') + '</a>';
+    document.getElementById('reg-agb-span').innerHTML =
+      pT('reg_accept_prefix') + ' ' + agbLink + ' ' + pT('reg_accept_and') + ' ' + dsLink + ' ' + pT('reg_accept_suffix');
+    document.getElementById('submit-btn').textContent = pT('reg_submit');
+    document.getElementById('reg-already-text').textContent = pT('reg_already');
+    document.getElementById('reg-login-link').textContent = pT('idx_login');
+    document.getElementById('reg-footer-note').textContent = pT('footer_note');
+    document.getElementById('reg-agb-link').textContent = pT('nav_agb');
+    document.getElementById('reg-ds-link').textContent = pT('nav_datenschutz');
+    document.getElementById('reg-sec-comp').textContent = pT('footer.security_compliance');
+    document.getElementById('reg-impressum').textContent = pT('nav_impressum') || 'Impressum';
+  })();
+
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const container = document.getElementById('alert-container');
+    container.innerHTML = '';
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.textContent = pT('reg_submitting');
+
+    const data = {
+      first_name: document.getElementById('first_name').value.trim(),
+      last_name: document.getElementById('last_name').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      password: document.getElementById('password').value,
+      language: document.getElementById('language').value,
+      practice_name: document.getElementById('practice_name').value.trim(),
+      practice_address: document.getElementById('practice_address').value.trim(),
+      practice_zip: document.getElementById('practice_zip').value.trim(),
+      practice_city: document.getElementById('practice_city').value.trim(),
+      practice_phone: document.getElementById('practice_phone').value.trim(),
+      package: document.querySelector('input[name="package"]:checked').value,
+    };
+
+    try {
+      await API.post('/api/auth/register', data);
+      window.location.href = '/dashboard.html';
+    } catch (err) {
+      const el = document.createElement('div');
+      el.className = 'alert alert-danger';
+      el.textContent = err.message;
+      container.appendChild(el);
+      btn.disabled = false;
+      btn.textContent = pT('reg_submit');
+    }
+  });
+</script>
+<script src="/js/hamburger.js"></script>
+</body>
+</html>
