@@ -18,18 +18,14 @@ services:
         generateValue: true
       - key: EMAIL_DEV_MODE
         value: false
-      - key: OWNER_EMAIL
-        value: housniadmy@yahoo.de
-      - key: SMTP_HOST
-        sync: false
-      - key: SMTP_PORT
-        value: 587
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
+      - key: BREVO_API_KEY
         sync: false
       - key: SMTP_FROM
         value: "PraxisOnline24 <info@praxisonline24.com>"
+      - key: OWNER_EMAIL
+        value: info@praxisonline24.com
+      - key: APP_URL
+        sync: false
     disk:
       name: praxisonline24-db
       mountPath: /opt/render/project/src/data
