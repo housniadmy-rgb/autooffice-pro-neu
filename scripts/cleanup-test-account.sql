@@ -44,7 +44,7 @@ BEGIN TRANSACTION;
 DROP TABLE IF EXISTS _cleanup_target;
 CREATE TEMP TABLE _cleanup_target (
   email TEXT NOT NULL CHECK (
-    LOWER(email) != 'housniadmy@yahoo.de'      -- OWNER_EMAIL nie löschen
+    LOWER(email) != 'info@praxisonline24.com'      -- OWNER_EMAIL nie löschen
   )
 );
 

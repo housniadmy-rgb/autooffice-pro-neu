@@ -970,7 +970,7 @@ async function sendDemoRequestAdmin({ to, practice, contact, email, country, lan
   });
   return dispatch('DEMO-ANFRAGE-ADMIN', {
     from: process.env.SMTP_FROM || DEFAULT_FROM,
-    to: to || 'translationadmy@web.de',
+    to: to || 'info@praxisonline24.com',
     replyTo: email,
     subject,
     html,
@@ -1439,7 +1439,7 @@ async function sendDemoRequest({ practice, contact, email, phone, country, langu
 
   return dispatch('DEMO-ANFRAGE', {
     from: process.env.SMTP_FROM || DEFAULT_FROM,
-    to: 'translationadmy@web.de',
+    to: 'info@praxisonline24.com',
     replyTo: email,
     subject,
     html,
