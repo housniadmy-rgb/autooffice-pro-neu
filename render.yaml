@@ -1,9 +1,15 @@
+# Free-Tier Test-Setup für PraxisOnline24
+# - Kein Persistent Disk (Free unterstützt das nicht; SQLite ist ephemeral)
+# - Service spinnt nach 15 Min Inaktivität ab; nächster Request ~30 s Cold-Start
+# - EMAIL_DEV_MODE=true → Mails werden nur ins Render-Log geschrieben, nicht versendet
+# Für Produktion später: plan auf "starter", disk-Block wieder hinzufügen, EMAIL_DEV_MODE=false.
+
 services:
   - type: web
     name: praxisonline24
     runtime: node
     region: frankfurt
-    plan: starter
+    plan: free
     branch: main
     buildCommand: npm install
     startCommand: npm start
@@ -16,17 +22,16 @@ services:
         value: 10000
       - key: SESSION_SECRET
         generateValue: true
+      # Test-Phase: Mails nur loggen, nicht versenden
       - key: EMAIL_DEV_MODE
-        value: false
+        value: true
+      # Optional in der Test-Phase – nur befüllen, wenn EMAIL_DEV_MODE auf false steht
       - key: BREVO_API_KEY
         sync: false
       - key: SMTP_FROM
         value: "PraxisOnline24 <info@praxisonline24.com>"
       - key: OWNER_EMAIL
         value: info@praxisonline24.com
+      # Nach erstem Deploy auf die echte onrender.com-URL setzen
       - key: APP_URL
         sync: false
-    disk:
-      name: praxisonline24-db
-      mountPath: /opt/render/project/src/data
-      sizeGB: 1
