@@ -1,0 +1,26 @@
+User-agent: *
+Allow: /
+
+Disallow: /api/
+Disallow: /dashboard.html
+Disallow: /settings.html
+Disallow: /subscription.html
+Disallow: /appointments.html
+Disallow: /my-appointments.html
+Disallow: /patients.html
+Disallow: /practice.html
+Disallow: /practitioners.html
+Disallow: /invoices.html
+Disallow: /recipes.html
+Disallow: /reviews.html
+Disallow: /review.html
+Disallow: /waitlist.html
+Disallow: /waitlist-admin.html
+Disallow: /waitlist-accept.html
+Disallow: /ceo-dashboard.html
+Disallow: /set-password.html
+Disallow: /reset-password.html
+Disallow: /cancel.html
+Disallow: /booking.html
+
+Sitemap: https://praxisonline24.com/sitemap.xml
