@@ -8,6 +8,20 @@
 </head>
 <body class="auth-page">
 
+<header class="site-header">
+  <div class="container">
+    <a href="/" class="logo">PraxisOnline24</a>
+    <nav class="nav">
+      <a id="nav-funktionen" href="/#funktionen">Funktionen</a>
+      <a id="nav-branchen"   href="/#branchen">Branchen</a>
+      <a id="nav-preise"     href="/preise.html">Preise</a>
+      <a id="nav-demo"       href="/demo.html">Demo</a>
+      <a id="nav-login"      href="/login.html">Anmelden</a>
+      <a id="nav-start"      href="/register.html" class="btn btn-primary btn-sm" style="font-weight:600;">Kostenlos starten</a>
+    </nav>
+  </div>
+</header>
+
 <div class="auth-container" style="padding:2rem 1rem;">
   <div class="auth-card" style="max-width:560px;">
     <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem;">
@@ -188,6 +202,12 @@
   (function () {
     pApplyDir();
     renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+    document.getElementById('nav-funktionen').textContent = pT('nav_funktionen') || 'Funktionen';
+    document.getElementById('nav-branchen').textContent   = pT('nav_branchen')   || 'Branchen';
+    document.getElementById('nav-preise').textContent     = pT('nav_preise')     || 'Preise';
+    document.getElementById('nav-demo').textContent       = pT('nav_demo')       || 'Demo';
+    document.getElementById('nav-login').textContent      = pT('idx_login')      || 'Anmelden';
+    document.getElementById('nav-start').textContent      = pT('idx_start')      || 'Kostenlos starten';
     document.getElementById('reg-slogan').textContent = pT('reg_subtitle');
     document.getElementById('reg-section-info').textContent = pT('reg_your_info');
     document.getElementById('reg-fn-label').textContent = pT('first_name_label');

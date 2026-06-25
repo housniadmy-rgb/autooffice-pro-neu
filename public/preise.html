@@ -173,10 +173,12 @@
     <a href="/" class="logo">PraxisOnline24</a>
     <nav class="nav">
       <div id="pub-lang-switcher" class="lang-switcher"></div>
-      <a id="pr-nav-preise" href="/preise.html" style="font-weight:600;">Preise</a>
-      <a id="pr-nav-demo"   href="/demo.html">Demo anfragen</a>
-      <a id="pr-nav-login"  href="/login.html">Anmelden</a>
-      <a id="pr-nav-start"  href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
+      <a id="pr-nav-funktionen" href="/#funktionen">Funktionen</a>
+      <a id="pr-nav-branchen"   href="/#branchen">Branchen</a>
+      <a id="pr-nav-preise"     href="/preise.html" style="font-weight:600;">Preise</a>
+      <a id="pr-nav-demo"       href="/demo.html">Demo</a>
+      <a id="pr-nav-login"      href="/login.html">Anmelden</a>
+      <a id="pr-nav-start"      href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
       <!-- Hidden; hamburger picks these up for mobile drawer -->
       <a id="pr-nav-home"        href="/"                         style="display:none">Startseite</a>
       <a id="pr-nav-register"    href="/register.html"            style="display:none">Kostenlos starten</a>
@@ -309,8 +311,10 @@
   renderLangSwitcher(document.getElementById('pub-lang-switcher'));
 
   // Header nav
-  document.getElementById('pr-nav-preise').textContent      = pT('nav_preise')               || 'Preise';
-  document.getElementById('pr-nav-demo').textContent         = pT('nav_demo')                 || 'Demo anfragen';
+  document.getElementById('pr-nav-funktionen').textContent   = pT('nav_funktionen')           || 'Funktionen';
+  document.getElementById('pr-nav-branchen').textContent     = pT('nav_branchen')             || 'Branchen';
+  document.getElementById('pr-nav-preise').textContent       = pT('nav_preise')               || 'Preise';
+  document.getElementById('pr-nav-demo').textContent         = pT('nav_demo')                 || 'Demo';
   document.getElementById('pr-nav-login').textContent        = pT('idx_login')                || 'Anmelden';
   document.getElementById('pr-nav-start').textContent        = pT('idx_start')                || 'Kostenlos starten';
   document.getElementById('pr-nav-home').textContent         = pT('nav_home')                 || 'Startseite';

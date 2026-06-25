@@ -61,10 +61,12 @@
     </a>
     <nav class="nav">
       <div id="pub-lang-switcher" class="lang-switcher"></div>
-      <a id="nav-preise" href="/preise.html">Preise</a>
-      <a id="nav-demo" href="/demo.html" style="font-weight:600;">Demo anfragen</a>
-      <a id="nav-login" href="/login.html">Anmelden</a>
-      <a id="nav-start" href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
+      <a id="nav-funktionen" href="/#funktionen">Funktionen</a>
+      <a id="nav-branchen"   href="/#branchen">Branchen</a>
+      <a id="nav-preise"     href="/preise.html">Preise</a>
+      <a id="nav-demo"       href="/demo.html" style="font-weight:600;">Demo</a>
+      <a id="nav-login"      href="/login.html">Anmelden</a>
+      <a id="nav-start"      href="/register.html" class="btn btn-primary btn-sm">Kostenlos starten</a>
     </nav>
   </div>
 </header>
@@ -173,8 +175,10 @@
     }
 
     document.getElementById('logo-slogan').textContent     = pT('slogan')             || 'Ihre Praxis. Online. Rund um die Uhr.';
+    document.getElementById('nav-funktionen').textContent  = pT('nav_funktionen')      || 'Funktionen';
+    document.getElementById('nav-branchen').textContent    = pT('nav_branchen')        || 'Branchen';
     document.getElementById('nav-preise').textContent      = pT('nav_preise')          || 'Preise';
-    document.getElementById('nav-demo').textContent        = pT('nav_demo')            || 'Demo anfragen';
+    document.getElementById('nav-demo').textContent        = pT('nav_demo')            || 'Demo';
     document.getElementById('nav-login').textContent       = pT('idx_login')           || 'Anmelden';
     document.getElementById('nav-start').textContent       = pT('idx_start')           || 'Kostenlos starten';
     document.getElementById('demo-title').textContent      = pT('demo_title')          || 'Demo anfragen';
