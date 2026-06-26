@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/audit/schema.json",
+  "title": "AuditEntry",
+  "description": "Append-only Audit-Eintrag der Plattform.",
+  "type": "object",
+  "required": ["id", "ts", "kind", "actor", "subject", "action", "outcome"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^audit_[A-Za-z0-9]+$" },
+    "ts": { "type": "string", "format": "date-time" },
+    "kind": {
+      "type": "string",
+      "description": "Klassifikator – siehe events.md."
+    },
+    "actor": {
+      "type": "string",
+      "description": "Auslösendes Subject: agent_id oder human_<name>."
+    },
+    "subject": {
+      "type": "string",
+      "description": "Betroffene Entität (Agent, Route, Permission, Topic, ...)."
+    },
+    "action": {
+      "type": "string",
+      "description": "Durchgeführte Aktion (register, forward, deny, grant, ...)."
+    },
+    "outcome": {
+      "type": "string",
+      "enum": ["allowed", "denied", "success", "failure", "dryrun_success", "dropped"]
+    },
+    "trace_id": { "type": "string" },
+    "correlation_id": { "type": "string" },
+    "details": {
+      "type": "object",
+      "description": "Kompakte Zusatzdaten ohne PII oder Secrets."
+    },
+    "previous_hash": { "type": ["string", "null"] },
+    "entry_hash": { "type": ["string", "null"] },
+    "corrects": {
+      "type": ["string", "null"],
+      "description": "Referenz auf einen früheren Eintrag, der korrigiert wird (kind=correction)."
+    }
+  },
+  "additionalProperties": false
+}

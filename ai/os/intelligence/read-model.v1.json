@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "section_intelligence",
+  "name": "Intelligence",
+  "status": "registered",
+  "owner": "agent_hub_decision_engine",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Wissens-, Entscheidungs- und Strategie-Schicht: Event Hub, Knowledge Base, Decision Engine (Hub) sowie Strategy Engine, Roadmap, KPI, Risk, Opportunities (Strategy). Liefert Empfehlungen, keine produktiven Aktionen.",
+  "warnings": [
+    "Regel-Konflikt-Risiko zwischen Hub Decision Engine (fachlich) und Core Event Router (transport).",
+    "KPI-Werte sind bisher nur Definitionen ohne Live-Werte – Dashboards können daher keine Ist/Soll-Vergleiche zeigen."
+  ],
+  "next_actions": [
+    "Trennung Transport-Routing (Core) vs. Fachliches Routing (Intelligence) in den READMEs explizit fixieren.",
+    "KPI-Anbindung an externe Quellen (Stripe, Analytics, Monitoring) in einem späteren Folge-ADR planen.",
+    "Strategie-Empfehlungen ausschließlich als Tasks via Engine.Approvals abbilden (ADR-002)."
+  ]
+}

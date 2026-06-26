@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "default_decision": "deny",
+  "roles": [
+    {
+      "id": "role_os_admin",
+      "description": "Verwaltet Plattform-Artefakte (Registry, Routes, Permissions).",
+      "permissions": [
+        "read:agent", "write:agent",
+        "read:route", "write:route",
+        "read:permission", "write:permission",
+        "write:audit",
+        "admin:gateway"
+      ]
+    },
+    {
+      "id": "role_department",
+      "description": "Standardrolle aller AI-Abteilungen.",
+      "permissions": [
+        "write:report",
+        "subscribe:bus", "publish:bus",
+        "read:memory:agent", "write:memory:agent",
+        "read:memory:department", "write:memory:department"
+      ]
+    },
+    {
+      "id": "role_engine",
+      "description": "Engine-Module (Tasks, Workflows, Priority, Approvals, Dashboard, Status).",
+      "permissions": [
+        "read:task", "write:task",
+        "read:workflow", "write:workflow",
+        "read:approval", "write:approval",
+        "read:status", "write:status",
+        "subscribe:bus", "publish:bus",
+        "read:memory:workflow", "write:memory:workflow"
+      ]
+    },
+    {
+      "id": "role_hub",
+      "description": "Hub-Module (Event Hub, Decision, Knowledge, Notifications, Feed).",
+      "permissions": [
+        "read:event", "write:event",
+        "read:kb",
+        "write:route",
+        "write:notification",
+        "write:feed",
+        "subscribe:bus", "publish:bus"
+      ]
+    },
+    {
+      "id": "role_ops",
+      "description": "Ops-Module (Queue, Execution, Policy, Health, Digest, History, Audit).",
+      "permissions": [
+        "read:queue", "write:queue",
+        "dryrun:execution",
+        "read:policy",
+        "read:health", "write:health",
+        "write:digest",
+        "write:history",
+        "write:audit",
+        "subscribe:bus", "publish:bus"
+      ]
+    },
+    {
+      "id": "role_strategy",
+      "description": "Strategy-Module (Engine, Roadmap, KPI, Risk, Opportunities, Dashboard).",
+      "permissions": [
+        "read:kpi", "write:kpi",
+        "read:roadmap", "write:roadmap",
+        "read:risk", "write:risk",
+        "read:opportunity", "write:opportunity",
+        "write:recommendation",
+        "subscribe:bus", "publish:bus"
+      ]
+    },
+    {
+      "id": "role_ceo",
+      "description": "Menschliche CEO-Rolle. Erteilt Approvals, sieht Dashboards.",
+      "permissions": [
+        "decide:approval",
+        "read:dashboard",
+        "read:audit",
+        "read:feed"
+      ]
+    },
+    {
+      "id": "role_observer",
+      "description": "Lesende Rolle für Dashboards und Audit, ohne Schreibrechte.",
+      "permissions": [
+        "read:dashboard",
+        "read:audit",
+        "read:kpi",
+        "read:roadmap",
+        "read:risk",
+        "read:health",
+        "read:feed"
+      ]
+    }
+  ],
+  "bindings": [
+    { "subject": "agent_department_ceo", "role": "role_department" },
+    { "subject": "agent_department_cto", "role": "role_department" },
+    { "subject": "agent_department_qa", "role": "role_department" },
+    { "subject": "agent_department_seo", "role": "role_department" },
+    { "subject": "agent_department_marketing", "role": "role_department" },
+    { "subject": "agent_department_sales", "role": "role_department" },
+    { "subject": "agent_department_support", "role": "role_department" },
+    { "subject": "agent_department_finance", "role": "role_department" },
+    { "subject": "agent_department_security", "role": "role_department" },
+    { "subject": "agent_department_monitoring", "role": "role_department" },
+    { "subject": "agent_department_operations", "role": "role_department" },
+
+    { "subject": "agent_engine_tasks", "role": "role_engine" },
+    { "subject": "agent_engine_workflows", "role": "role_engine" },
+    { "subject": "agent_engine_priority", "role": "role_engine" },
+    { "subject": "agent_engine_approvals", "role": "role_engine" },
+    { "subject": "agent_engine_dashboard", "role": "role_engine" },
+    { "subject": "agent_engine_status", "role": "role_engine" },
+
+    { "subject": "agent_hub_event_hub", "role": "role_hub" },
+    { "subject": "agent_hub_registry", "role": "role_hub" },
+    { "subject": "agent_hub_knowledge_base", "role": "role_hub" },
+    { "subject": "agent_hub_decision_engine", "role": "role_hub" },
+    { "subject": "agent_hub_notifications", "role": "role_hub" },
+    { "subject": "agent_hub_ceo_feed", "role": "role_hub" },
+
+    { "subject": "agent_ops_queue", "role": "role_ops" },
+    { "subject": "agent_ops_execution", "role": "role_ops" },
+    { "subject": "agent_ops_policy", "role": "role_ops" },
+    { "subject": "agent_ops_health", "role": "role_ops" },
+    { "subject": "agent_ops_digest", "role": "role_ops" },
+    { "subject": "agent_ops_history", "role": "role_ops" },
+    { "subject": "agent_ops_audit", "role": "role_ops" },
+
+    { "subject": "agent_strategy_strategy_engine", "role": "role_strategy" },
+    { "subject": "agent_strategy_roadmap", "role": "role_strategy" },
+    { "subject": "agent_strategy_opportunities", "role": "role_strategy" },
+    { "subject": "agent_strategy_kpi", "role": "role_strategy" },
+    { "subject": "agent_strategy_risk", "role": "role_strategy" },
+    { "subject": "agent_strategy_executive_dashboard", "role": "role_observer" },
+
+    { "subject": "agent_os_registry", "role": "role_os_admin" },
+    { "subject": "agent_os_message_bus", "role": "role_os_admin" },
+    { "subject": "agent_os_scheduler", "role": "role_os_admin" },
+    { "subject": "agent_os_memory", "role": "role_os_admin" },
+    { "subject": "agent_os_event_router", "role": "role_os_admin" },
+    { "subject": "agent_os_permissions", "role": "role_os_admin" },
+    { "subject": "agent_os_audit", "role": "role_os_admin" },
+    { "subject": "agent_os_dashboard_api", "role": "role_observer" },
+    { "subject": "agent_os_api_gateway", "role": "role_os_admin" },
+
+    { "subject": "human_ceo", "role": "role_ceo" }
+  ]
+}

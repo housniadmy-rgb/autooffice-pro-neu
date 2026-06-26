@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "id": "section_security",
+  "name": "Security",
+  "status": "registered",
+  "owner": "agent_os_permissions",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Querschnittliche Schutz- und Beweisschicht: Permissions (Default-Deny RBAC), Audit (append-only, ADR-004), Policy-Definitionen. Keine Secrets, keine PII im AI OS (ADR-005).",
+  "warnings": [
+    "role_observer besitzt read:audit – Re-Scope auf eine Summary-View empfohlen.",
+    "role_ops besitzt write:audit – sollte auf einen append:audit:ops-Adapter eingeengt werden.",
+    "human_ceo ist als Subject deklariert, aber es existiert keine Human-Subjects-Registry analog zur Agent Registry.",
+    "Pflicht-Header headers.contains_pii ist noch nicht im Bus-Schema erzwungen."
+  ],
+  "next_actions": [
+    "headers.contains_pii als Pflichtfeld im Bus-Envelope etablieren (ADR-005).",
+    "Human-Subjects-Registry für human_ceo und spätere Mitarbeiter:innen vorbereiten.",
+    "Rollen-Komposition (Rolle erbt von Rolle) als Folge-ADR vorbereiten.",
+    "role_observer auf read:audit:summary einschränken."
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "default_enabled": false,
+  "jobs": [
+    {
+      "id": "job_os_tick_minute",
+      "description": "Minütlicher Heartbeat-Tick für Plattform-Audits.",
+      "trigger": { "type": "interval", "every": "PT1M" },
+      "emits": ["os.scheduler.tick.minute"]
+    },
+    {
+      "id": "job_os_tick_hourly",
+      "description": "Stündlicher Tick u. a. für Health-Aggregation.",
+      "trigger": { "type": "cron", "expression": "0 * * * *", "timezone": "Europe/Berlin" },
+      "emits": ["os.scheduler.tick.hourly"]
+    },
+    {
+      "id": "job_os_tick_daily",
+      "description": "Täglicher Tick um 06:00 Europe/Berlin für CEO Daily Digest.",
+      "trigger": { "type": "cron", "expression": "0 6 * * *", "timezone": "Europe/Berlin" },
+      "emits": ["os.scheduler.tick.daily"]
+    },
+    {
+      "id": "job_ops_health_snapshot",
+      "description": "Alle 15 Minuten ein Health-Score-Snapshot anfordern.",
+      "trigger": { "type": "interval", "every": "PT15M" },
+      "emits": ["ops.health.snapshot.requested"]
+    },
+    {
+      "id": "job_strategy_weekly_review",
+      "description": "Wöchentlicher strategischer Review-Tick (Montag 07:00).",
+      "trigger": { "type": "cron", "expression": "0 7 * * 1", "timezone": "Europe/Berlin" },
+      "emits": ["strategy.review.weekly.requested"]
+    }
+  ]
+}

@@ -1,0 +1,508 @@
+{
+  "version": 1,
+  "generated_for_phase": 11,
+  "default_owner_human": "ceo",
+  "agents": [
+    {
+      "id": "agent_department_ceo",
+      "area": "department",
+      "path": "ai/ceo",
+      "description": "Konsolidiert Berichte aller Abteilungen, ohne zu handeln.",
+      "capabilities": ["report.consolidate", "approval.decide"],
+      "subscriptions": ["report.published", "approval.requested"],
+      "publishes": ["approval.granted", "approval.rejected"],
+      "permissions_required": ["report:read", "approval:decide"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_cto",
+      "area": "department",
+      "path": "ai/cto",
+      "capabilities": ["architecture.review", "code.quality"],
+      "subscriptions": ["repo.changed"],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_qa",
+      "area": "department",
+      "path": "ai/qa",
+      "capabilities": ["test.plan", "test.run.dryrun"],
+      "subscriptions": ["release.candidate"],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_seo",
+      "area": "department",
+      "path": "ai/seo",
+      "capabilities": ["seo.audit", "keyword.research"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_marketing",
+      "area": "department",
+      "path": "ai/marketing",
+      "capabilities": ["campaign.plan", "content.brief"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_sales",
+      "area": "department",
+      "path": "ai/sales",
+      "capabilities": ["pipeline.analyze", "offer.structure"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_support",
+      "area": "department",
+      "path": "ai/support",
+      "capabilities": ["inquiry.classify", "knowledge.search"],
+      "subscriptions": ["inquiry.received"],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_finance",
+      "area": "department",
+      "path": "ai/finance",
+      "capabilities": ["forecast.compute", "pricing.analyze"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_security",
+      "area": "department",
+      "path": "ai/security",
+      "capabilities": ["vuln.scan.spec", "secret.hygiene.spec"],
+      "subscriptions": ["repo.changed"],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_monitoring",
+      "area": "department",
+      "path": "ai/monitoring",
+      "capabilities": ["uptime.observe.spec", "log.summarize.spec"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_department_operations",
+      "area": "department",
+      "path": "ai/operations",
+      "capabilities": ["routine.describe"],
+      "subscriptions": [],
+      "publishes": ["report.published"],
+      "permissions_required": ["report:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+
+    {
+      "id": "agent_engine_tasks",
+      "area": "engine",
+      "path": "ai/engine/tasks",
+      "capabilities": ["task.create", "task.transition"],
+      "subscriptions": ["task.requested", "approval.granted"],
+      "publishes": ["task.created", "task.state.changed"],
+      "permissions_required": ["task:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_engine_workflows",
+      "area": "engine",
+      "path": "ai/engine/workflows",
+      "capabilities": ["workflow.compose"],
+      "subscriptions": ["task.created"],
+      "publishes": ["workflow.created"],
+      "permissions_required": ["workflow:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_engine_priority",
+      "area": "engine",
+      "path": "ai/engine/priority",
+      "capabilities": ["priority.assign"],
+      "subscriptions": ["task.created", "workflow.created"],
+      "publishes": ["priority.assigned"],
+      "permissions_required": ["task:read", "workflow:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_engine_approvals",
+      "area": "engine",
+      "path": "ai/engine/approvals",
+      "capabilities": ["approval.gate"],
+      "subscriptions": ["task.requires_approval"],
+      "publishes": ["approval.requested", "approval.granted", "approval.rejected"],
+      "permissions_required": ["approval:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_engine_dashboard",
+      "area": "engine",
+      "path": "ai/engine/dashboard",
+      "capabilities": ["dashboard.operational.read"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["task:read", "workflow:read", "approval:read", "status:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_engine_status",
+      "area": "engine",
+      "path": "ai/engine/status",
+      "capabilities": ["department.status.read"],
+      "subscriptions": ["report.published"],
+      "publishes": ["status.updated"],
+      "permissions_required": ["status:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+
+    {
+      "id": "agent_hub_event_hub",
+      "area": "hub",
+      "path": "ai/hub/event-hub",
+      "capabilities": ["event.ingest", "event.validate"],
+      "subscriptions": [],
+      "publishes": ["event.normalized"],
+      "permissions_required": ["event:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_hub_registry",
+      "area": "hub",
+      "path": "ai/hub/registry",
+      "capabilities": ["event.types.catalog"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["event:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_hub_knowledge_base",
+      "area": "hub",
+      "path": "ai/hub/knowledge-base",
+      "capabilities": ["kb.lookup"],
+      "subscriptions": ["event.normalized"],
+      "publishes": [],
+      "permissions_required": ["kb:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_hub_decision_engine",
+      "area": "hub",
+      "path": "ai/hub/decision-engine",
+      "capabilities": ["routing.decide"],
+      "subscriptions": ["event.normalized"],
+      "publishes": ["task.requested", "notification.prepared", "ceo.feed.append"],
+      "permissions_required": ["route:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_hub_notifications",
+      "area": "hub",
+      "path": "ai/hub/notifications",
+      "capabilities": ["notification.prepare"],
+      "subscriptions": ["notification.prepared"],
+      "publishes": [],
+      "permissions_required": ["notification:write"],
+      "state": "paused",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_hub_ceo_feed",
+      "area": "hub",
+      "path": "ai/hub/ceo-feed",
+      "capabilities": ["feed.append"],
+      "subscriptions": ["ceo.feed.append"],
+      "publishes": [],
+      "permissions_required": ["feed:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+
+    {
+      "id": "agent_ops_queue",
+      "area": "ops",
+      "path": "ai/ops/queue",
+      "capabilities": ["queue.enqueue", "queue.distribute"],
+      "subscriptions": ["task.created", "approval.granted"],
+      "publishes": ["queue.entry.created", "queue.entry.assigned"],
+      "permissions_required": ["queue:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_execution",
+      "area": "ops",
+      "path": "ai/ops/execution",
+      "capabilities": ["execution.dryrun"],
+      "subscriptions": ["queue.entry.assigned"],
+      "publishes": ["execution.dryrun.completed"],
+      "permissions_required": ["execution:dryrun"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_policy",
+      "area": "ops",
+      "path": "ai/ops/policy",
+      "capabilities": ["policy.classify"],
+      "subscriptions": ["queue.entry.created"],
+      "publishes": ["policy.classified"],
+      "permissions_required": ["policy:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_health",
+      "area": "ops",
+      "path": "ai/ops/health",
+      "capabilities": ["health.aggregate"],
+      "subscriptions": ["execution.dryrun.completed", "status.updated"],
+      "publishes": ["health.updated"],
+      "permissions_required": ["health:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_digest",
+      "area": "ops",
+      "path": "ai/ops/digest",
+      "capabilities": ["digest.compose.daily"],
+      "subscriptions": ["scheduler.tick.daily"],
+      "publishes": ["digest.published"],
+      "permissions_required": ["digest:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_history",
+      "area": "ops",
+      "path": "ai/ops/history",
+      "capabilities": ["history.archive"],
+      "subscriptions": ["execution.dryrun.completed", "approval.rejected"],
+      "publishes": [],
+      "permissions_required": ["history:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_ops_audit",
+      "area": "ops",
+      "path": "ai/ops/audit",
+      "capabilities": ["audit.append.ops"],
+      "subscriptions": ["policy.classified", "execution.dryrun.completed", "approval.granted", "approval.rejected", "queue.entry.created", "queue.entry.assigned"],
+      "publishes": [],
+      "permissions_required": ["audit:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+
+    {
+      "id": "agent_strategy_strategy_engine",
+      "area": "strategy",
+      "path": "ai/strategy/strategy-engine",
+      "capabilities": ["strategy.recommend"],
+      "subscriptions": ["digest.published", "health.updated", "kpi.snapshot.updated", "risk.changed", "opportunity.detected"],
+      "publishes": ["recommendation.created"],
+      "permissions_required": ["recommendation:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_strategy_roadmap",
+      "area": "strategy",
+      "path": "ai/strategy/roadmap",
+      "capabilities": ["roadmap.manage"],
+      "subscriptions": ["recommendation.created"],
+      "publishes": ["roadmap.changed"],
+      "permissions_required": ["roadmap:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_strategy_opportunities",
+      "area": "strategy",
+      "path": "ai/strategy/opportunities",
+      "capabilities": ["opportunity.scan.spec"],
+      "subscriptions": [],
+      "publishes": ["opportunity.detected"],
+      "permissions_required": ["opportunity:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_strategy_kpi",
+      "area": "strategy",
+      "path": "ai/strategy/kpi",
+      "capabilities": ["kpi.define", "kpi.snapshot.read"],
+      "subscriptions": [],
+      "publishes": ["kpi.snapshot.updated"],
+      "permissions_required": ["kpi:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_strategy_risk",
+      "area": "strategy",
+      "path": "ai/strategy/risk",
+      "capabilities": ["risk.register"],
+      "subscriptions": ["report.published"],
+      "publishes": ["risk.changed"],
+      "permissions_required": ["risk:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_strategy_executive_dashboard",
+      "area": "strategy",
+      "path": "ai/strategy/executive-dashboard",
+      "capabilities": ["dashboard.strategic.read"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["kpi:read", "roadmap:read", "risk:read", "recommendation:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+
+    {
+      "id": "agent_os_registry",
+      "area": "os",
+      "path": "ai/os/agent-registry",
+      "capabilities": ["agent.resolve", "agent.list"],
+      "subscriptions": [],
+      "publishes": ["agent.lifecycle.changed"],
+      "permissions_required": ["registry:read", "registry:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_message_bus",
+      "area": "os",
+      "path": "ai/os/message-bus",
+      "capabilities": ["bus.publish", "bus.subscribe"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["bus:publish", "bus:subscribe"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_scheduler",
+      "area": "os",
+      "path": "ai/os/scheduler",
+      "capabilities": ["scheduler.tick.emit.spec"],
+      "subscriptions": [],
+      "publishes": ["scheduler.tick.minute", "scheduler.tick.hourly", "scheduler.tick.daily"],
+      "permissions_required": ["scheduler:register"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_memory",
+      "area": "os",
+      "path": "ai/os/memory",
+      "capabilities": ["memory.read", "memory.write"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["memory:read", "memory:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_event_router",
+      "area": "os",
+      "path": "ai/os/event-router",
+      "capabilities": ["event.route.decide"],
+      "subscriptions": ["*"],
+      "publishes": [],
+      "permissions_required": ["route:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_permissions",
+      "area": "os",
+      "path": "ai/os/permissions",
+      "capabilities": ["permission.check"],
+      "subscriptions": [],
+      "publishes": ["permission.denied"],
+      "permissions_required": ["permission:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_audit",
+      "area": "os",
+      "path": "ai/os/audit",
+      "capabilities": ["audit.append.platform"],
+      "subscriptions": ["agent.lifecycle.changed", "permission.denied", "scheduler.tick.minute", "scheduler.tick.hourly", "scheduler.tick.daily", "route.matched"],
+      "publishes": [],
+      "permissions_required": ["audit:write"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_dashboard_api",
+      "area": "os",
+      "path": "ai/os/dashboard-api",
+      "capabilities": ["dashboard.api.read.spec"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["dashboard:read"],
+      "state": "registered",
+      "runtime": "spec-only"
+    },
+    {
+      "id": "agent_os_api_gateway",
+      "area": "os",
+      "path": "ai/os/api-gateway",
+      "capabilities": ["gateway.route.spec"],
+      "subscriptions": [],
+      "publishes": [],
+      "permissions_required": ["gateway:admin"],
+      "state": "paused",
+      "runtime": "spec-only"
+    }
+  ]
+}

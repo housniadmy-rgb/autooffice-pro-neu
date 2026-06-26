@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "section_integrations",
+  "name": "Integrations",
+  "status": "paused",
+  "owner": "agent_os_api_gateway",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Externer Schicht-Slot: API Gateway (deaktiviert), geplante Inbound-/Outbound-Plugins (z. B. GitHub, Stripe, Google Calendar), Notifications (paused). Alle externen Integrationen starten read-only gemäß ADR-003.",
+  "warnings": [
+    "API Gateway ist vollständig deaktiviert (gateway_enabled: false) – das ist Absicht, sollte aber im Dashboard sichtbar sein.",
+    "Keine Plugins definiert; die Sektion ist heute architektonisch reserviert, aber leer.",
+    "Notifications (ai/hub/notifications) ist paused – Datenmodell vorbereitet, kein Versand."
+  ],
+  "next_actions": [
+    "Plugin-Manifest-Spec für inbound/outbound/bidirectional Integrationen entwerfen.",
+    "Aktivierungs-Pfad analog API Gateway für jede Integration festschreiben (ADR-003).",
+    "Outbound-Permission-Namespace outbound:<provider> in Permissions reservieren."
+  ]
+}

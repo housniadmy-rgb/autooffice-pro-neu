@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/agent-registry/schema.json",
+  "title": "Agent",
+  "description": "Identitäts- und Capability-Eintrag eines AI-Agenten. Quelle der Wahrheit für agent_id-Auflösung.",
+  "type": "object",
+  "required": ["id", "area", "path", "capabilities", "state"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^agent_[a-z0-9]+(_[a-z0-9]+)+$",
+      "description": "Stabile Kennung im Schema agent_<area>_<name>."
+    },
+    "area": {
+      "type": "string",
+      "enum": ["department", "engine", "hub", "ops", "strategy", "os"]
+    },
+    "path": {
+      "type": "string",
+      "description": "Pfad zum Modul im Repository, relativ zur Repo-Wurzel."
+    },
+    "description": {
+      "type": "string"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "subscriptions": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "publishes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "permissions_required": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": []
+    },
+    "state": {
+      "type": "string",
+      "enum": ["draft", "registered", "active", "paused", "retired"]
+    },
+    "owner_human": {
+      "type": "string",
+      "default": "ceo"
+    },
+    "version": {
+      "type": "string"
+    },
+    "runtime": {
+      "type": "string",
+      "enum": ["spec-only", "node", "python", "bun", "deno", "external"]
+    },
+    "model": {
+      "type": "string",
+      "description": "Optionaler LLM-/ML-Modellname, falls der Agent ein KI-Modell nutzt."
+    },
+    "health_endpoint": {
+      "type": ["string", "null"],
+      "default": null
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

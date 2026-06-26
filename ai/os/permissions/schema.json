@@ -1,0 +1,52 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/permissions/schema.json",
+  "title": "PermissionsCatalog",
+  "description": "Rollen, Permissions und Bindungen. Auswertung default-deny, additiv.",
+  "type": "object",
+  "required": ["version", "default_decision", "roles", "bindings"],
+  "properties": {
+    "version": { "type": "integer", "minimum": 1 },
+    "default_decision": {
+      "type": "string",
+      "enum": ["allow", "deny"],
+      "const": "deny"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "permissions"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^role_[a-z0-9]+(_[a-z0-9]+)*$" },
+          "description": { "type": "string" },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(read|write|decide|subscribe|publish|register|dryrun|admin):[a-z_]+(:[a-z_]+)?$"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["subject", "role"],
+        "properties": {
+          "subject": {
+            "type": "string",
+            "description": "Agent-ID oder menschliches Subject, z. B. agent_engine_tasks oder human_ceo."
+          },
+          "role": { "type": "string", "pattern": "^role_[a-z0-9]+(_[a-z0-9]+)*$" },
+          "valid_until": { "type": ["string", "null"], "format": "date-time" }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

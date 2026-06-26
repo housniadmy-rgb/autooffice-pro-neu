@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "section_dashboard",
+  "name": "Dashboard",
+  "status": "registered",
+  "owner": "agent_os_dashboard_api",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Read-only Aggregations-Schicht. Spezifiziert Views (CEO Today, Engine Operational, Strategy Executive, Platform Health, Audit Recent, Agents Directory, Permissions Matrix). Konsumiert ausschließlich versionierte Read-Models gemäß ADR-006.",
+  "warnings": [
+    "Heutige endpoints.json referenziert interne Pfade (z. B. /latest/summary) – sollte vollständig auf Read-Models umgestellt werden.",
+    "Drei historische Dashboard-Quellen (ai/engine/dashboard, ai/strategy/executive-dashboard, ai/os/dashboard-api) überlappen.",
+    "Keine Aggregations-Spec definiert, die mehrere Read-Models zu einer View zusammenführt."
+  ],
+  "next_actions": [
+    "endpoints.json auf Read-Models umstellen (ADR-006).",
+    "ai/engine/dashboard und ai/strategy/executive-dashboard als Datenlieferanten (Read-Model-Quellen) re-positionieren, nicht als eigene Renderer.",
+    "Aggregations-Spec für Multi-Source-Views (z. B. view_ceo_today) als Folge-ADR vorbereiten."
+  ]
+}

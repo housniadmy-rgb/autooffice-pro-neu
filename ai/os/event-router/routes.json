@@ -1,0 +1,84 @@
+{
+  "version": 1,
+  "default_action_for_unknown": { "type": "audit_only" },
+  "routes": [
+    {
+      "id": "route_engine_task_to_queue",
+      "description": "Neue Tasks landen in der Ops-Queue.",
+      "match": { "topic": "engine.task.created" },
+      "actions": [{ "type": "forward", "to": "agent_ops_queue" }]
+    },
+    {
+      "id": "route_engine_approval_to_queue",
+      "description": "Freigegebene Approvals lösen die Queue-Distribution aus.",
+      "match": { "topic": "engine.approval.granted" },
+      "actions": [
+        { "type": "forward", "to": "agent_ops_queue" },
+        { "type": "audit_only" }
+      ],
+      "final": false
+    },
+    {
+      "id": "route_hub_event_to_decision",
+      "description": "Normalisierte Events gehen an die Decision Engine.",
+      "match": { "topic": "hub.event.normalized" },
+      "actions": [{ "type": "forward", "to": "agent_hub_decision_engine" }]
+    },
+    {
+      "id": "route_decision_to_tasks",
+      "description": "Decision-Engine-Ausgaben, die einen Task fordern, an den Task Manager.",
+      "match": { "topic": "engine.task.requested" },
+      "actions": [{ "type": "forward", "to": "agent_engine_tasks" }]
+    },
+    {
+      "id": "route_ops_health_fanout",
+      "description": "Health-Updates an Strategy + Dashboard API.",
+      "match": { "topic": "ops.health.updated" },
+      "actions": [
+        { "type": "fanout", "to": ["agent_strategy_strategy_engine", "agent_os_dashboard_api"] }
+      ]
+    },
+    {
+      "id": "route_ops_digest_fanout",
+      "description": "Tages-Digest an CEO-Feed, Strategy Engine und Dashboard API.",
+      "match": { "topic": "ops.digest.published" },
+      "actions": [
+        { "type": "fanout", "to": ["agent_hub_ceo_feed", "agent_strategy_strategy_engine", "agent_os_dashboard_api"] }
+      ]
+    },
+    {
+      "id": "route_scheduler_daily_to_digest",
+      "description": "Daily-Tick triggert den CEO Daily Digest.",
+      "match": { "topic": "os.scheduler.tick.daily" },
+      "actions": [{ "type": "forward", "to": "agent_ops_digest" }]
+    },
+    {
+      "id": "route_scheduler_hourly_to_health",
+      "description": "Hourly-Tick triggert Health-Aggregation.",
+      "match": { "topic": "os.scheduler.tick.hourly" },
+      "actions": [{ "type": "forward", "to": "agent_ops_health" }]
+    },
+    {
+      "id": "route_permission_denied_audit",
+      "description": "Jede Permission-Verweigerung wird im Audit dokumentiert.",
+      "match": { "topic": "os.permission.denied" },
+      "actions": [
+        { "type": "enrich", "set_headers": { "criticality": "high" } },
+        { "type": "audit_only" }
+      ]
+    },
+    {
+      "id": "route_critical_fanout_audit",
+      "description": "Kritische Nachrichten gehen zusätzlich ins Audit.",
+      "match": { "headers": { "criticality_gte": "high" } },
+      "actions": [{ "type": "audit_only" }],
+      "final": false
+    },
+    {
+      "id": "route_external_block",
+      "description": "External-visible Nachrichten werden bis zur Gateway-Aktivierung verworfen.",
+      "match": { "headers": { "visibility": "external" } },
+      "actions": [{ "type": "drop" }]
+    }
+  ]
+}

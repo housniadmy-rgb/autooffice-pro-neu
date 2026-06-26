@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "views": [
+    {
+      "id": "view_ceo_today",
+      "description": "CEO-Tagesblick (Digest, Health, jüngster CEO-Feed-Eintrag).",
+      "sources": ["ai/ops/digest", "ai/ops/health", "ai/hub/ceo-feed"],
+      "fields": [
+        { "name": "digest_summary", "type": "string", "from": "/latest/summary" },
+        { "name": "health_score", "type": "number", "from": "/latest/score" },
+        { "name": "open_approvals", "type": "integer", "from": "/latest/open_approvals" },
+        { "name": "feed_entries", "type": "array", "from": "/latest/feed_entries" }
+      ],
+      "default_sort": { "field": "ts", "direction": "desc" },
+      "cache_seconds": 60,
+      "permission_required": "read:dashboard"
+    },
+    {
+      "id": "view_engine_operational",
+      "description": "Operative Tasks/Workflows/Approvals des Tages.",
+      "sources": ["ai/engine/tasks", "ai/engine/workflows", "ai/engine/approvals"],
+      "fields": [
+        { "name": "task_id", "type": "string" },
+        { "name": "owner", "type": "string" },
+        { "name": "state", "type": "string" },
+        { "name": "priority", "type": "string" },
+        { "name": "requires_approval", "type": "boolean" }
+      ],
+      "default_sort": { "field": "updated_at", "direction": "desc" },
+      "cache_seconds": 30,
+      "permission_required": "read:task"
+    },
+    {
+      "id": "view_strategy_executive",
+      "description": "Strategischer Überblick (KPI, Roadmap, Risk).",
+      "sources": ["ai/strategy/kpi", "ai/strategy/roadmap", "ai/strategy/risk"],
+      "fields": [
+        { "name": "kpi_id", "type": "string" },
+        { "name": "kpi_target", "type": "number" },
+        { "name": "roadmap_horizon", "type": "enum", "enum": ["now", "next", "later"] },
+        { "name": "risk_score", "type": "number" }
+      ],
+      "cache_seconds": 300,
+      "permission_required": "read:kpi"
+    },
+    {
+      "id": "view_platform_health",
+      "description": "Plattform-Gesundheit + Registry-Status.",
+      "sources": ["ai/ops/health", "ai/os/agent-registry", "ai/os/audit"],
+      "fields": [
+        { "name": "platform_score", "type": "number" },
+        { "name": "active_agents", "type": "integer" },
+        { "name": "paused_agents", "type": "integer" },
+        { "name": "denials_last_hour", "type": "integer" }
+      ],
+      "cache_seconds": 60,
+      "permission_required": "read:dashboard"
+    },
+    {
+      "id": "view_audit_recent",
+      "description": "Neueste Audit-Einträge (Plattform + Ops).",
+      "sources": ["ai/os/audit", "ai/ops/audit"],
+      "fields": [
+        { "name": "audit_id", "type": "string" },
+        { "name": "ts", "type": "datetime" },
+        { "name": "kind", "type": "string" },
+        { "name": "actor", "type": "string" },
+        { "name": "outcome", "type": "string" }
+      ],
+      "default_sort": { "field": "ts", "direction": "desc" },
+      "cache_seconds": 10,
+      "permission_required": "read:audit"
+    },
+    {
+      "id": "view_agents_directory",
+      "description": "Verzeichnis aller registrierten Agenten.",
+      "sources": ["ai/os/agent-registry"],
+      "fields": [
+        { "name": "id", "type": "string" },
+        { "name": "area", "type": "string" },
+        { "name": "state", "type": "string" },
+        { "name": "capabilities", "type": "array" }
+      ],
+      "cache_seconds": 300,
+      "permission_required": "read:agent"
+    },
+    {
+      "id": "view_permissions_matrix",
+      "description": "Rollen × Permissions × Bindungen (Admin-Sicht).",
+      "sources": ["ai/os/permissions"],
+      "fields": [
+        { "name": "role_id", "type": "string" },
+        { "name": "permissions", "type": "array" },
+        { "name": "subjects", "type": "array" }
+      ],
+      "cache_seconds": 600,
+      "permission_required": "read:permission"
+    }
+  ]
+}

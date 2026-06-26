@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/message-bus/schema.json",
+  "title": "BusEnvelope",
+  "description": "Standardisierter Pub/Sub-Envelope für alle Agenten der AI Company.",
+  "type": "object",
+  "required": ["envelope_version", "id", "topic", "ts", "producer", "payload"],
+  "properties": {
+    "envelope_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^msg_[A-Za-z0-9]+$"
+    },
+    "topic": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9_]*){2,}$"
+    },
+    "ts": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "producer": {
+      "type": "string",
+      "pattern": "^agent_[a-z0-9]+(_[a-z0-9]+)+$"
+    },
+    "trace_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "schema_ref": {
+      "type": "string",
+      "description": "Relativer Pfad zu einem Payload-Schema (optional)."
+    },
+    "payload": {
+      "type": "object",
+      "description": "Payload je nach Topic. Enthält niemals PII oder Secrets."
+    },
+    "headers": {
+      "type": "object",
+      "properties": {
+        "tenant": { "type": "string", "default": "praxisonline24" },
+        "visibility": { "type": "string", "enum": ["internal", "external"], "default": "internal" },
+        "criticality": { "type": "string", "enum": ["info", "low", "medium", "high", "critical"], "default": "info" },
+        "partition_key": { "type": "string" },
+        "replay_token": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

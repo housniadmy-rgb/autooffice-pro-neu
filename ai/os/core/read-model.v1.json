@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "id": "section_core",
+  "name": "Core",
+  "status": "registered",
+  "owner": "agent_os_registry",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Plattform-Fundament des AI OS: Agent Registry, Message Bus, Event Router, Scheduler, Memory und Audit. Querschneidende Schicht für Identität, Kommunikation und Beobachtbarkeit. Heute spec-only, kein Transport aktiv.",
+  "warnings": [
+    "Audit zweifach vorhanden (ai/ops/audit und ai/os/audit) – Konsolidierung gemäß ADR-004 empfohlen.",
+    "Wildcard-Subscription '*' beim Event Router umgeht das Default-Deny der Permissions dem Geist nach.",
+    "Topic-Katalog (ai/os/message-bus/topics.json) und Event-Type-Katalog (ai/hub/registry) überschneiden sich."
+  ],
+  "next_actions": [
+    "Audit konsolidieren: ai/ops/audit wird Schreib-Adapter, ai/os/audit ist logische Wahrheit.",
+    "Event-Catalog vereinheitlichen: Topic == Event-Type.",
+    "Wildcard-Subscriptions auf drei privilegierte Agenten begrenzen (Router, Audit, Dashboard).",
+    "Manifest-Konvention pro Agent vorbereiten, aus der Registry und Bus-Catalog generierbar sind."
+  ]
+}

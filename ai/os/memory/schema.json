@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/memory/schema.json",
+  "title": "MemoryEntry",
+  "description": "Eintrag im Plattform-Memory. Spezifikation, kein Store-Backend in dieser Phase.",
+  "type": "object",
+  "required": ["key", "scope", "owner", "value", "created_at"],
+  "properties": {
+    "key": {
+      "type": "string",
+      "pattern": "^(agent|department|shared|workflow):[a-z0-9_]+:[a-z0-9_]+:[a-z0-9_.-]+$"
+    },
+    "scope": {
+      "type": "string",
+      "enum": ["agent", "department", "shared", "workflow"]
+    },
+    "owner": {
+      "type": "string",
+      "pattern": "^agent_[a-z0-9]+(_[a-z0-9]+)+$"
+    },
+    "value": {
+      "description": "Beliebiger JSON-Wert. Niemals PII oder Secrets."
+    },
+    "ttl": {
+      "type": "string",
+      "description": "ISO-8601 Duration oder 'unlimited'. Defaults stehen im README.",
+      "default": "PT1H"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": "string", "format": "date-time" },
+    "version": { "type": "integer", "minimum": 1, "default": 1 },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

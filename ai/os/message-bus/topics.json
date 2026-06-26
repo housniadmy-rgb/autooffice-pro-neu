@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "convention": "<area>.<entity>.<event>",
+  "topics": [
+    { "topic": "dept.report.published", "producer_area": "department", "criticality": "info" },
+    { "topic": "engine.task.requested", "producer_area": "hub", "criticality": "low" },
+    { "topic": "engine.task.created", "producer_area": "engine", "criticality": "low" },
+    { "topic": "engine.task.state.changed", "producer_area": "engine", "criticality": "low" },
+    { "topic": "engine.task.requires_approval", "producer_area": "engine", "criticality": "medium" },
+    { "topic": "engine.workflow.created", "producer_area": "engine", "criticality": "low" },
+    { "topic": "engine.priority.assigned", "producer_area": "engine", "criticality": "info" },
+    { "topic": "engine.approval.requested", "producer_area": "engine", "criticality": "high" },
+    { "topic": "engine.approval.granted", "producer_area": "engine", "criticality": "high" },
+    { "topic": "engine.approval.rejected", "producer_area": "engine", "criticality": "high" },
+    { "topic": "engine.status.updated", "producer_area": "engine", "criticality": "info" },
+
+    { "topic": "hub.event.normalized", "producer_area": "hub", "criticality": "low" },
+    { "topic": "hub.notification.prepared", "producer_area": "hub", "criticality": "info" },
+    { "topic": "hub.ceo.feed.append", "producer_area": "hub", "criticality": "info" },
+
+    { "topic": "ops.queue.entry.created", "producer_area": "ops", "criticality": "low" },
+    { "topic": "ops.queue.entry.assigned", "producer_area": "ops", "criticality": "low" },
+    { "topic": "ops.policy.classified", "producer_area": "ops", "criticality": "medium" },
+    { "topic": "ops.execution.dryrun.completed", "producer_area": "ops", "criticality": "info" },
+    { "topic": "ops.health.updated", "producer_area": "ops", "criticality": "info" },
+    { "topic": "ops.digest.published", "producer_area": "ops", "criticality": "info" },
+
+    { "topic": "strategy.recommendation.created", "producer_area": "strategy", "criticality": "medium" },
+    { "topic": "strategy.roadmap.changed", "producer_area": "strategy", "criticality": "low" },
+    { "topic": "strategy.opportunity.detected", "producer_area": "strategy", "criticality": "low" },
+    { "topic": "strategy.kpi.snapshot.updated", "producer_area": "strategy", "criticality": "info" },
+    { "topic": "strategy.risk.changed", "producer_area": "strategy", "criticality": "medium" },
+
+    { "topic": "os.agent.lifecycle.changed", "producer_area": "os", "criticality": "medium" },
+    { "topic": "os.scheduler.tick.minute", "producer_area": "os", "criticality": "info" },
+    { "topic": "os.scheduler.tick.hourly", "producer_area": "os", "criticality": "info" },
+    { "topic": "os.scheduler.tick.daily", "producer_area": "os", "criticality": "info" },
+    { "topic": "os.permission.denied", "producer_area": "os", "criticality": "high" },
+    { "topic": "os.route.matched", "producer_area": "os", "criticality": "info" }
+  ]
+}

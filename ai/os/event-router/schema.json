@@ -1,0 +1,53 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/event-router/schema.json",
+  "title": "EventRoute",
+  "description": "Deklarative Routing-Regel für Bus-Nachrichten.",
+  "type": "object",
+  "required": ["id", "match", "actions"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^route_[a-z0-9]+(_[a-z0-9]+)+$"
+    },
+    "description": { "type": "string" },
+    "match": {
+      "type": "object",
+      "properties": {
+        "topic": { "type": "string" },
+        "producer": { "type": "string" },
+        "headers": {
+          "type": "object",
+          "properties": {
+            "criticality_gte": { "type": "string", "enum": ["info", "low", "medium", "high", "critical"] },
+            "visibility": { "type": "string", "enum": ["internal", "external"] }
+          },
+          "additionalProperties": false
+        },
+        "payload_has": {
+          "type": "array",
+          "items": { "type": "string", "description": "JSON-Pointer-Pfad, der existieren muss." }
+        }
+      },
+      "additionalProperties": false
+    },
+    "actions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["type"],
+        "oneOf": [
+          { "properties": { "type": { "const": "forward" }, "to": { "type": "string" } }, "required": ["to"] },
+          { "properties": { "type": { "const": "fanout" }, "to": { "type": "array", "items": { "type": "string" } } }, "required": ["to"] },
+          { "properties": { "type": { "const": "enrich" }, "set_headers": { "type": "object" } }, "required": ["set_headers"] },
+          { "properties": { "type": { "const": "drop" } } },
+          { "properties": { "type": { "const": "audit_only" } } }
+        ]
+      }
+    },
+    "final": { "type": "boolean", "default": true },
+    "enabled": { "type": "boolean", "default": true }
+  },
+  "additionalProperties": false
+}

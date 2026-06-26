@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "section_departments",
+  "name": "Departments",
+  "status": "registered",
+  "owner": "agent_department_ceo",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Fachliche Stimmen der AI Company: CEO, CTO, QA, SEO, Marketing, Sales, Support, Finance, Security, Monitoring, Operations. Kommunikation ausschließlich über Bus-Events (Reports). Heute deklarativ, ohne produktive Aktionen.",
+  "warnings": [
+    "Namenskollision: ai/operations (Department) vs. ai/ops (Operations Platform).",
+    "Alle Departments teilen die Rolle role_department – feinere Trennung wäre für Security/Finance angebracht."
+  ],
+  "next_actions": [
+    "ai/operations umbenennen oder in die Operations-Sektion verschieben, um Namenskollision aufzulösen.",
+    "Berichts-Routine je Abteilung in den Department-READMEs explizit dokumentieren.",
+    "Rollen-Komposition (role_finance, role_security) als Folge-ADR vorbereiten."
+  ]
+}

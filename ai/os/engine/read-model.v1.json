@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "id": "section_engine",
+  "name": "Engine",
+  "status": "registered",
+  "owner": "agent_engine_tasks",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Aufgaben-Pipeline der AI Company: Tasks, Workflows, Priority, Approvals. ai/engine/approvals ist die einzige Schreibstelle für Genehmigungs-Records (ADR-002). Heute deklarativ, keine Ausführung.",
+  "warnings": [
+    "Drei Module können Approvals anfordern (Engine, Hub Decision Engine, Ops Policy); Schreibseite muss alleinige Approval-Quelle bleiben.",
+    "7-stufige Pipeline (Tasks → Workflows → Priority → Approval → Queue → Policy → Execution) ist für triviale Tasks zu schwer."
+  ],
+  "next_actions": [
+    "Fast-Path für single-task safe definieren, der Workflow und Policy überspringt.",
+    "Approval-API als alleinige Eingangsstelle in den Modul-READMEs verankern.",
+    "view_engine_operational als versioniertes Read-Model im Dashboard konsumieren (ADR-006)."
+  ]
+}

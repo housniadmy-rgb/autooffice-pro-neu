@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai/os/scheduler/schema.json",
+  "title": "SchedulerJob",
+  "description": "Deklarative Definition eines Scheduler-Jobs. Lediglich Spezifikation, kein realer Cron.",
+  "type": "object",
+  "required": ["id", "trigger", "emits"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^job_[a-z0-9]+(_[a-z0-9]+)+$"
+    },
+    "description": { "type": "string" },
+    "trigger": {
+      "type": "object",
+      "required": ["type"],
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "const": "cron" },
+            "expression": { "type": "string" },
+            "timezone": { "type": "string", "default": "Europe/Berlin" }
+          },
+          "required": ["expression"]
+        },
+        {
+          "properties": {
+            "type": { "const": "interval" },
+            "every": { "type": "string", "pattern": "^P(T.*)?.+$" }
+          },
+          "required": ["every"]
+        },
+        {
+          "properties": {
+            "type": { "const": "once" },
+            "at": { "type": "string", "format": "date-time" }
+          },
+          "required": ["at"]
+        },
+        {
+          "properties": {
+            "type": { "const": "event" },
+            "on_topic": { "type": "string" }
+          },
+          "required": ["on_topic"]
+        }
+      ]
+    },
+    "emits": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "owner_agent": {
+      "type": "string",
+      "default": "agent_os_scheduler"
+    },
+    "catch_up": { "type": "boolean", "default": false },
+    "max_concurrency": { "type": "integer", "default": 1, "minimum": 1 },
+    "enabled": { "type": "boolean", "default": false }
+  },
+  "additionalProperties": false
+}

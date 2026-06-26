@@ -1,0 +1,62 @@
+{
+  "version": 1,
+  "gateway_enabled": false,
+  "default_auth_required": true,
+  "default_rate_limit_per_minute": 30,
+  "endpoints": [
+    {
+      "id": "endpoint_ceo_today",
+      "description": "Tagesblick für CEO – read-only.",
+      "path": "/api/v1/ceo/today",
+      "method": "GET",
+      "binds_to": "view_ceo_today",
+      "permission_required": "read:dashboard",
+      "enabled": false
+    },
+    {
+      "id": "endpoint_engine_operational",
+      "description": "Operative Tasks/Workflows/Approvals.",
+      "path": "/api/v1/engine/operational",
+      "method": "GET",
+      "binds_to": "view_engine_operational",
+      "permission_required": "read:task",
+      "enabled": false
+    },
+    {
+      "id": "endpoint_strategy_executive",
+      "description": "Strategischer Überblick KPI/Roadmap/Risk.",
+      "path": "/api/v1/strategy/executive",
+      "method": "GET",
+      "binds_to": "view_strategy_executive",
+      "permission_required": "read:kpi",
+      "enabled": false
+    },
+    {
+      "id": "endpoint_platform_health",
+      "description": "Plattform-Gesundheit + Registry-Status.",
+      "path": "/api/v1/platform/health",
+      "method": "GET",
+      "binds_to": "view_platform_health",
+      "permission_required": "read:dashboard",
+      "enabled": false
+    },
+    {
+      "id": "endpoint_audit_recent",
+      "description": "Neueste Audit-Einträge.",
+      "path": "/api/v1/audit/recent",
+      "method": "GET",
+      "binds_to": "view_audit_recent",
+      "permission_required": "read:audit",
+      "enabled": false
+    },
+    {
+      "id": "endpoint_agents_directory",
+      "description": "Verzeichnis registrierter Agenten.",
+      "path": "/api/v1/agents",
+      "method": "GET",
+      "binds_to": "view_agents_directory",
+      "permission_required": "read:agent",
+      "enabled": false
+    }
+  ]
+}

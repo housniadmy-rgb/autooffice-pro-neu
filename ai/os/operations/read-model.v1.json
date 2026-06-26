@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "id": "section_operations",
+  "name": "Operations",
+  "status": "registered",
+  "owner": "agent_ops_queue",
+  "health_score": 100,
+  "last_updated": "2026-06-26",
+  "summary": "Operativer Vollzug: Queue, Execution (Dry-Run only), Policy, Health, Digest, History. Auto-Distribution erlaubt, Auto-Execution deaktiviert. Append-only Verlauf gemäß ADR-004.",
+  "warnings": [
+    "Auto-Execution disabled – Dry-Run-only ist gewollt, aber Dashboard sollte das Flag prominent zeigen.",
+    "Status (ai/engine/status) und Health (ai/ops/health) überlappen konzeptionell.",
+    "Ops-Audit-Adapter muss in den konsolidierten Plattform-Audit schreiben, nicht in einen Parallelstore."
+  ],
+  "next_actions": [
+    "Status + Health zu Platform Status zusammenführen; Health bleibt berechnete Sicht.",
+    "Schreibweg Ops-Audit → Plattform-Audit dokumentieren (ADR-004).",
+    "Klares 'Auto-Execution: disabled'-Badge im view_ceo_today vorbereiten."
+  ]
+}
