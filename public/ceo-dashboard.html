@@ -180,12 +180,24 @@
       padding: .35rem; margin-bottom: 1.5rem;
       background: var(--c-surface); border: 1px solid var(--c-border); border-radius: 12px;
     }
-    .tab-group-label {
+    .tab-group-btn {
       font-size: .65rem; font-weight: 700; color: var(--c-text-subtle);
       text-transform: uppercase; letter-spacing: .08em;
-      padding: 0 .65rem 0 .5rem;
+      padding: .4rem .65rem; margin: 0;
+      border: none; background: transparent; border-radius: 6px;
+      cursor: pointer; transition: background .15s, color .15s;
+      font-family: inherit;
     }
-    .tab-group-label:not(:first-child) { border-left: 1px solid var(--c-border); margin-left: .25rem; }
+    .tab-group-btn:hover { background: var(--c-surface-alt); color: var(--c-text-muted); }
+    .tab-group-btn:focus-visible { outline: 2px solid var(--c-brand); outline-offset: 2px; }
+    .tab-group-btn.active { color: var(--c-brand); background: var(--c-brand-soft); }
+    .tab-group-btn:not(:first-child) {
+      position: relative; margin-left: .35rem; padding-left: .9rem;
+    }
+    .tab-group-btn:not(:first-child)::before {
+      content: ""; position: absolute; left: 0; top: 50%;
+      width: 1px; height: 1rem; background: var(--c-border); transform: translateY(-50%);
+    }
     .tab-btn {
       padding: .5rem .9rem; border-radius: 8px;
       border: none; background: transparent;
@@ -627,14 +639,14 @@
       </div>
 
       <nav class="cmd-tabs" role="tablist">
-        <span class="tab-group-label">Strategy</span>
-        <button class="tab-btn active" data-tab="ceo" role="tab">CEO Command</button>
-        <span class="tab-group-label">Operations</span>
-        <button class="tab-btn" data-tab="cfo"       role="tab">Finance</button>
-        <button class="tab-btn" data-tab="marketing" role="tab">Marketing</button>
-        <button class="tab-btn" data-tab="demos"     role="tab">Approvals</button>
-        <span class="tab-group-label">Engineering</span>
-        <button class="tab-btn" data-tab="cto"       role="tab">System</button>
+        <button type="button" class="tab-group-btn active" data-group="strategy" data-first-tab="ceo" aria-label="Strategy: CEO Command öffnen">Strategy</button>
+        <button class="tab-btn active" data-tab="ceo" data-group="strategy" role="tab">CEO Command</button>
+        <button type="button" class="tab-group-btn" data-group="operations" data-first-tab="cfo" aria-label="Operations: Finance öffnen">Operations</button>
+        <button class="tab-btn" data-tab="cfo"       data-group="operations" role="tab">Finance</button>
+        <button class="tab-btn" data-tab="marketing" data-group="operations" role="tab">Marketing</button>
+        <button class="tab-btn" data-tab="demos"     data-group="operations" role="tab">Approvals</button>
+        <button type="button" class="tab-group-btn" data-group="engineering" data-first-tab="cto" aria-label="Engineering: System öffnen">Engineering</button>
+        <button class="tab-btn" data-tab="cto"       data-group="engineering" role="tab">System</button>
       </nav>
 
       <div id="panel-ceo"       class="tab-panel active"><div class="panel-loading" id="loading-ceo"></div><div id="content-ceo"       style="display:none;"></div></div>
@@ -720,16 +732,29 @@ document.getElementById('theme-toggle').addEventListener('click', () => {
 const loaded  = {};
 const loadFns = { ceo: loadCEO, cfo: loadCFO, marketing: loadMarketing, demos: loadDemos, cto: loadCTO };
 
+function activateTab(tab) {
+  const tabBtn = document.querySelector('.tab-btn[data-tab="'+tab+'"]');
+  if (!tabBtn) return;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-group-btn').forEach(g => g.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  tabBtn.classList.add('active');
+  const group = tabBtn.dataset.group;
+  if (group) {
+    const groupBtn = document.querySelector('.tab-group-btn[data-group="'+group+'"]');
+    if (groupBtn) groupBtn.classList.add('active');
+  }
+  document.getElementById('panel-'+tab).classList.add('active');
+  document.getElementById('ts-active').textContent = '';
+  if (!loaded[tab]) loadFns[tab]();
+}
+
 document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    const tab = btn.dataset.tab;
-    document.getElementById('panel-'+tab).classList.add('active');
-    document.getElementById('ts-active').textContent = '';
-    if (!loaded[tab]) loadFns[tab]();
-  });
+  btn.addEventListener('click', () => activateTab(btn.dataset.tab));
+});
+
+document.querySelectorAll('.tab-group-btn').forEach(btn => {
+  btn.addEventListener('click', () => activateTab(btn.dataset.firstTab));
 });
 
 document.getElementById('btn-refresh').addEventListener('click', () => {
