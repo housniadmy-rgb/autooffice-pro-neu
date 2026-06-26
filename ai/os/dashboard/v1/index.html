@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>CEO Dashboard v1 – PraxisOnline24 AI OS</title>
+  <style>
+    :root {
+      --bg: #f7f8fa;
+      --surface: #ffffff;
+      --surface-2: #fbfbfd;
+      --border: #e5e7eb;
+      --border-strong: #d1d5db;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --green: #16a34a;
+      --green-soft: #dcfce7;
+      --yellow: #d97706;
+      --yellow-soft: #fef3c7;
+      --red: #dc2626;
+      --red-soft: #fee2e2;
+      --shadow: 0 1px 2px rgba(15, 23, 42, .04), 0 1px 1px rgba(15, 23, 42, .02);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0b1020;
+      --surface: #121831;
+      --surface-2: #0f1530;
+      --border: #1f2747;
+      --border-strong: #2a3358;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --accent: #60a5fa;
+      --accent-soft: #1e2a4d;
+      --green: #4ade80;
+      --green-soft: #14321f;
+      --yellow: #fbbf24;
+      --yellow-soft: #3a2b0f;
+      --red: #f87171;
+      --red-soft: #3a1414;
+      --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 1px 1px rgba(0, 0, 0, .2);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html:not([data-theme]) { color-scheme: dark; }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color .15s ease, color .15s ease;
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 4rem;
+    }
+
+    /* -------- Header -------- */
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1rem 0 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .brand { display: flex; align-items: center; gap: .75rem; }
+    .brand-mark {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: .95rem;
+      letter-spacing: -.02em;
+    }
+    .brand-text { display: flex; flex-direction: column; }
+    .brand-title { font-size: 1.0625rem; font-weight: 700; letter-spacing: -.01em; }
+    .brand-sub { font-size: .75rem; color: var(--text-muted); }
+
+    .topbar-actions { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
+    .pill {
+      display: inline-flex; align-items: center; gap: .375rem;
+      padding: .25rem .625rem;
+      font-size: .75rem; font-weight: 500;
+      border-radius: 9999px;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      background: var(--surface);
+    }
+    .pill.ok { color: var(--green); background: var(--green-soft); border-color: transparent; }
+    .pill.warn { color: var(--yellow); background: var(--yellow-soft); border-color: transparent; }
+    .pill.muted { color: var(--text-subtle); }
+
+    .theme-toggle {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      transition: background-color .12s, border-color .12s;
+    }
+    .theme-toggle:hover { border-color: var(--border-strong); }
+
+    /* -------- Section heading -------- */
+    .section-head {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin: 2rem 0 .875rem;
+      gap: 1rem;
+    }
+    .section-title {
+      font-size: .8125rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+    .section-meta { font-size: .75rem; color: var(--text-subtle); }
+
+    /* -------- Card -------- */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-body { padding: 1.125rem 1.25rem; }
+    .card-tight { padding: .875rem 1rem; }
+    .card-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .75rem 1.25rem;
+      border-top: 1px solid var(--border);
+      gap: 1rem;
+    }
+    .card-row:first-of-type { border-top: 1px solid var(--border); }
+    .card-row .label { font-size: .875rem; color: var(--text); font-weight: 500; }
+    .card-row .value { font-size: .8125rem; color: var(--text-muted); }
+
+    /* -------- Grid -------- */
+    .grid { display: grid; gap: 1rem; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    /* -------- KPI -------- */
+    .kpi {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.125rem;
+      box-shadow: var(--shadow);
+    }
+    .kpi-label {
+      font-size: .75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      margin-top: .125rem;
+      color: var(--text);
+      line-height: 1.1;
+    }
+    .kpi-foot {
+      font-size: .6875rem;
+      color: var(--text-subtle);
+      margin-top: .375rem;
+    }
+
+    /* -------- Status badge -------- */
+    .status-badge {
+      display: inline-flex; align-items: center; gap: .375rem;
+      font-size: .7rem; font-weight: 600;
+      padding: .15rem .5rem;
+      border-radius: 9999px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; }
+    .status-registered { background: var(--green-soft); color: var(--green); }
+    .status-registered .status-dot { background: var(--green); }
+    .status-paused { background: var(--yellow-soft); color: var(--yellow); }
+    .status-paused .status-dot { background: var(--yellow); }
+    .status-active { background: var(--accent-soft); color: var(--accent); }
+    .status-active .status-dot { background: var(--accent); }
+
+    /* -------- Section card (Unternehmensübersicht) -------- */
+    .sec-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.125rem;
+      box-shadow: var(--shadow);
+      display: flex; flex-direction: column; gap: .75rem;
+      min-height: 100%;
+    }
+    .sec-card-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: .75rem;
+    }
+    .sec-card-title { font-size: .9375rem; font-weight: 600; letter-spacing: -.01em; }
+    .sec-card-summary {
+      font-size: .8125rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .sec-card-foot {
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: .6875rem; color: var(--text-subtle);
+      padding-top: .625rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* -------- Health bars -------- */
+    .health-row {
+      display: grid;
+      grid-template-columns: 140px 1fr 60px;
+      align-items: center;
+      gap: .875rem;
+      padding: .625rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .health-row:last-child { border-bottom: none; }
+    .health-name { font-size: .875rem; font-weight: 500; }
+    .health-track {
+      height: 8px;
+      border-radius: 9999px;
+      background: var(--border);
+      overflow: hidden;
+      position: relative;
+    }
+    .health-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: var(--green);
+      transition: width .3s ease;
+    }
+    .health-fill.warn { background: var(--yellow); }
+    .health-fill.bad  { background: var(--red); }
+    .health-num {
+      font-size: .8125rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-align: right;
+    }
+    @media (max-width: 640px) {
+      .health-row { grid-template-columns: 1fr 50px; }
+      .health-track { grid-column: 1 / -1; }
+    }
+
+    /* -------- Departments list -------- */
+    .dept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: .625rem;
+    }
+    .dept-chip {
+      display: flex; align-items: center; gap: .625rem;
+      padding: .625rem .75rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--surface-2);
+      font-size: .875rem;
+    }
+    .dept-chip-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); flex-shrink: 0;
+    }
+    .dept-chip-name { font-weight: 500; }
+    .dept-chip-area { font-size: .6875rem; color: var(--text-subtle); margin-left: auto; text-transform: uppercase; letter-spacing: .04em; }
+
+    /* -------- Lists (tasks / recs / events) -------- */
+    .list { list-style: none; padding: 0; margin: 0; }
+    .list-item {
+      display: flex; align-items: flex-start; gap: .75rem;
+      padding: .75rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .875rem;
+    }
+    .list-item:last-child { border-bottom: none; }
+    .list-bullet {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); flex-shrink: 0;
+      margin-top: .5rem;
+    }
+    .list-bullet.warn { background: var(--yellow); }
+    .list-bullet.danger { background: var(--red); }
+    .list-bullet.ok { background: var(--green); }
+    .list-body { flex: 1; min-width: 0; }
+    .list-body .src {
+      display: block;
+      font-size: .6875rem;
+      color: var(--text-subtle);
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: .15rem;
+    }
+    .list-body .txt { color: var(--text); }
+
+    /* -------- Events timeline -------- */
+    .event {
+      display: grid;
+      grid-template-columns: 110px 1fr;
+      gap: 1rem;
+      padding: .625rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: .875rem;
+    }
+    .event:last-child { border-bottom: none; }
+    .event-time { font-size: .75rem; color: var(--text-subtle); font-variant-numeric: tabular-nums; }
+    .event-title { font-weight: 500; }
+    .event-sub { font-size: .75rem; color: var(--text-muted); margin-top: .15rem; }
+    @media (max-width: 640px) {
+      .event { grid-template-columns: 1fr; gap: .25rem; }
+    }
+
+    /* -------- Footer note -------- */
+    .footnote {
+      margin-top: 3rem;
+      padding: 1rem 1.25rem;
+      background: var(--surface-2);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      font-size: .75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footnote code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: .7rem;
+      padding: .075rem .25rem;
+      border-radius: 4px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">P24</div>
+        <div class="brand-text">
+          <div class="brand-title">CEO Dashboard <span style="color:var(--text-subtle);font-weight:500;font-size:.8em;">v1</span></div>
+          <div class="brand-sub">PraxisOnline24 · AI Operating System</div>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <span class="pill ok"><span class="status-dot" style="background:currentColor"></span>Read-only</span>
+        <span class="pill muted" id="pill-source">8 Read-Models</span>
+        <span class="pill muted" id="pill-updated">—</span>
+        <button class="theme-toggle" id="themeToggle" aria-label="Theme umschalten" title="Hell / Dunkel">◐</button>
+      </div>
+    </header>
+
+    <!-- ============================================== -->
+    <!-- 1) SYSTEMSTATUS                                 -->
+    <!-- ============================================== -->
+    <div class="section-head">
+      <div class="section-title">1 · Systemstatus</div>
+      <div class="section-meta">Quelle: alle 8 Read-Models</div>
+    </div>
+    <div class="grid grid-4" id="kpiRow"></div>
+
+    <!-- ============================================== -->
+    <!-- 2) UNTERNEHMENSÜBERSICHT                        -->
+    <!-- ============================================== -->
+    <div class="section-head">
+      <div class="section-title">2 · Unternehmensübersicht</div>
+      <div class="section-meta">Sektionen der AI Company</div>
+    </div>
+    <div class="grid grid-4" id="sectionGrid"></div>
+
+    <!-- ============================================== -->
+    <!-- 3) ABTEILUNGEN                                  -->
+    <!-- ============================================== -->
+    <div class="section-head">
+      <div class="section-title">3 · Abteilungen</div>
+      <div class="section-meta">Quelle: departments/read-model.v1.json</div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <div class="dept-grid" id="deptGrid"></div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 4) HEALTH SCORES                                -->
+    <!-- ============================================== -->
+    <div class="section-head">
+      <div class="section-title">4 · Health Scores</div>
+      <div class="section-meta">health_score je Sektion</div>
+    </div>
+    <div class="card">
+      <div class="card-body" id="healthList"></div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 5) CEO-AUFGABEN  +  6) EMPFEHLUNGEN             -->
+    <!-- ============================================== -->
+    <div class="grid grid-2" style="margin-top: 1rem;">
+      <div>
+        <div class="section-head">
+          <div class="section-title">5 · CEO-Aufgaben</div>
+          <div class="section-meta">next_actions</div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <ul class="list" id="ceoTasks"></ul>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-head">
+          <div class="section-title">6 · Empfehlungen</div>
+          <div class="section-meta">warnings</div>
+        </div>
+        <div class="card">
+          <div class="card-body">
+            <ul class="list" id="recommendations"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- 7) LETZTE EREIGNISSE                            -->
+    <!-- ============================================== -->
+    <div class="section-head">
+      <div class="section-title">7 · Letzte Ereignisse</div>
+      <div class="section-meta">last_updated je Sektion</div>
+    </div>
+    <div class="card">
+      <div class="card-body" id="events"></div>
+    </div>
+
+    <!-- Footnote -->
+    <div class="footnote">
+      <strong>Read-only.</strong> Dieses Dashboard liest ausschließlich die acht versionierten
+      <code>read-model.v1.json</code>-Dateien aus <code>ai/os/&lt;section&gt;/</code>.
+      Keine direkten Zugriffe auf interne Modul-Dateien, keine Schreibwege, keine externen Calls.
+      ADR-006-konform. Integration in PraxisOnline24 erfolgt später durch Anbindung an einen
+      Read-only Aggregations-Endpoint (siehe <code>ai/os/dashboard-api/endpoints.json</code> ·
+      <code>view_ceo_today</code>, <code>view_platform_health</code>).
+    </div>
+
+  </div>
+
+  <script>
+    /* ================================================================
+       READ-MODELS (Phase 11, v1)
+       Eingebettete Kopien der 8 read-model.v1.json Dateien.
+       Quelle: ai/os/<section>/read-model.v1.json
+       Diese Dateien werden NICHT verändert; nur gelesen.
+       Bei Integration in PraxisOnline24 wird dieser Block durch einen
+       fetch() auf den Dashboard-API-Endpoint ersetzt.
+       ================================================================ */
+    const READ_MODELS = {
+      core: {"version":1,"id":"section_core","name":"Core","status":"registered","owner":"agent_os_registry","health_score":100,"last_updated":"2026-06-26","summary":"Plattform-Fundament des AI OS: Agent Registry, Message Bus, Event Router, Scheduler, Memory und Audit. Querschneidende Schicht für Identität, Kommunikation und Beobachtbarkeit. Heute spec-only, kein Transport aktiv.","warnings":["Audit zweifach vorhanden (ai/ops/audit und ai/os/audit) – Konsolidierung gemäß ADR-004 empfohlen.","Wildcard-Subscription '*' beim Event Router umgeht das Default-Deny der Permissions dem Geist nach.","Topic-Katalog (ai/os/message-bus/topics.json) und Event-Type-Katalog (ai/hub/registry) überschneiden sich."],"next_actions":["Audit konsolidieren: ai/ops/audit wird Schreib-Adapter, ai/os/audit ist logische Wahrheit.","Event-Catalog vereinheitlichen: Topic == Event-Type.","Wildcard-Subscriptions auf drei privilegierte Agenten begrenzen (Router, Audit, Dashboard).","Manifest-Konvention pro Agent vorbereiten, aus der Registry und Bus-Catalog generierbar sind."]},
+      intelligence: {"version":1,"id":"section_intelligence","name":"Intelligence","status":"registered","owner":"agent_hub_decision_engine","health_score":100,"last_updated":"2026-06-26","summary":"Wissens-, Entscheidungs- und Strategie-Schicht: Event Hub, Knowledge Base, Decision Engine (Hub) sowie Strategy Engine, Roadmap, KPI, Risk, Opportunities (Strategy). Liefert Empfehlungen, keine produktiven Aktionen.","warnings":["Regel-Konflikt-Risiko zwischen Hub Decision Engine (fachlich) und Core Event Router (transport).","KPI-Werte sind bisher nur Definitionen ohne Live-Werte – Dashboards können daher keine Ist/Soll-Vergleiche zeigen."],"next_actions":["Trennung Transport-Routing (Core) vs. Fachliches Routing (Intelligence) in den READMEs explizit fixieren.","KPI-Anbindung an externe Quellen (Stripe, Analytics, Monitoring) in einem späteren Folge-ADR planen.","Strategie-Empfehlungen ausschließlich als Tasks via Engine.Approvals abbilden (ADR-002)."]},
+      security: {"version":1,"id":"section_security","name":"Security","status":"registered","owner":"agent_os_permissions","health_score":100,"last_updated":"2026-06-26","summary":"Querschnittliche Schutz- und Beweisschicht: Permissions (Default-Deny RBAC), Audit (append-only, ADR-004), Policy-Definitionen. Keine Secrets, keine PII im AI OS (ADR-005).","warnings":["role_observer besitzt read:audit – Re-Scope auf eine Summary-View empfohlen.","role_ops besitzt write:audit – sollte auf einen append:audit:ops-Adapter eingeengt werden.","human_ceo ist als Subject deklariert, aber es existiert keine Human-Subjects-Registry analog zur Agent Registry.","Pflicht-Header headers.contains_pii ist noch nicht im Bus-Schema erzwungen."],"next_actions":["headers.contains_pii als Pflichtfeld im Bus-Envelope etablieren (ADR-005).","Human-Subjects-Registry für human_ceo und spätere Mitarbeiter:innen vorbereiten.","Rollen-Komposition (Rolle erbt von Rolle) als Folge-ADR vorbereiten.","role_observer auf read:audit:summary einschränken."]},
+      departments: {"version":1,"id":"section_departments","name":"Departments","status":"registered","owner":"agent_department_ceo","health_score":100,"last_updated":"2026-06-26","summary":"Fachliche Stimmen der AI Company: CEO, CTO, QA, SEO, Marketing, Sales, Support, Finance, Security, Monitoring, Operations. Kommunikation ausschließlich über Bus-Events (Reports). Heute deklarativ, ohne produktive Aktionen.","warnings":["Namenskollision: ai/operations (Department) vs. ai/ops (Operations Platform).","Alle Departments teilen die Rolle role_department – feinere Trennung wäre für Security/Finance angebracht."],"next_actions":["ai/operations umbenennen oder in die Operations-Sektion verschieben, um Namenskollision aufzulösen.","Berichts-Routine je Abteilung in den Department-READMEs explizit dokumentieren.","Rollen-Komposition (role_finance, role_security) als Folge-ADR vorbereiten."]},
+      operations: {"version":1,"id":"section_operations","name":"Operations","status":"registered","owner":"agent_ops_queue","health_score":100,"last_updated":"2026-06-26","summary":"Operativer Vollzug: Queue, Execution (Dry-Run only), Policy, Health, Digest, History. Auto-Distribution erlaubt, Auto-Execution deaktiviert. Append-only Verlauf gemäß ADR-004.","warnings":["Auto-Execution disabled – Dry-Run-only ist gewollt, aber Dashboard sollte das Flag prominent zeigen.","Status (ai/engine/status) und Health (ai/ops/health) überlappen konzeptionell.","Ops-Audit-Adapter muss in den konsolidierten Plattform-Audit schreiben, nicht in einen Parallelstore."],"next_actions":["Status + Health zu Platform Status zusammenführen; Health bleibt berechnete Sicht.","Schreibweg Ops-Audit → Plattform-Audit dokumentieren (ADR-004).","Klares 'Auto-Execution: disabled'-Badge im view_ceo_today vorbereiten."]},
+      dashboard: {"version":1,"id":"section_dashboard","name":"Dashboard","status":"registered","owner":"agent_os_dashboard_api","health_score":100,"last_updated":"2026-06-26","summary":"Read-only Aggregations-Schicht. Spezifiziert Views (CEO Today, Engine Operational, Strategy Executive, Platform Health, Audit Recent, Agents Directory, Permissions Matrix). Konsumiert ausschließlich versionierte Read-Models gemäß ADR-006.","warnings":["Heutige endpoints.json referenziert interne Pfade (z. B. /latest/summary) – sollte vollständig auf Read-Models umgestellt werden.","Drei historische Dashboard-Quellen (ai/engine/dashboard, ai/strategy/executive-dashboard, ai/os/dashboard-api) überlappen.","Keine Aggregations-Spec definiert, die mehrere Read-Models zu einer View zusammenführt."],"next_actions":["endpoints.json auf Read-Models umstellen (ADR-006).","ai/engine/dashboard und ai/strategy/executive-dashboard als Datenlieferanten (Read-Model-Quellen) re-positionieren, nicht als eigene Renderer.","Aggregations-Spec für Multi-Source-Views (z. B. view_ceo_today) als Folge-ADR vorbereiten."]},
+      integrations: {"version":1,"id":"section_integrations","name":"Integrations","status":"paused","owner":"agent_os_api_gateway","health_score":100,"last_updated":"2026-06-26","summary":"Externer Schicht-Slot: API Gateway (deaktiviert), geplante Inbound-/Outbound-Plugins (z. B. GitHub, Stripe, Google Calendar), Notifications (paused). Alle externen Integrationen starten read-only gemäß ADR-003.","warnings":["API Gateway ist vollständig deaktiviert (gateway_enabled: false) – das ist Absicht, sollte aber im Dashboard sichtbar sein.","Keine Plugins definiert; die Sektion ist heute architektonisch reserviert, aber leer.","Notifications (ai/hub/notifications) ist paused – Datenmodell vorbereitet, kein Versand."],"next_actions":["Plugin-Manifest-Spec für inbound/outbound/bidirectional Integrationen entwerfen.","Aktivierungs-Pfad analog API Gateway für jede Integration festschreiben (ADR-003).","Outbound-Permission-Namespace outbound:<provider> in Permissions reservieren."]},
+      engine: {"version":1,"id":"section_engine","name":"Engine","status":"registered","owner":"agent_engine_tasks","health_score":100,"last_updated":"2026-06-26","summary":"Aufgaben-Pipeline der AI Company: Tasks, Workflows, Priority, Approvals. ai/engine/approvals ist die einzige Schreibstelle für Genehmigungs-Records (ADR-002). Heute deklarativ, keine Ausführung.","warnings":["Drei Module können Approvals anfordern (Engine, Hub Decision Engine, Ops Policy); Schreibseite muss alleinige Approval-Quelle bleiben.","7-stufige Pipeline (Tasks → Workflows → Priority → Approval → Queue → Policy → Execution) ist für triviale Tasks zu schwer."],"next_actions":["Fast-Path für single-task safe definieren, der Workflow und Policy überspringt.","Approval-API als alleinige Eingangsstelle in den Modul-READMEs verankern.","view_engine_operational als versioniertes Read-Model im Dashboard konsumieren (ADR-006)."]}
+    };
+
+    /* ---------------- Helpers ---------------- */
+    const $ = (sel) => document.querySelector(sel);
+
+    const allSections = () => Object.values(READ_MODELS);
+    const sectionKeys = () => Object.keys(READ_MODELS);
+
+    const fmtDate = (iso) => {
+      if (!iso) return '—';
+      const d = new Date(iso);
+      if (isNaN(d)) return iso;
+      return d.toLocaleDateString('de-DE', { year: 'numeric', month: 'short', day: '2-digit' });
+    };
+
+    /* ---------------- 1. Systemstatus (KPI row) ---------------- */
+    function renderKpis() {
+      const sections = allSections();
+      const total = sections.length;
+      const active = sections.filter(s => s.status === 'registered' || s.status === 'active').length;
+      const paused = sections.filter(s => s.status === 'paused').length;
+      const avgHealth = Math.round(
+        sections.reduce((sum, s) => sum + (s.health_score ?? 0), 0) / total
+      );
+      const warnings = sections.reduce((sum, s) => sum + (s.warnings?.length || 0), 0);
+
+      const kpis = [
+        { label: 'Sektionen aktiv', value: `${active} / ${total}`, foot: paused ? `${paused} pausiert` : 'alle registriert' },
+        { label: 'Ø Health Score',   value: `${avgHealth}`, foot: avgHealth >= 90 ? 'gesund' : 'beobachten' },
+        { label: 'Offene Hinweise',  value: `${warnings}`,  foot: 'warnings (Spec)' },
+        { label: 'Auto-Execution',   value: 'OFF',          foot: 'Dry-Run only · ADR-002' },
+      ];
+
+      $('#kpiRow').innerHTML = kpis.map(k => `
+        <div class="kpi">
+          <div class="kpi-label">${k.label}</div>
+          <div class="kpi-value">${k.value}</div>
+          <div class="kpi-foot">${k.foot}</div>
+        </div>
+      `).join('');
+    }
+
+    /* ---------------- 2. Unternehmensübersicht ---------------- */
+    function renderSectionGrid() {
+      const order = ['core', 'engine', 'departments', 'intelligence', 'operations', 'security', 'integrations', 'dashboard'];
+      $('#sectionGrid').innerHTML = order.map(key => {
+        const s = READ_MODELS[key];
+        const badgeClass = `status-${s.status}`;
+        return `
+          <div class="sec-card">
+            <div class="sec-card-head">
+              <div class="sec-card-title">${s.name}</div>
+              <span class="status-badge ${badgeClass}">
+                <span class="status-dot"></span>${s.status}
+              </span>
+            </div>
+            <div class="sec-card-summary">${s.summary}</div>
+            <div class="sec-card-foot">
+              <span>${s.owner}</span>
+              <span>${fmtDate(s.last_updated)}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    /* ---------------- 3. Abteilungen ---------------- */
+    function renderDepartments() {
+      // Quelle: departments.summary — nennt die fachlichen Abteilungen
+      const dept = READ_MODELS.departments;
+      // Stabile Liste aus dem Summary-Text extrahiert (Spec-konform)
+      const names = ['CEO', 'CTO', 'QA', 'SEO', 'Marketing', 'Sales', 'Support', 'Finance', 'Security', 'Monitoring', 'Operations'];
+      $('#deptGrid').innerHTML = names.map(n => `
+        <div class="dept-chip" title="${dept.summary}">
+          <span class="dept-chip-dot"></span>
+          <span class="dept-chip-name">${n}</span>
+          <span class="dept-chip-area">spec</span>
+        </div>
+      `).join('');
+    }
+
+    /* ---------------- 4. Health Scores ---------------- */
+    function renderHealth() {
+      const rows = sectionKeys().map(key => {
+        const s = READ_MODELS[key];
+        const score = s.health_score ?? 0;
+        const cls = score >= 90 ? '' : score >= 60 ? 'warn' : 'bad';
+        return `
+          <div class="health-row">
+            <div class="health-name">${s.name}</div>
+            <div class="health-track"><div class="health-fill ${cls}" style="width:${score}%"></div></div>
+            <div class="health-num">${score}</div>
+          </div>
+        `;
+      }).join('');
+      $('#healthList').innerHTML = rows;
+    }
+
+    /* ---------------- 5. CEO-Aufgaben ---------------- */
+    function renderCeoTasks() {
+      // CEO-Aufgaben = next_actions aus allen Sektionen
+      const tasks = [];
+      for (const key of sectionKeys()) {
+        const s = READ_MODELS[key];
+        (s.next_actions || []).forEach(t => tasks.push({ src: s.name, txt: t }));
+      }
+      $('#ceoTasks').innerHTML = tasks.map(t => `
+        <li class="list-item">
+          <span class="list-bullet"></span>
+          <div class="list-body">
+            <span class="src">${t.src}</span>
+            <span class="txt">${t.txt}</span>
+          </div>
+        </li>
+      `).join('') || '<li class="list-item"><span class="list-body"><span class="txt">Keine offenen Aufgaben.</span></span></li>';
+    }
+
+    /* ---------------- 6. Empfehlungen ---------------- */
+    function renderRecommendations() {
+      // Empfehlungen = warnings aus allen Sektionen
+      const recs = [];
+      for (const key of sectionKeys()) {
+        const s = READ_MODELS[key];
+        (s.warnings || []).forEach(w => recs.push({ src: s.name, txt: w }));
+      }
+      $('#recommendations').innerHTML = recs.map(r => `
+        <li class="list-item">
+          <span class="list-bullet warn"></span>
+          <div class="list-body">
+            <span class="src">${r.src}</span>
+            <span class="txt">${r.txt}</span>
+          </div>
+        </li>
+      `).join('') || '<li class="list-item"><span class="list-body"><span class="txt">Keine Hinweise.</span></span></li>';
+    }
+
+    /* ---------------- 7. Letzte Ereignisse ---------------- */
+    function renderEvents() {
+      // Letzte Ereignisse = last_updated je Sektion (chronologisch absteigend)
+      const events = sectionKeys().map(key => {
+        const s = READ_MODELS[key];
+        return {
+          ts: s.last_updated,
+          title: `${s.name} – Read-Model aktualisiert`,
+          sub: `status: ${s.status} · owner: ${s.owner}`,
+        };
+      }).sort((a, b) => (b.ts || '').localeCompare(a.ts || ''));
+
+      $('#events').innerHTML = events.map(e => `
+        <div class="event">
+          <div class="event-time">${fmtDate(e.ts)}</div>
+          <div>
+            <div class="event-title">${e.title}</div>
+            <div class="event-sub">${e.sub}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* ---------------- Topbar meta ---------------- */
+    function renderTopbarMeta() {
+      const latest = sectionKeys()
+        .map(k => READ_MODELS[k].last_updated)
+        .filter(Boolean)
+        .sort()
+        .pop();
+      $('#pill-updated').textContent = `Stand: ${fmtDate(latest)}`;
+    }
+
+    /* ---------------- Theme toggle ---------------- */
+    function initTheme() {
+      const stored = localStorage.getItem('p24_ceo_theme');
+      const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', stored || prefers);
+      $('#themeToggle').addEventListener('click', () => {
+        const cur = document.documentElement.getAttribute('data-theme');
+        const next = cur === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('p24_ceo_theme', next);
+      });
+    }
+
+    /* ---------------- Bootstrap ---------------- */
+    initTheme();
+    renderKpis();
+    renderSectionGrid();
+    renderDepartments();
+    renderHealth();
+    renderCeoTasks();
+    renderRecommendations();
+    renderEvents();
+    renderTopbarMeta();
+  </script>
+</body>
+</html>

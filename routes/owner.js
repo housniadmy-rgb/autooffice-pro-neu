@@ -486,4 +486,36 @@ router.post('/purge-demo-requests', (req, res) => {
   res.json({ ok: true, vorher, nachher, geloescht, emails });
 });
 
+// ── AI OS Read Models (System Health Panel) ──────────────────────────────────
+// Liefert die acht versionierten Read-Models aus ai/os/<section>/read-model.v1.json
+// als read-only Liste. Reine Spec-Auslieferung, keine DB-Zugriffe, keine Mutationen.
+router.get('/read-models', requireOwner, (req, res) => {
+  const root = path.join(__dirname, '..', 'ai', 'os');
+  const sections = ['core', 'engine', 'departments', 'intelligence', 'operations', 'security', 'integrations', 'dashboard'];
+  const models = sections.map(section => {
+    const file = path.join(root, section, 'read-model.v1.json');
+    try {
+      const data = JSON.parse(fs.readFileSync(file, 'utf8'));
+      return {
+        section,
+        id: data.id,
+        name: data.name,
+        status: data.status,
+        health_score: data.health_score,
+        last_updated: data.last_updated,
+        summary: data.summary,
+        warnings: Array.isArray(data.warnings) ? data.warnings : [],
+        next_actions: Array.isArray(data.next_actions) ? data.next_actions : [],
+      };
+    } catch {
+      return { section, error: 'not_readable' };
+    }
+  });
+  res.json({
+    generated_at: new Date().toISOString(),
+    auto_execution_enabled: false,
+    models,
+  });
+});
+
 module.exports = router;
