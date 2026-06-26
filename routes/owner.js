@@ -486,6 +486,164 @@ router.post('/purge-demo-requests', (req, res) => {
   res.json({ ok: true, vorher, nachher, geloescht, emails });
 });
 
+// ── CEO Command Center: Read-Only Aggregations ───────────────────────────────
+// Drei dedizierte Endpunkte für das CEO Command Center.
+// Strikt read-only: ausschließlich SELECT-Queries, keine Mutationen, keine
+// sensiblen Felder (Passwort-Hashes, Secrets, Patientennamen, E-Mails von
+// Patient:innen, Details-Blobs des Activity-Logs) werden zurückgegeben.
+
+router.get('/command-center/summary', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  const today = now.format('YYYY-MM-DD');
+  const monthStart = now.clone().startOf('month').format('YYYY-MM-DD');
+  const in7days = now.clone().add(7, 'days').format('YYYY-MM-DD');
+
+  // Praxen
+  const totalPractices  = db.prepare('SELECT COUNT(*) as n FROM practices').get().n;
+  const activePractices = db.prepare("SELECT COUNT(*) as n FROM practices WHERE account_status = 'active' OR account_status IS NULL").get().n;
+  const pausedPractices = db.prepare("SELECT COUNT(*) as n FROM practices WHERE account_status = 'paused'").get().n;
+  const trialPractices  = db.prepare('SELECT COUNT(*) as n FROM practices WHERE trial_end_date >= ?').get(today).n;
+  const trialsExpiring  = db.prepare('SELECT COUNT(*) as n FROM practices WHERE trial_end_date BETWEEN ? AND ?').get(today, in7days).n;
+  const trialsExpired   = db.prepare("SELECT COUNT(*) as n FROM practices WHERE trial_end_date < ? AND (account_status IS NULL OR account_status = 'active')").get(today).n;
+
+  // Termine
+  const appointmentsToday = db.prepare("SELECT COUNT(*) as n FROM appointments WHERE appointment_date = ? AND status NOT IN ('cancelled','archived')").get(today).n;
+  const appointmentsMonth = db.prepare("SELECT COUNT(*) as n FROM appointments WHERE appointment_date >= ? AND status NOT IN ('cancelled','archived')").get(monthStart).n;
+
+  // Rechnungen
+  const openInvoices = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid'").get().n;
+
+  // Bewertungen
+  const pendingReviews = db.prepare('SELECT COUNT(*) as n FROM reviews WHERE visible = 0').get().n;
+
+  // Demo-Anfragen
+  const demoTotal = db.prepare('SELECT COUNT(*) as n FROM demo_requests').get().n;
+  const demoNew   = db.prepare("SELECT COUNT(*) as n FROM demo_requests WHERE status = 'neu'").get().n;
+
+  // Benutzer (nur Zählung, keine E-Mails/Hashes)
+  const totalUsers  = db.prepare('SELECT COUNT(*) as n FROM users').get().n;
+  const activeUsers = db.prepare('SELECT COUNT(*) as n FROM users WHERE active = 1').get().n;
+
+  // Warnungen (immer aus Live-Zahlen abgeleitet, keine statischen Fake-Werte)
+  const warnings = [];
+  if (trialsExpired > 0)  warnings.push({ level: 'danger', code: 'trials_expired',   message: `${trialsExpired} Testphase(n) abgelaufen`, count: trialsExpired });
+  if (trialsExpiring > 0) warnings.push({ level: 'warn',   code: 'trials_expiring',  message: `${trialsExpiring} Testphase(n) enden binnen 7 Tagen`, count: trialsExpiring });
+  if (pausedPractices > 0) warnings.push({ level: 'warn',  code: 'practices_paused', message: `${pausedPractices} Praxis/Praxen pausiert`, count: pausedPractices });
+  if (openInvoices > 0)   warnings.push({ level: 'info',   code: 'invoices_open',    message: `${openInvoices} offene Rechnung(en)`, count: openInvoices });
+  if (pendingReviews > 0) warnings.push({ level: 'info',   code: 'reviews_pending',  message: `${pendingReviews} Bewertung(en) warten auf Freigabe`, count: pendingReviews });
+  if (demoNew > 0)        warnings.push({ level: 'info',   code: 'demo_new',         message: `${demoNew} neue Demo-Anfrage(n)`, count: demoNew });
+
+  let ampel = 'green';
+  if (warnings.some(w => w.level === 'warn'))   ampel = 'yellow';
+  if (warnings.some(w => w.level === 'danger')) ampel = 'red';
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only: true,
+    practices: {
+      total:  totalPractices,
+      active: activePractices,
+      paused: pausedPractices,
+      trial:  trialPractices,
+    },
+    appointments: {
+      today:      appointmentsToday,
+      this_month: appointmentsMonth,
+    },
+    invoices: {
+      open: openInvoices,
+    },
+    reviews: {
+      pending: pendingReviews,
+    },
+    demo_requests: {
+      total: demoTotal,
+      new:   demoNew,
+    },
+    users: {
+      total:  totalUsers,
+      active: activeUsers,
+    },
+    warnings,
+    ampel,
+  });
+});
+
+router.get('/command-center/health', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  const today = now.format('YYYY-MM-DD');
+
+  const dbFilePath = process.env.DB_PATH || path.join(__dirname, '../data/praxisonline24.db');
+  let dbSizeBytes = null;
+  try { dbSizeBytes = fs.statSync(dbFilePath).size; } catch { /* DB-Datei nicht lesbar – kein Fehler an Client */ }
+
+  const lastAutomation   = db.prepare('SELECT ran_at FROM automation_log ORDER BY ran_at DESC LIMIT 1').get();
+  const automationsToday = db.prepare("SELECT COUNT(*) as n FROM automation_log WHERE DATE(ran_at) = ?").get(today).n;
+
+  // Owner-Konto-Status, ohne E-Mail oder ID herauszugeben
+  let ownerStatus;
+  if (!process.env.OWNER_EMAIL) {
+    ownerStatus = 'not_configured';
+  } else {
+    const owner = db.prepare('SELECT active FROM users WHERE LOWER(email) = LOWER(?)').get(process.env.OWNER_EMAIL);
+    ownerStatus = owner ? (owner.active ? 'active' : 'inactive') : 'missing';
+  }
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only: true,
+    server: {
+      uptime_seconds: Math.floor(process.uptime()),
+      node_env:       process.env.NODE_ENV || 'development',
+    },
+    database: {
+      size_bytes:     dbSizeBytes,
+      custom_path:    !!process.env.DB_PATH,
+    },
+    automation: {
+      last_run_at: lastAutomation ? lastAutomation.ran_at : null,
+      today:       automationsToday,
+    },
+    owner: {
+      configured: !!process.env.OWNER_EMAIL,
+      status:     ownerStatus,
+    },
+    // Keine Secret-Werte selbst – nur Boolean-Indikatoren.
+    config: {
+      session_secret_configured: !!process.env.SESSION_SECRET &&
+        process.env.SESSION_SECRET !== 'change_this_to_a_long_random_string' &&
+        process.env.SESSION_SECRET !== 'praxisonline24-dev-secret-change-in-production',
+      smtp_configured:    !!process.env.SMTP_HOST && process.env.SMTP_HOST !== 'smtp.example.com',
+      setup_token_active: !!process.env.OWNER_SETUP_TOKEN,
+      email_dev_mode:     process.env.EMAIL_DEV_MODE === 'true',
+    },
+  });
+});
+
+router.get('/command-center/activity', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+
+  // Nur Aktionstyp + Entität + Zeitstempel – KEINE user_email, KEINE entity_id,
+  // KEINE details (kann freien Text mit PII enthalten).
+  const recent = db.prepare(
+    'SELECT action, entity_type, created_at FROM activity_log ORDER BY created_at DESC LIMIT 20'
+  ).all();
+
+  const automation = db.prepare(
+    'SELECT type, ran_at FROM automation_log ORDER BY ran_at DESC LIMIT 10'
+  ).all().map(r => ({ type: r.type, created_at: r.ran_at }));
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only: true,
+    recent,
+    automation,
+  });
+});
+
 // ── AI OS Read Models (System Health Panel) ──────────────────────────────────
 // Liefert die acht versionierten Read-Models aus ai/os/<section>/read-model.v1.json
 // als read-only Liste. Reine Spec-Auslieferung, keine DB-Zugriffe, keine Mutationen.

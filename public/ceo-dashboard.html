@@ -773,20 +773,26 @@ async function loadCEO() {
   const content = document.getElementById('content-ceo');
   loading.style.display = 'block'; content.style.display = 'none';
 
-  let ceoData, ctoData, demosData, rmData;
+  let ceoData, ctoData, demosData, rmData, ccSummary, ccHealth, ccActivity;
   try {
-    const [r1, r2, r3, r4] = await Promise.all([
+    const [r1, r2, r3, r4, r5, r6, r7] = await Promise.all([
       fetch('/api/owner/tab/ceo'),
       fetch('/api/owner/tab/cto'),
       fetch('/api/owner/tab/demos'),
       fetch('/api/owner/read-models'),
+      fetch('/api/owner/command-center/summary'),
+      fetch('/api/owner/command-center/health'),
+      fetch('/api/owner/command-center/activity'),
     ]);
     if (r1.status === 401) { location.href = '/login.html'; return; }
     if (r1.status === 403 || r1.status === 503) { showAccessError(); return; }
-    ceoData   = await r1.json();
-    ctoData   = r2.ok ? await r2.json() : null;
-    demosData = r3.ok ? await r3.json() : null;
-    rmData    = r4.ok ? await r4.json() : null;
+    ceoData    = await r1.json();
+    ctoData    = r2.ok ? await r2.json() : null;
+    demosData  = r3.ok ? await r3.json() : null;
+    rmData     = r4.ok ? await r4.json() : null;
+    ccSummary  = r5.ok ? await r5.json() : null;
+    ccHealth   = r6.ok ? await r6.json() : null;
+    ccActivity = r7.ok ? await r7.json() : null;
   } catch {
     loading.innerHTML = '<div class="error-box">Fehler beim Laden der CEO-Daten.</div>';
     return;
@@ -839,6 +845,85 @@ async function loadCEO() {
       ` : ''}
     </section>
   `;
+
+  /* ── 3b) Live Daten – aus dedizierter Read-Only Command-Center API ───── */
+  const ampelLiveCls = { green: 'success', yellow: 'warning', red: 'danger' };
+  const ampelLiveLbl = { green: 'OK', yellow: 'Achtung', red: 'Kritisch' };
+  const liveHtml = (() => {
+    if (!ccSummary) {
+      return `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">Live Daten – Lokales System</div>
+              <div class="card-sub">Read-only API derzeit nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">
+            Daten konnten nicht geladen werden.
+          </div>
+        </div>`;
+    }
+    const s = ccSummary;
+    const cls = ampelLiveCls[s.ampel] || 'success';
+    const lbl = ampelLiveLbl[s.ampel] || 'OK';
+    const recent = (ccActivity && Array.isArray(ccActivity.recent)) ? ccActivity.recent.slice(0, 5) : [];
+    const warns = Array.isArray(s.warnings) ? s.warnings : [];
+    const h = ccHealth || null;
+    const nodeEnv = h && h.server ? h.server.node_env : '—';
+    const uptimeH = h && h.server ? Math.floor((h.server.uptime_seconds||0)/3600) : null;
+    const uptimeM = h && h.server ? Math.floor(((h.server.uptime_seconds||0)%3600)/60) : null;
+    const uptime  = (uptimeH !== null) ? `${uptimeH}h ${uptimeM}m` : '—';
+    const dbKB    = (h && h.database && typeof h.database.size_bytes === 'number') ? (h.database.size_bytes/1024).toFixed(1)+' KB' : '—';
+
+    return `
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-header">
+          <div class="card-icon ${cls}">📡</div>
+          <div class="card-title-block">
+            <div class="card-title">Live Daten – Lokales System</div>
+            <div class="card-sub">Read-only · /api/owner/command-center/* · ${esc(fmtTs(s.generated_at).replace('Stand: ',''))}</div>
+          </div>
+          <div class="card-action"><span class="chip chip-${s.ampel==='green'?'green':s.ampel==='yellow'?'yellow':'red'}">Status: ${esc(lbl)}</span></div>
+        </div>
+        <div class="card-body">
+          <div class="summary-grid" style="grid-template-columns:repeat(4,1fr);">
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.practices.total)}</div><div class="summary-lbl">Praxen gesamt</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.practices.active)}</div><div class="summary-lbl">Aktive Praxen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.practices.trial)}</div><div class="summary-lbl">Testphase-Praxen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.practices.paused)}</div><div class="summary-lbl">Pausierte Praxen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.appointments.today)}</div><div class="summary-lbl">Termine heute</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.appointments.this_month)}</div><div class="summary-lbl">Termine diesen Monat</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.invoices.open)}</div><div class="summary-lbl">Offene Rechnungen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.reviews.pending)}</div><div class="summary-lbl">Bewertungen offen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.demo_requests.total)}</div><div class="summary-lbl">Demo-Anfragen</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.demo_requests.new)}</div><div class="summary-lbl">Davon neu</div></div>
+            <div class="summary-item"><div class="summary-num">${fmtNum(s.users.active)} / ${fmtNum(s.users.total)}</div><div class="summary-lbl">Benutzer aktiv</div></div>
+            <div class="summary-item"><div class="summary-num" style="font-size:1rem;">${esc(nodeEnv)} · ${esc(uptime)}</div><div class="summary-lbl">Systemstatus · DB ${esc(dbKB)}</div></div>
+          </div>
+          <div class="section-lbl">Offene Warnungen</div>
+          <ul class="risk-list">
+            ${warns.length === 0
+              ? '<li class="risk-item"><div class="risk-dot info"></div>Keine offenen Warnungen</li>'
+              : warns.map(w => `<li class="risk-item"><div class="risk-dot ${esc(w.level)}"></div>${esc(w.message)}</li>`).join('')}
+          </ul>
+          <div class="section-lbl">Letzte Aktivitäten</div>
+          ${recent.length === 0
+            ? '<div style="color:var(--c-text-muted);font-size:.85rem;">Noch keine Aktivität.</div>'
+            : `<ul class="activity-list" style="margin:0;padding:0;list-style:none;">
+                ${recent.map(a => `
+                  <li class="activity-item" style="padding:.45rem 0;border-bottom:1px solid var(--c-border);">
+                    <div class="activity-dot muted">·</div>
+                    <div class="activity-body">
+                      <div class="activity-text">${esc(a.action || '—')}</div>
+                      <div class="activity-meta">${a.entity_type ? esc(a.entity_type)+' · ' : ''}${fmtRel(a.created_at)} · ${fmtDt(a.created_at)}</div>
+                    </div>
+                  </li>`).join('')}
+              </ul>`}
+        </div>
+      </div>`;
+  })();
 
   /* ── 4) KPI cards ─────────────────────────────────────────────────────── */
   const newToday = ov.newToday||0, newWeek = ov.newThisWeek||0, newMonth = ov.newThisMonth||0;
@@ -1043,6 +1128,7 @@ async function loadCEO() {
 
   content.innerHTML =
     execHtml +
+    liveHtml +
     kpiHtml +
     `<div class="panel-grid panel-grid-2">
        <div>${approvalHtml}</div>
