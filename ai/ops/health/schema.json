@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/health/schema.json",
+  "title": "Health Score Snapshot",
+  "description": "Abgeleitete Plattform-Gesundheit, als Snapshot. Wird nicht mutiert; jede neue Berechnung ist ein neuer Snapshot.",
+  "type": "object",
+  "required": ["snapshot_id", "score", "tier", "generated_at", "components"],
+  "additionalProperties": false,
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^hs_[0-9]+_[a-z0-9_-]+$"
+    },
+    "score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "tier": {
+      "type": "string",
+      "enum": ["healthy", "watch", "degraded", "critical"]
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["key", "value", "weight"],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": "string",
+            "enum": [
+              "queue_depth",
+              "queue_wait_p95",
+              "execution_success_rate",
+              "open_critical_tasks",
+              "open_approvals",
+              "feed_severity_profile",
+              "audit_anomalies"
+            ]
+          },
+          "value": { "type": "number" },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "contribution": { "type": ["number", "null"] },
+          "note": { "type": ["string", "null"], "maxLength": 500 }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "department": "sales",
+  "role": "Sales & Conversion",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "public/**"],
+    "write": ["ai/sales/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "funnel_stages": ["awareness", "interest", "trial", "paid", "retention"],
+  "outputs": {
+    "report": "ai/sales/report.latest.md",
+    "format": "markdown"
+  }
+}

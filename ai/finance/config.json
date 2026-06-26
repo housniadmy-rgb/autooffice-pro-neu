@@ -1,0 +1,20 @@
+{
+  "department": "finance",
+  "role": "Finance & Pricing",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "data/**"],
+    "write": ["ai/finance/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "currency": "EUR",
+  "outputs": {
+    "report": "ai/finance/report.latest.md",
+    "format": "markdown"
+  }
+}

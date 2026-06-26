@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/strategy-engine/schema.json",
+  "title": "Strategy Snapshot",
+  "description": "Tagesaktueller Strategie-Snapshot: aktive Themen und konkrete Empfehlungen.",
+  "type": "object",
+  "required": ["snapshot_id", "generated_at", "themes", "recommendations"],
+  "additionalProperties": false,
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^strat_[0-9]+_[a-z0-9_-]+$"
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["theme_id", "title", "status", "weight"],
+        "additionalProperties": false,
+        "properties": {
+          "theme_id": { "type": "string", "pattern": "^thm_[a-z0-9_-]+$" },
+          "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+          "summary": { "type": "string", "maxLength": 1000 },
+          "status": {
+            "type": "string",
+            "enum": ["active", "watching", "paused", "archived"]
+          },
+          "weight": { "type": "number", "minimum": 0, "maximum": 1 },
+          "related_kpis": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true,
+            "default": []
+          },
+          "related_risks": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true,
+            "default": []
+          },
+          "related_opportunities": {
+            "type": "array",
+            "items": { "type": "string" },
+            "uniqueItems": true,
+            "default": []
+          }
+        }
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "rec_id",
+          "title",
+          "rationale",
+          "priority",
+          "owner",
+          "requires_approval"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "rec_id": { "type": "string", "pattern": "^rec_[a-z0-9_-]+_[0-9]+$" },
+          "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+          "rationale": { "type": "string", "minLength": 3, "maxLength": 2000 },
+          "theme_id": { "type": ["string", "null"] },
+          "priority": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "owner": {
+            "type": "string",
+            "enum": [
+              "ceo", "cto", "qa", "seo", "marketing", "sales",
+              "support", "finance", "security", "monitoring", "operations"
+            ]
+          },
+          "requires_approval": { "type": "boolean", "const": true },
+          "signal_sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["kind", "id"],
+              "additionalProperties": false,
+              "properties": {
+                "kind": {
+                  "type": "string",
+                  "enum": ["kpi", "opportunity", "risk", "feed", "digest", "health"]
+                },
+                "id": { "type": "string" }
+              }
+            },
+            "default": []
+          },
+          "expected_effect": { "type": ["string", "null"], "maxLength": 1000 }
+        }
+      },
+      "default": []
+    }
+  }
+}

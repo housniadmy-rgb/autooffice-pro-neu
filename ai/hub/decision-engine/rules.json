@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/decision-engine/rules.json",
+  "title": "Initial Decision Rules",
+  "description": "Initialer, bewusst einfacher Regelsatz. Wird in einer späteren Phase erweitert.",
+  "version": 1,
+  "rules": [
+    {
+      "id": "rule_security_critical_escalate",
+      "description": "Kritische Security-Befunde sofort eskalieren und Freigabe anfordern.",
+      "enabled": true,
+      "specificity": 100,
+      "when": {
+        "type_prefix": "security.",
+        "severity_in": ["critical", "high"]
+      },
+      "then": [
+        { "action": "create_task", "owner": "security", "priority": "critical" },
+        { "action": "request_approval", "owner": "ceo" },
+        { "action": "notify", "channel": "ceo_inbox", "note": "Pending – kein Send in Phase 8." },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_monitoring_degraded",
+      "description": "Anhaltend degradierte Health-Signale eskalieren.",
+      "enabled": true,
+      "specificity": 80,
+      "when": {
+        "type_equals": "monitoring.health.degraded",
+        "severity_in": ["critical", "high"]
+      },
+      "then": [
+        { "action": "create_task", "owner": "monitoring", "priority": "high" },
+        { "action": "consult_kb", "kb_query": "monitoring.health.degraded" },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_qa_regression",
+      "description": "QA-Regressionen erzeugen Task und CEO-Feed-Eintrag.",
+      "enabled": true,
+      "specificity": 70,
+      "when": {
+        "type_equals": "qa.regression.found"
+      },
+      "then": [
+        { "action": "create_task", "owner": "qa", "priority": "high" },
+        { "action": "consult_kb", "kb_query": "qa.regression" },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_operations_release_proposed",
+      "description": "Release-Vorschläge brauchen immer Freigabe.",
+      "enabled": true,
+      "specificity": 70,
+      "when": {
+        "type_equals": "operations.release.proposed"
+      },
+      "then": [
+        { "action": "request_approval", "owner": "ceo" },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_finance_pricing_risk",
+      "description": "Pricing-Risiken laufen über Sales und Finance, Freigabe beim CEO.",
+      "enabled": true,
+      "specificity": 60,
+      "when": {
+        "type_equals": "finance.pricing.risk"
+      },
+      "then": [
+        { "action": "create_task", "owner": "finance", "priority": "high" },
+        { "action": "create_task", "owner": "sales", "priority": "high" },
+        { "action": "request_approval", "owner": "ceo" },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_approval_pending_notify",
+      "description": "Offene Freigaben gehen in das CEO-Inbox (passiv, kein Send).",
+      "enabled": true,
+      "specificity": 60,
+      "when": {
+        "type_equals": "engine.approval.pending"
+      },
+      "then": [
+        { "action": "notify", "channel": "ceo_inbox", "note": "Pending – kein Send in Phase 8." },
+        { "action": "append_feed" }
+      ]
+    },
+    {
+      "id": "rule_info_default_feed_only",
+      "description": "Reine Info-Events landen ausschließlich im CEO Event Feed.",
+      "enabled": true,
+      "specificity": 1,
+      "when": {
+        "severity_in": ["info"]
+      },
+      "then": [
+        { "action": "append_feed" }
+      ]
+    }
+  ]
+}

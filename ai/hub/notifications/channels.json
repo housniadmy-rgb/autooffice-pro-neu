@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/notifications/channels.json",
+  "title": "Notification Channels",
+  "description": "Katalog der Kanäle. In Phase 8 sind alle Kanäle deaktiviert – kein Versand möglich.",
+  "version": 1,
+  "channels": [
+    {
+      "id": "ceo_inbox",
+      "kind": "internal",
+      "audience": "ceo",
+      "enabled": false,
+      "description": "Interne Sicht für den menschlichen CEO. Wird in späterer Phase an Dashboard angebunden."
+    },
+    {
+      "id": "ops_inbox",
+      "kind": "internal",
+      "audience": "operations",
+      "enabled": false,
+      "description": "Interne Sicht für Operations / On-Call."
+    },
+    {
+      "id": "email_owner",
+      "kind": "external",
+      "audience": "human_owner",
+      "enabled": false,
+      "description": "Platzhalter für E-Mail. In Phase 8 nicht angebunden."
+    },
+    {
+      "id": "webhook_generic",
+      "kind": "external",
+      "audience": "external_system",
+      "enabled": false,
+      "description": "Generischer Outbound-Webhook. In Phase 8 nicht angebunden."
+    }
+  ]
+}

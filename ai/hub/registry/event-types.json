@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/registry/event-types.json",
+  "title": "Registered Event Types",
+  "description": "Verbindliche Liste aller bekannten Event-Typen für PraxisOnline24.",
+  "version": 1,
+  "types": [
+    {
+      "type": "security.vulnerability.detected",
+      "owner": "security",
+      "default_severity": "high",
+      "description": "Ein potenzielles Sicherheitsrisiko wurde identifiziert.",
+      "payload_schema": {
+        "required": ["finding", "scope"],
+        "properties": {
+          "finding": { "type": "string" },
+          "scope": { "type": "string" },
+          "cve": { "type": ["string", "null"] }
+        }
+      }
+    },
+    {
+      "type": "monitoring.health.degraded",
+      "owner": "monitoring",
+      "default_severity": "high",
+      "description": "Health-Signale liegen wiederholt unter Schwellwert.",
+      "payload_schema": {
+        "required": ["metric", "value"],
+        "properties": {
+          "metric": { "type": "string" },
+          "value": { "type": "number" },
+          "threshold": { "type": ["number", "null"] }
+        }
+      }
+    },
+    {
+      "type": "qa.regression.found",
+      "owner": "qa",
+      "default_severity": "high",
+      "description": "Eine bestehende Funktion verhält sich nicht mehr wie erwartet.",
+      "payload_schema": {
+        "required": ["area", "expected", "actual"],
+        "properties": {
+          "area": { "type": "string" },
+          "expected": { "type": "string" },
+          "actual": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "seo.audit.completed",
+      "owner": "seo",
+      "default_severity": "info",
+      "description": "Onpage-Audit einer Landingpage liegt vor.",
+      "payload_schema": {
+        "required": ["page"],
+        "properties": {
+          "page": { "type": "string" },
+          "score": { "type": ["number", "null"] }
+        }
+      }
+    },
+    {
+      "type": "marketing.campaign.proposed",
+      "owner": "marketing",
+      "default_severity": "info",
+      "description": "Vorschlag für eine Kampagne wurde formuliert.",
+      "payload_schema": {
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "industry": { "type": ["string", "null"] }
+        }
+      }
+    },
+    {
+      "type": "sales.conversion.dropped",
+      "owner": "sales",
+      "default_severity": "medium",
+      "description": "Spürbarer Konversionsabfall in einem Funnel-Schritt.",
+      "payload_schema": {
+        "required": ["stage", "delta"],
+        "properties": {
+          "stage": { "type": "string" },
+          "delta": { "type": "number" }
+        }
+      }
+    },
+    {
+      "type": "support.ticket.recurring",
+      "owner": "support",
+      "default_severity": "medium",
+      "description": "Wiederkehrendes Anfragemuster im Support.",
+      "payload_schema": {
+        "required": ["topic", "count"],
+        "properties": {
+          "topic": { "type": "string" },
+          "count": { "type": "integer", "minimum": 1 }
+        }
+      }
+    },
+    {
+      "type": "finance.pricing.risk",
+      "owner": "finance",
+      "default_severity": "high",
+      "description": "Hinweis auf Margen- oder Preisrisiko.",
+      "payload_schema": {
+        "required": ["summary"],
+        "properties": {
+          "summary": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "cto.architecture.note",
+      "owner": "cto",
+      "default_severity": "info",
+      "description": "Architektur- oder Codequalitäts-Hinweis.",
+      "payload_schema": {
+        "required": ["summary"],
+        "properties": { "summary": { "type": "string" } }
+      }
+    },
+    {
+      "type": "operations.release.proposed",
+      "owner": "operations",
+      "default_severity": "high",
+      "description": "Release-Vorschlag wartet auf Freigabe.",
+      "payload_schema": {
+        "required": ["target", "changes"],
+        "properties": {
+          "target": { "type": "string" },
+          "changes": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "engine.task.created",
+      "owner": "engine.tasks",
+      "default_severity": "info",
+      "description": "Ein Task wurde im Task Manager erfasst.",
+      "payload_schema": {
+        "required": ["task_id"],
+        "properties": { "task_id": { "type": "string" } }
+      }
+    },
+    {
+      "type": "engine.task.state_changed",
+      "owner": "engine.tasks",
+      "default_severity": "info",
+      "description": "Statuswechsel eines Tasks (siehe ai/engine/tasks/states.md).",
+      "payload_schema": {
+        "required": ["task_id", "from", "to"],
+        "properties": {
+          "task_id": { "type": "string" },
+          "from": { "type": "string" },
+          "to": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "engine.approval.pending",
+      "owner": "engine.approvals",
+      "default_severity": "high",
+      "description": "Eine Freigabe wartet auf einen Menschen.",
+      "payload_schema": {
+        "required": ["approval_id", "subject_id"],
+        "properties": {
+          "approval_id": { "type": "string" },
+          "subject_id": { "type": "string" }
+        }
+      }
+    },
+    {
+      "type": "engine.approval.decided",
+      "owner": "engine.approvals",
+      "default_severity": "info",
+      "description": "Eine Freigabe wurde entschieden.",
+      "payload_schema": {
+        "required": ["approval_id", "status"],
+        "properties": {
+          "approval_id": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["approved", "rejected", "expired", "withdrawn"]
+          }
+        }
+      }
+    }
+  ]
+}

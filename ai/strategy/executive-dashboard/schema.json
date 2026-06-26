@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/executive-dashboard/schema.json",
+  "title": "Executive Dashboard Snapshot",
+  "description": "Read-only Aggregat über Strategy, Roadmap, Opportunities, KPIs, Risks und Ops-Signale.",
+  "type": "object",
+  "required": ["snapshot_id", "generated_at", "today", "this_week", "current_quarter"],
+  "additionalProperties": false,
+  "properties": {
+    "snapshot_id": {
+      "type": "string",
+      "pattern": "^exec_[0-9]+_[a-z0-9_-]+$"
+    },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "headline": { "type": "string", "minLength": 3, "maxLength": 280 },
+    "today": { "$ref": "#/$defs/section" },
+    "this_week": { "$ref": "#/$defs/section" },
+    "current_quarter": { "$ref": "#/$defs/section" },
+    "ops_signal": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "health_score": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+        "health_tier": {
+          "type": ["string", "null"],
+          "enum": ["healthy", "watch", "degraded", "critical", null]
+        },
+        "open_critical_tasks": { "type": "integer", "minimum": 0 },
+        "open_approvals": { "type": "integer", "minimum": 0 }
+      }
+    }
+  },
+  "$defs": {
+    "section": {
+      "type": "object",
+      "required": ["window", "headline"],
+      "additionalProperties": false,
+      "properties": {
+        "window": {
+          "type": "string",
+          "enum": ["today", "this_week", "current_quarter"]
+        },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 280 },
+        "top_recommendations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["rec_id", "title", "priority"],
+            "additionalProperties": false,
+            "properties": {
+              "rec_id": { "type": "string" },
+              "title": { "type": "string", "maxLength": 200 },
+              "priority": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low", "info"]
+              },
+              "owner": { "type": ["string", "null"] }
+            }
+          },
+          "default": []
+        },
+        "active_themes": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "roadmap": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "now": { "type": "array", "items": { "type": "string" }, "default": [] },
+            "next": { "type": "array", "items": { "type": "string" }, "default": [] },
+            "later": { "type": "array", "items": { "type": "string" }, "default": [] }
+          }
+        },
+        "kpi_highlights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["kpi_id", "status"],
+            "additionalProperties": false,
+            "properties": {
+              "kpi_id": { "type": "string" },
+              "status": {
+                "type": "string",
+                "enum": ["on_target", "watch", "off_target", "no_data"]
+              },
+              "note": { "type": ["string", "null"], "maxLength": 500 }
+            }
+          },
+          "default": []
+        },
+        "risk_highlights": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["risk_id", "severity"],
+            "additionalProperties": false,
+            "properties": {
+              "risk_id": { "type": "string" },
+              "severity": {
+                "type": "string",
+                "enum": ["info", "low", "medium", "high", "critical"]
+              },
+              "headline": { "type": ["string", "null"], "maxLength": 200 }
+            }
+          },
+          "default": []
+        }
+      }
+    }
+  }
+}

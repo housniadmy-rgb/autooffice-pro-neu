@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/engine/status/schema.json",
+  "title": "Department Status",
+  "description": "Kompakter Ist-Zustand einer AI-Abteilung für Engine und CEO-Dashboard.",
+  "type": "object",
+  "required": ["department", "status", "updated_at"],
+  "additionalProperties": false,
+  "properties": {
+    "department": {
+      "type": "string",
+      "enum": [
+        "ceo",
+        "cto",
+        "qa",
+        "seo",
+        "marketing",
+        "sales",
+        "support",
+        "finance",
+        "security",
+        "monitoring",
+        "operations"
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["passive", "active", "degraded", "blocked", "unknown"],
+      "default": "passive"
+    },
+    "phase": { "type": "integer", "minimum": 0, "default": 7 },
+    "open_tasks": { "type": "integer", "minimum": 0, "default": 0 },
+    "open_approvals": { "type": "integer", "minimum": 0, "default": 0 },
+    "last_report_at": { "type": ["string", "null"], "format": "date-time" },
+    "last_artifact_path": { "type": ["string", "null"] },
+    "notes": { "type": "string", "maxLength": 1000 },
+    "updated_at": { "type": "string", "format": "date-time" }
+  }
+}

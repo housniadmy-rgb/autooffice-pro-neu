@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/history/schema.json",
+  "title": "Task History Entry",
+  "description": "Unveränderlicher Eintrag für einen abgeschlossenen Task.",
+  "type": "object",
+  "required": [
+    "history_id",
+    "task_id",
+    "owner",
+    "final_state",
+    "policy_class",
+    "closed_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "history_id": {
+      "type": "string",
+      "pattern": "^hist_[a-z0-9_-]+_[0-9]+$"
+    },
+    "task_id": { "type": "string" },
+    "queue_id": { "type": ["string", "null"] },
+    "execution_id": { "type": ["string", "null"] },
+    "approval_id": { "type": ["string", "null"] },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo",
+        "cto",
+        "qa",
+        "seo",
+        "marketing",
+        "sales",
+        "support",
+        "finance",
+        "security",
+        "monitoring",
+        "operations"
+      ]
+    },
+    "policy_class": {
+      "type": "string",
+      "enum": ["safe", "critical"]
+    },
+    "final_state": {
+      "type": "string",
+      "enum": ["completed", "failed", "rejected", "cancelled"]
+    },
+    "duration_ms": { "type": ["integer", "null"], "minimum": 0 },
+    "result_summary": { "type": ["string", "null"], "maxLength": 1000 },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "started_at": { "type": ["string", "null"], "format": "date-time" },
+    "closed_at": { "type": "string", "format": "date-time" }
+  }
+}

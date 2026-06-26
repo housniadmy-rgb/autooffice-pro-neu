@@ -1,0 +1,27 @@
+{
+  "department": "security",
+  "role": "Security & Privacy",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["**/*"],
+    "write": ["ai/security/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "frameworks": ["DSGVO", "OWASP_Top10"],
+  "scan_targets": [
+    "middleware/",
+    "routes/",
+    "utils/",
+    "server.js",
+    "package.json"
+  ],
+  "outputs": {
+    "report": "ai/security/report.latest.md",
+    "format": "markdown"
+  }
+}

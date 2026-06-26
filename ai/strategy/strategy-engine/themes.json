@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/strategy-engine/themes.json",
+  "title": "Initial Strategic Themes",
+  "description": "Initialer Themenkatalog für PraxisOnline24. Wird vom CEO laufend gepflegt.",
+  "version": 1,
+  "themes": [
+    {
+      "theme_id": "thm_multi_industry_positioning",
+      "title": "Multi-Industry Repositionierung",
+      "summary": "PraxisOnline24 als horizontale Terminsoftware für Arzt, Therapie, Coaching, Friseur, Beauty, Handwerk positionieren – ohne den medizinischen Kern zu verwässern.",
+      "status": "active",
+      "weight": 0.35,
+      "related_kpis": ["kpi_industry_signups", "kpi_landing_conversion"],
+      "related_risks": ["risk_brand_dilution"],
+      "related_opportunities": []
+    },
+    {
+      "theme_id": "thm_conversion_optimization",
+      "title": "Conversion-Optimierung Branchen-LP",
+      "summary": "Branchen-Landingpages und Pricing-Pfad systematisch optimieren.",
+      "status": "active",
+      "weight": 0.2,
+      "related_kpis": ["kpi_landing_conversion", "kpi_signup_to_paid"],
+      "related_risks": [],
+      "related_opportunities": []
+    },
+    {
+      "theme_id": "thm_compliance_dsgvo",
+      "title": "Compliance & DSGVO",
+      "summary": "Datenschutz und DSGVO-Konformität als verlässliche Basis aller Funktionen.",
+      "status": "active",
+      "weight": 0.2,
+      "related_kpis": [],
+      "related_risks": ["risk_dsgvo_finding"],
+      "related_opportunities": []
+    },
+    {
+      "theme_id": "thm_platform_reliability",
+      "title": "Plattform-Zuverlässigkeit",
+      "summary": "Uptime, Performance und Health der laufenden Anwendung sichern.",
+      "status": "active",
+      "weight": 0.15,
+      "related_kpis": ["kpi_uptime", "kpi_p95_latency"],
+      "related_risks": ["risk_outage_peak"],
+      "related_opportunities": []
+    },
+    {
+      "theme_id": "thm_growth_acquisition",
+      "title": "Wachstum & Akquise",
+      "summary": "Organisches Wachstum über SEO, Content und Partnerschaften.",
+      "status": "watching",
+      "weight": 0.1,
+      "related_kpis": ["kpi_organic_traffic", "kpi_industry_signups"],
+      "related_risks": [],
+      "related_opportunities": []
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/registry/schema.json",
+  "title": "Event Type Registration",
+  "description": "Struktur eines Eintrags im Event-Typ-Katalog.",
+  "type": "object",
+  "required": ["type", "owner", "default_severity", "payload_schema"],
+  "additionalProperties": false,
+  "properties": {
+    "type": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*){2,3}$"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Verantwortliche Quelle für diesen Typ (Abteilung oder Engine-Modul).",
+      "enum": [
+        "ceo",
+        "cto",
+        "qa",
+        "seo",
+        "marketing",
+        "sales",
+        "support",
+        "finance",
+        "security",
+        "monitoring",
+        "operations",
+        "engine.tasks",
+        "engine.workflows",
+        "engine.priority",
+        "engine.approvals",
+        "engine.status",
+        "engine.dashboard"
+      ]
+    },
+    "default_severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "description": { "type": "string", "maxLength": 1000 },
+    "payload_schema": {
+      "type": "object",
+      "description": "JSON-Schema-Skelett für den Inhalt dieses Typs.",
+      "additionalProperties": true
+    },
+    "deprecated": { "type": "boolean", "default": false },
+    "replaced_by": { "type": ["string", "null"] }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/engine/priority/levels.json",
+  "title": "Priority Levels",
+  "description": "Stabile Reihung der Prioritätsstufen für Tasks und Workflows.",
+  "levels": [
+    {
+      "name": "critical",
+      "score": 100,
+      "sla_hours": 4,
+      "escalate": true,
+      "description": "Sicherheitsvorfall, Datenverlust, kompletter Ausfall."
+    },
+    {
+      "name": "high",
+      "score": 75,
+      "sla_hours": 24,
+      "escalate": true,
+      "description": "Funktionsausfall mit Workaround, kundenrelevanter Bug, Compliance-Risiko."
+    },
+    {
+      "name": "medium",
+      "score": 50,
+      "sla_hours": 72,
+      "escalate": false,
+      "description": "Wichtige Verbesserungen, mittelfristige Risiken."
+    },
+    {
+      "name": "low",
+      "score": 25,
+      "sla_hours": 168,
+      "escalate": false,
+      "description": "Optimierungen, kleinere UX-Themen."
+    },
+    {
+      "name": "info",
+      "score": 10,
+      "sla_hours": null,
+      "escalate": false,
+      "description": "Reine Informationen, keine Maßnahme erforderlich."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "department": "marketing",
+  "role": "Marketing & Positioning",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "public/**"],
+    "write": ["ai/marketing/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "industries": [
+    "arzt",
+    "therapie",
+    "coaching",
+    "friseur",
+    "beauty",
+    "handwerk"
+  ],
+  "channels": [],
+  "outputs": {
+    "report": "ai/marketing/report.latest.md",
+    "format": "markdown"
+  }
+}

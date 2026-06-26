@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/kpi/schema.json",
+  "title": "KPI Definition",
+  "description": "Verbindliche Definition einer Kennzahl. In Phase 10 ohne Ist-Wert.",
+  "type": "object",
+  "required": ["kpi_id", "name", "owner", "unit", "direction", "target", "source"],
+  "additionalProperties": false,
+  "properties": {
+    "kpi_id": {
+      "type": "string",
+      "pattern": "^kpi_[a-z0-9_-]+$"
+    },
+    "name": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "summary": { "type": "string", "maxLength": 1000 },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo", "cto", "qa", "seo", "marketing", "sales",
+        "support", "finance", "security", "monitoring", "operations"
+      ]
+    },
+    "unit": {
+      "type": "string",
+      "enum": ["count", "percent", "ratio", "ms", "eur", "usd", "score"]
+    },
+    "direction": {
+      "type": "string",
+      "enum": ["higher_is_better", "lower_is_better", "in_range"]
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "value": { "type": ["number", "null"] },
+        "min": { "type": ["number", "null"] },
+        "max": { "type": ["number", "null"] }
+      }
+    },
+    "tolerance_pct": { "type": ["number", "null"], "minimum": 0, "maximum": 100 },
+    "frequency": {
+      "type": "string",
+      "enum": ["realtime", "hourly", "daily", "weekly", "monthly", "quarterly"]
+    },
+    "source": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["stripe", "analytics", "monitoring", "github", "internal", "manual"]
+        },
+        "id": { "type": "string" },
+        "connected": { "type": "boolean", "default": false }
+      }
+    },
+    "related_themes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    }
+  }
+}

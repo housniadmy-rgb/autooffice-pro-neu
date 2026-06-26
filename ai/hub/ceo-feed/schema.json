@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/ceo-feed/schema.json",
+  "title": "CEO Feed Entry",
+  "description": "Append-only Eintrag im CEO Event Feed. Wird nach Erzeugung nicht verändert.",
+  "type": "object",
+  "required": [
+    "feed_id",
+    "event_id",
+    "type",
+    "source",
+    "severity",
+    "headline",
+    "occurred_at",
+    "appended_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "feed_id": {
+      "type": "string",
+      "pattern": "^feed_[0-9]+_[a-z0-9_-]+$"
+    },
+    "event_id": { "type": "string" },
+    "type": { "type": "string" },
+    "source": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["department", "engine_module", "external"]
+        },
+        "id": { "type": "string" }
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "headline": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "summary": { "type": ["string", "null"], "maxLength": 1000 },
+    "correlation_id": { "type": ["string", "null"] },
+    "related_task_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "related_approval_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "appended_at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "department": "cto",
+  "role": "Chief Technology Officer",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["**/*"],
+    "write": ["ai/cto/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "watch": ["server.js", "routes/", "middleware/", "utils/", "data/", "package.json"],
+  "outputs": {
+    "report": "ai/cto/report.latest.md",
+    "format": "markdown"
+  }
+}

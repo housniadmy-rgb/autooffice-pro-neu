@@ -1,0 +1,15 @@
+{
+  "id": "kb_example_seed",
+  "kind": "best_practice",
+  "title": "Beispiel-Eintrag (Seed)",
+  "summary": "Platzhalter, damit das Schema in Phase 8 anhand eines konkreten Eintrags überprüfbar bleibt. Wird in einer späteren Phase durch echte Inhalte ersetzt.",
+  "details": "Ein KB-Eintrag soll: (1) ein eindeutiges Symptom oder Ziel benennen, (2) den Lösungspfad in nachvollziehbaren Schritten beschreiben, (3) verlinken auf verwandte Einträge und Event-Typen, (4) eine Quelle nennen, sofern sich der Eintrag auf externe Empfehlungen stützt.",
+  "status": "draft",
+  "owner": "cto",
+  "related_event_types": [],
+  "related_entries": [],
+  "tags": ["seed", "documentation"],
+  "sources": [],
+  "created_at": "2026-06-26T00:00:00Z",
+  "updated_at": null
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/opportunities/schema.json",
+  "title": "Opportunity",
+  "description": "Eine bewertete Chance: Branche, Feature, Partnerschaft, SEO-Lücke, Wettbewerbsbeobachtung.",
+  "type": "object",
+  "required": ["opp_id", "title", "kind", "status", "owner", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "opp_id": {
+      "type": "string",
+      "pattern": "^opp_[a-z0-9_-]+$"
+    },
+    "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "summary": { "type": "string", "maxLength": 2000 },
+    "kind": {
+      "type": "string",
+      "enum": ["industry", "feature", "partnership", "seo", "competitor", "channel", "other"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["captured", "scored", "validated", "archived"],
+      "default": "captured"
+    },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo", "cto", "qa", "seo", "marketing", "sales",
+        "support", "finance", "security", "monitoring", "operations"
+      ]
+    },
+    "score": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "reach": { "type": "number", "minimum": 0 },
+        "impact": { "type": "number", "minimum": 0, "maximum": 3 },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "effort": { "type": "number", "minimum": 1 },
+        "total": { "type": "number", "minimum": 0 }
+      }
+    },
+    "theme_id": { "type": ["string", "null"] },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["feed", "department_report", "external_link", "interview", "other"],
+            "default": "other"
+          },
+          "url": { "type": ["string", "null"], "format": "uri" }
+        }
+      },
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

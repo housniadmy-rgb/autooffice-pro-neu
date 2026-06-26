@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/risk/schema.json",
+  "title": "Risk Register Entry",
+  "description": "Ein Eintrag im strategischen Risiko-Register.",
+  "type": "object",
+  "required": [
+    "risk_id",
+    "title",
+    "owner",
+    "probability",
+    "impact",
+    "severity",
+    "status",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "risk_id": {
+      "type": "string",
+      "pattern": "^risk_[a-z0-9_-]+$"
+    },
+    "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "summary": { "type": "string", "maxLength": 2000 },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo", "cto", "qa", "seo", "marketing", "sales",
+        "support", "finance", "security", "monitoring", "operations"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "security",
+        "compliance",
+        "reliability",
+        "financial",
+        "market",
+        "operational",
+        "brand",
+        "legal"
+      ]
+    },
+    "probability": {
+      "type": "string",
+      "enum": ["very_low", "low", "medium", "high", "very_high"]
+    },
+    "impact": {
+      "type": "string",
+      "enum": ["very_low", "low", "medium", "high", "very_high"]
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["info", "low", "medium", "high", "critical"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["open", "mitigating", "monitoring", "accepted", "closed"],
+      "default": "open"
+    },
+    "mitigations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "maxLength": 200 },
+          "owner": {
+            "type": ["string", "null"],
+            "enum": [
+              "ceo", "cto", "qa", "seo", "marketing", "sales",
+              "support", "finance", "security", "monitoring", "operations", null
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": ["planned", "in_progress", "done", "cancelled"],
+            "default": "planned"
+          },
+          "linked_task_id": { "type": ["string", "null"] }
+        }
+      },
+      "default": []
+    },
+    "related_themes": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "related_kpis": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "review_cadence": {
+      "type": "string",
+      "enum": ["weekly", "monthly", "quarterly"]
+    },
+    "last_reviewed_at": { "type": ["string", "null"], "format": "date-time" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

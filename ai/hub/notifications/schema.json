@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/notifications/schema.json",
+  "title": "Notification",
+  "description": "Eine vorbereitete Benachrichtigung. Wird in Phase 8 niemals automatisch versendet.",
+  "type": "object",
+  "required": ["id", "channel", "subject", "body", "status", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^ntf_[a-z0-9_-]+_[0-9]+$"
+    },
+    "channel": {
+      "type": "string",
+      "description": "Muss in channels.json existieren."
+    },
+    "event_id": { "type": ["string", "null"] },
+    "correlation_id": { "type": ["string", "null"] },
+    "subject": { "type": "string", "minLength": 1, "maxLength": 200 },
+    "body": { "type": "string", "minLength": 1, "maxLength": 8000 },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"],
+      "default": "info"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "queued", "sent", "failed", "cancelled"],
+      "default": "pending"
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "sent_at": { "type": ["string", "null"], "format": "date-time" },
+    "last_error": { "type": ["string", "null"], "maxLength": 1000 }
+  }
+}

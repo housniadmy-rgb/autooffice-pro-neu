@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/engine/tasks/schema.json",
+  "title": "Task",
+  "description": "Kleinste koordinierbare Arbeitseinheit der AI Company. Tasks werden niemals automatisch ausgeführt, sondern nur erfasst, bewertet und zur Freigabe vorbereitet.",
+  "type": "object",
+  "required": ["id", "owner", "title", "state", "created_at"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^task_[a-z0-9_-]+_[0-9]+$",
+      "description": "Stabile, sortierbare ID."
+    },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo",
+        "cto",
+        "qa",
+        "seo",
+        "marketing",
+        "sales",
+        "support",
+        "finance",
+        "security",
+        "monitoring",
+        "operations"
+      ]
+    },
+    "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "description": { "type": "string", "maxLength": 4000 },
+    "workflow_id": { "type": ["string", "null"] },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"],
+      "default": "info"
+    },
+    "requires_approval": { "type": "boolean", "default": true },
+    "state": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "queued",
+        "blocked",
+        "awaiting_approval",
+        "approved",
+        "rejected",
+        "in_progress",
+        "completed",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["report", "summary", "diff", "log", "screenshot", "other"]
+          },
+          "path": { "type": "string" },
+          "read_only": { "type": "boolean", "default": true }
+        }
+      },
+      "default": []
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "due_at": { "type": ["string", "null"], "format": "date-time" },
+    "approval_id": { "type": ["string", "null"] }
+  }
+}

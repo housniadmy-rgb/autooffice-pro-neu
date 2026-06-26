@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/policy/schema.json",
+  "title": "Policy Rule",
+  "description": "Eine deklarative Klassifikationsregel der Policy Engine. Keine KI, kein LLM.",
+  "type": "object",
+  "required": ["id", "match", "classify"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^pol_[a-z0-9_-]+$"
+    },
+    "description": { "type": "string", "maxLength": 500 },
+    "enabled": { "type": "boolean", "default": true },
+    "specificity": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 1,
+      "description": "Höhere Werte gewinnen bei Konflikten."
+    },
+    "match": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "owner_in": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "priority_min": {
+          "type": ["string", "null"],
+          "enum": ["critical", "high", "medium", "low", "info", null]
+        },
+        "effect_kind_any": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "report_create",
+              "report_update",
+              "config_propose",
+              "notification_propose",
+              "kb_propose",
+              "other"
+            ]
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "tag_any": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "default": []
+        }
+      }
+    },
+    "classify": {
+      "type": "object",
+      "required": ["class"],
+      "additionalProperties": false,
+      "properties": {
+        "class": {
+          "type": "string",
+          "enum": ["safe", "critical"]
+        },
+        "require_approval_by": {
+          "type": ["string", "null"],
+          "enum": ["ceo", null],
+          "description": "Bei 'critical' standardmäßig 'ceo'."
+        },
+        "note": { "type": ["string", "null"], "maxLength": 500 }
+      }
+    }
+  }
+}

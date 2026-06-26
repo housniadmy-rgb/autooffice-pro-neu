@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/event-hub/schema.json",
+  "title": "Event Envelope",
+  "description": "Einheitliche Hülle für jedes Ereignis, das den Hub betritt. Inhalt (payload) wird zusätzlich gegen den Typ in der Event Registry validiert.",
+  "type": "object",
+  "required": [
+    "event_id",
+    "type",
+    "source",
+    "severity",
+    "occurred_at",
+    "received_at",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[a-z0-9_-]+_[0-9]+$"
+    },
+    "type": {
+      "type": "string",
+      "description": "Muss in ai/hub/registry/event-types.json existieren."
+    },
+    "source": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": ["department", "engine_module", "external"]
+        },
+        "id": {
+          "type": "string",
+          "description": "z. B. 'security', 'monitoring', 'engine.tasks', 'engine.approvals'."
+        }
+      }
+    },
+    "severity": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"]
+    },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "received_at": { "type": "string", "format": "date-time" },
+    "correlation_id": { "type": ["string", "null"] },
+    "dedupe_key": {
+      "type": ["string", "null"],
+      "description": "Wenn gesetzt, gilt ein zweites Event mit gleichem Key als Duplikat."
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Typspezifischer Inhalt, validiert gegen das Schema des registrierten Event-Typs."
+    }
+  }
+}

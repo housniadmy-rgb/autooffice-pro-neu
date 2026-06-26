@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/hub/decision-engine/schema.json",
+  "title": "Decision Rule",
+  "description": "Eine deklarative Routing-Regel für eingehende Events. Keine KI, keine ML-Inferenz.",
+  "type": "object",
+  "required": ["id", "when", "then"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^rule_[a-z0-9_-]+$"
+    },
+    "description": { "type": "string", "maxLength": 500 },
+    "enabled": { "type": "boolean", "default": true },
+    "specificity": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 1,
+      "description": "Höhere Werte gewinnen bei Konflikten."
+    },
+    "when": {
+      "type": "object",
+      "description": "Alle vorhandenen Bedingungen müssen erfüllt sein (UND-Verknüpfung).",
+      "additionalProperties": false,
+      "properties": {
+        "type_equals": { "type": ["string", "null"] },
+        "type_prefix": { "type": ["string", "null"] },
+        "severity_in": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["critical", "high", "medium", "low", "info"]
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "source_kind_in": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["department", "engine_module", "external"]
+          },
+          "uniqueItems": true,
+          "default": []
+        },
+        "source_id_in": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true,
+          "default": []
+        },
+        "tag_contains_any": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "payload_equals": {
+          "type": "object",
+          "additionalProperties": { "type": ["string", "number", "boolean", "null"] },
+          "default": {}
+        }
+      }
+    },
+    "then": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["action"],
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "type": "string",
+            "enum": [
+              "create_task",
+              "request_approval",
+              "notify",
+              "append_feed",
+              "consult_kb",
+              "noop"
+            ]
+          },
+          "owner": {
+            "type": ["string", "null"],
+            "description": "Empfehlende Owner-Abteilung für create_task / request_approval."
+          },
+          "priority": {
+            "type": ["string", "null"],
+            "enum": ["critical", "high", "medium", "low", "info", null]
+          },
+          "channel": {
+            "type": ["string", "null"],
+            "description": "Nur für action=notify (siehe notifications/channels.json)."
+          },
+          "kb_query": { "type": ["string", "null"] },
+          "note": { "type": ["string", "null"], "maxLength": 500 }
+        }
+      }
+    }
+  }
+}

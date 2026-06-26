@@ -1,0 +1,29 @@
+{
+  "department": "seo",
+  "role": "Search Engine Optimization",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "public/**"],
+    "write": ["ai/seo/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "languages": ["de", "en"],
+  "focus": [
+    "title",
+    "meta_description",
+    "headings",
+    "structured_data",
+    "internal_links",
+    "canonicals",
+    "hreflang"
+  ],
+  "outputs": {
+    "report": "ai/seo/report.latest.md",
+    "format": "markdown"
+  }
+}

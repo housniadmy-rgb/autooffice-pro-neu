@@ -1,0 +1,20 @@
+{
+  "department": "qa",
+  "role": "Quality Assurance",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "public/**", "QA_CHECKLIST.md"],
+    "write": ["ai/qa/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "severity_levels": ["critical", "high", "medium", "low", "info"],
+  "outputs": {
+    "report": "ai/qa/report.latest.md",
+    "format": "markdown"
+  }
+}

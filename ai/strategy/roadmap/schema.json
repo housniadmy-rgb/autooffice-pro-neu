@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/strategy/roadmap/schema.json",
+  "title": "Roadmap Item",
+  "description": "Eine strategische Initiative auf der Roadmap. Trägt keinen Code, keine Deploys.",
+  "type": "object",
+  "required": [
+    "item_id",
+    "title",
+    "horizon",
+    "status",
+    "owner",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "item_id": {
+      "type": "string",
+      "pattern": "^rm_[a-z0-9_-]+$"
+    },
+    "title": { "type": "string", "minLength": 3, "maxLength": 200 },
+    "summary": { "type": "string", "maxLength": 2000 },
+    "theme_id": { "type": ["string", "null"] },
+    "horizon": {
+      "type": "string",
+      "enum": ["now", "next", "later", "parked"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "validated", "in_progress", "blocked", "shipped", "cancelled"],
+      "default": "proposed"
+    },
+    "owner": {
+      "type": "string",
+      "enum": [
+        "ceo", "cto", "qa", "seo", "marketing", "sales",
+        "support", "finance", "security", "monitoring", "operations"
+      ]
+    },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "related_kpis": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "related_opportunities": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "related_risks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "uniqueItems": true,
+      "default": []
+    },
+    "estimate": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "size": {
+          "type": "string",
+          "enum": ["xs", "s", "m", "l", "xl"]
+        },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+    "ship_target_quarter": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-Q[1-4]$"
+    },
+    "external_links": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["label"],
+        "additionalProperties": false,
+        "properties": {
+          "label": { "type": "string" },
+          "url": { "type": ["string", "null"], "format": "uri" },
+          "kind": {
+            "type": "string",
+            "enum": ["github_issue", "github_milestone", "doc", "other"],
+            "default": "other"
+          }
+        }
+      },
+      "default": []
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

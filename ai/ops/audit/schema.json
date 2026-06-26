@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/audit/schema.json",
+  "title": "Audit Log Entry",
+  "description": "Unveränderlicher Eintrag im Audit Log. Append-only.",
+  "type": "object",
+  "required": [
+    "audit_id",
+    "kind",
+    "actor",
+    "subject",
+    "summary",
+    "occurred_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^aud_[0-9]+_[a-z0-9_-]+$"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "queue.enqueued",
+        "queue.assigned",
+        "queue.requeued",
+        "queue.cancelled",
+        "policy.classified",
+        "policy.requested_approval",
+        "approval.decided",
+        "execution.started",
+        "execution.completed",
+        "execution.failed",
+        "execution.rejected",
+        "history.appended",
+        "system.anomaly"
+      ]
+    },
+    "actor": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "human",
+            "queue",
+            "policy_engine",
+            "execution_manager",
+            "approval_flow",
+            "system"
+          ]
+        },
+        "id": { "type": "string" }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "required": ["kind", "id"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "task",
+            "queue_entry",
+            "execution",
+            "approval",
+            "policy",
+            "snapshot",
+            "digest"
+          ]
+        },
+        "id": { "type": "string" }
+      }
+    },
+    "summary": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "details": {
+      "type": "object",
+      "additionalProperties": true,
+      "default": {}
+    },
+    "correlation_id": { "type": ["string", "null"] },
+    "prev_hash": {
+      "type": ["string", "null"],
+      "description": "Hash des vorherigen Audit-Eintrags (Spezifikation für Hash-Kette)."
+    },
+    "hash": {
+      "type": ["string", "null"],
+      "description": "Hash dieses Eintrags (Spezifikation, in Phase 9 nicht berechnet)."
+    },
+    "occurred_at": { "type": "string", "format": "date-time" }
+  }
+}

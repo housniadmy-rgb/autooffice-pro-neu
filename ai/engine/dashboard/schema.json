@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/engine/dashboard/schema.json",
+  "title": "CEO Dashboard Snapshot",
+  "description": "Read-only Aggregat über Tasks, Workflows, Approvals und Department-Status.",
+  "type": "object",
+  "required": ["generated_at", "headline", "by_department", "metrics"],
+  "additionalProperties": false,
+  "properties": {
+    "generated_at": { "type": "string", "format": "date-time" },
+    "headline": { "type": "string", "minLength": 3, "maxLength": 280 },
+    "attention_required": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "pending_approvals": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["approval_id", "subject_type", "subject_id", "risk_level"],
+            "additionalProperties": false,
+            "properties": {
+              "approval_id": { "type": "string" },
+              "subject_type": { "type": "string", "enum": ["task", "workflow_step"] },
+              "subject_id": { "type": "string" },
+              "risk_level": {
+                "type": "string",
+                "enum": ["critical", "high", "medium", "low", "info"]
+              }
+            }
+          },
+          "default": []
+        },
+        "critical_tasks": {
+          "type": "array",
+          "items": { "type": "string", "description": "Task-ID" },
+          "default": []
+        }
+      },
+      "default": {}
+    },
+    "by_department": {
+      "type": "object",
+      "description": "Pro Abteilung aggregierte Sicht.",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["passive", "active", "degraded", "blocked", "unknown"]
+          },
+          "last_report_at": { "type": ["string", "null"], "format": "date-time" },
+          "open_tasks": { "type": "integer", "minimum": 0 },
+          "open_approvals": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "recent_artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["department", "path"],
+        "additionalProperties": false,
+        "properties": {
+          "department": { "type": "string" },
+          "path": { "type": "string" },
+          "kind": {
+            "type": "string",
+            "enum": ["report", "summary", "diff", "log", "screenshot", "other"]
+          },
+          "updated_at": { "type": ["string", "null"], "format": "date-time" }
+        }
+      },
+      "default": []
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tasks_total": { "type": "integer", "minimum": 0 },
+        "tasks_by_state": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "tasks_by_priority": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "approvals_pending": { "type": "integer", "minimum": 0 },
+        "workflows_active": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

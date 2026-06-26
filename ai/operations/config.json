@@ -1,0 +1,20 @@
+{
+  "department": "operations",
+  "role": "Operations & Release",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["render.yaml", "DEPLOYMENT.md", "scripts/**", "package.json"],
+    "write": ["ai/operations/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "release_targets": ["render"],
+  "outputs": {
+    "report": "ai/operations/report.latest.md",
+    "format": "markdown"
+  }
+}

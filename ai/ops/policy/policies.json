@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/policy/policies.json",
+  "title": "Initial Policies",
+  "description": "Initialer Policy-Satz. Default ist 'critical' – wer 'safe' werden will, muss eine spezifische Regel treffen.",
+  "version": 1,
+  "policies": [
+    {
+      "id": "pol_default_critical",
+      "description": "Konservativer Default: alles ohne spezifische Regel ist kritisch und braucht CEO-Freigabe.",
+      "enabled": true,
+      "specificity": 0,
+      "match": {},
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo",
+        "note": "Default. Erst eine spezifischere Regel kann ein Task als 'safe' einstufen."
+      }
+    },
+    {
+      "id": "pol_readonly_reports_safe",
+      "description": "Read-only Reports und KB-Vorschläge gelten als sicher.",
+      "enabled": true,
+      "specificity": 50,
+      "match": {
+        "effect_kind_any": ["report_create", "report_update", "kb_propose"]
+      },
+      "classify": {
+        "class": "safe"
+      }
+    },
+    {
+      "id": "pol_config_change_critical",
+      "description": "Änderungen an Konfigurationen oder Deploy-relevanten Artefakten sind immer kritisch.",
+      "enabled": true,
+      "specificity": 80,
+      "match": {
+        "effect_kind_any": ["config_propose"]
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    },
+    {
+      "id": "pol_external_notification_critical",
+      "description": "Jede Benachrichtigung mit Außenwirkung braucht CEO-Freigabe.",
+      "enabled": true,
+      "specificity": 80,
+      "match": {
+        "effect_kind_any": ["notification_propose"]
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    },
+    {
+      "id": "pol_security_high_critical",
+      "description": "Security-Tasks mit hoher Priorität sind kritisch.",
+      "enabled": true,
+      "specificity": 70,
+      "match": {
+        "owner_in": ["security"],
+        "priority_min": "high"
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    },
+    {
+      "id": "pol_finance_pricing_critical",
+      "description": "Finance-Aktionen mit Pricing-Bezug sind kritisch.",
+      "enabled": true,
+      "specificity": 70,
+      "match": {
+        "owner_in": ["finance"],
+        "tag_any": ["pricing", "tariff", "margin"]
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    },
+    {
+      "id": "pol_operations_release_critical",
+      "description": "Operations-Aktionen mit Release- oder Deploy-Bezug sind kritisch.",
+      "enabled": true,
+      "specificity": 70,
+      "match": {
+        "owner_in": ["operations"],
+        "tag_any": ["release", "deploy", "infrastructure"]
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    },
+    {
+      "id": "pol_compliance_critical",
+      "description": "Alles, was Compliance/DSGVO berührt, ist kritisch.",
+      "enabled": true,
+      "specificity": 90,
+      "match": {
+        "tag_any": ["compliance", "dsgvo"]
+      },
+      "classify": {
+        "class": "critical",
+        "require_approval_by": "ceo"
+      }
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/engine/approvals/schema.json",
+  "title": "Approval Request",
+  "description": "Datensatz einer menschlichen Freigabe für Task oder Workflow-Schritt.",
+  "type": "object",
+  "required": [
+    "id",
+    "subject_type",
+    "subject_id",
+    "requested_by",
+    "status",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^apr_[a-z0-9_-]+_[0-9]+$"
+    },
+    "subject_type": {
+      "type": "string",
+      "enum": ["task", "workflow_step"]
+    },
+    "subject_id": { "type": "string" },
+    "requested_by": {
+      "type": "string",
+      "description": "Abteilung aus ai/, die die Freigabe braucht.",
+      "enum": [
+        "ceo",
+        "cto",
+        "qa",
+        "seo",
+        "marketing",
+        "sales",
+        "support",
+        "finance",
+        "security",
+        "monitoring",
+        "operations"
+      ]
+    },
+    "reason": { "type": "string", "maxLength": 2000 },
+    "risk_level": {
+      "type": "string",
+      "enum": ["critical", "high", "medium", "low", "info"],
+      "default": "info"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["pending", "approved", "rejected", "expired", "withdrawn"]
+    },
+    "decided_by": {
+      "type": ["string", "null"],
+      "description": "Identifier des Menschen, der entschieden hat."
+    },
+    "decision_note": { "type": ["string", "null"], "maxLength": 2000 },
+    "created_at": { "type": "string", "format": "date-time" },
+    "decided_at": { "type": ["string", "null"], "format": "date-time" },
+    "expires_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

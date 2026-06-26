@@ -1,0 +1,24 @@
+{
+  "department": "support",
+  "role": "Customer Support",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["routes/**", "locales/**", "public/**"],
+    "write": ["ai/support/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "channels": [],
+  "knowledge_base": {
+    "languages": ["de", "en"],
+    "topics": ["onboarding", "kalender", "buchung", "abrechnung", "datenschutz"]
+  },
+  "outputs": {
+    "report": "ai/support/report.latest.md",
+    "format": "markdown"
+  }
+}

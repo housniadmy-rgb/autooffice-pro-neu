@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "praxisonline24/ai/ops/execution/schema.json",
+  "title": "Execution Record",
+  "description": "Datensatz einer Task-Ausführung. In Phase 9 ist mode ausschließlich 'dry_run' erlaubt.",
+  "type": "object",
+  "required": [
+    "execution_id",
+    "queue_id",
+    "task_id",
+    "mode",
+    "state",
+    "idempotency_key",
+    "started_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "execution_id": {
+      "type": "string",
+      "pattern": "^exec_[a-z0-9_-]+_[0-9]+$"
+    },
+    "queue_id": { "type": "string" },
+    "task_id": { "type": "string" },
+    "mode": {
+      "type": "string",
+      "enum": ["dry_run"],
+      "description": "In Phase 9 ist ausschließlich 'dry_run' zulässig."
+    },
+    "state": {
+      "type": "string",
+      "enum": [
+        "starting",
+        "running",
+        "completed",
+        "failed",
+        "rejected",
+        "cancelled"
+      ]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200
+    },
+    "planned_effects": {
+      "type": "array",
+      "description": "Geplante Wirkungen – werden NICHT ausgeführt.",
+      "items": {
+        "type": "object",
+        "required": ["kind", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "report_create",
+              "report_update",
+              "config_propose",
+              "notification_propose",
+              "kb_propose",
+              "other"
+            ]
+          },
+          "summary": { "type": "string", "maxLength": 500 },
+          "target_path": { "type": ["string", "null"] }
+        }
+      },
+      "default": []
+    },
+    "result": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "ok": { "type": "boolean" },
+        "message": { "type": ["string", "null"], "maxLength": 1000 },
+        "metrics": {
+          "type": "object",
+          "additionalProperties": { "type": ["number", "string", "boolean", "null"] },
+          "default": {}
+        }
+      }
+    },
+    "error": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string" },
+        "message": { "type": "string" }
+      }
+    },
+    "started_at": { "type": "string", "format": "date-time" },
+    "finished_at": { "type": ["string", "null"], "format": "date-time" }
+  }
+}

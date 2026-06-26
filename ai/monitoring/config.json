@@ -1,0 +1,20 @@
+{
+  "department": "monitoring",
+  "role": "Monitoring & Observability",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["server.js", "routes/**", "middleware/**"],
+    "write": ["ai/monitoring/report.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "signals": ["uptime", "latency", "error_rate", "log_patterns"],
+  "outputs": {
+    "report": "ai/monitoring/report.latest.md",
+    "format": "markdown"
+  }
+}

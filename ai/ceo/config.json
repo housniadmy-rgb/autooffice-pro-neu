@@ -1,0 +1,37 @@
+{
+  "department": "ceo",
+  "role": "Chief Executive Officer",
+  "status": "passive",
+  "phase": 6,
+  "permissions": {
+    "read": ["ai/*/report.*", "ai/*/config.json", "ai/*/README.md"],
+    "write": ["ai/ceo/summary.*"],
+    "execute": [],
+    "publish": []
+  },
+  "auto_publish": false,
+  "auto_execute": false,
+  "requires_human_approval": true,
+  "inputs": [
+    "ai/cto",
+    "ai/qa",
+    "ai/seo",
+    "ai/marketing",
+    "ai/sales",
+    "ai/support",
+    "ai/finance",
+    "ai/security",
+    "ai/monitoring",
+    "ai/operations"
+  ],
+  "outputs": {
+    "summary": "ai/ceo/summary.latest.md",
+    "format": "markdown"
+  },
+  "escalation": {
+    "critical": "human_review_required",
+    "high": "human_review_required",
+    "medium": "queue",
+    "info": "log_only"
+  }
+}
