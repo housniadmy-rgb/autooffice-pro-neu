@@ -773,9 +773,9 @@ async function loadCEO() {
   const content = document.getElementById('content-ceo');
   loading.style.display = 'block'; content.style.display = 'none';
 
-  let ceoData, ctoData, demosData, rmData, ccSummary, ccHealth, ccActivity;
+  let ceoData, ctoData, demosData, rmData, ccSummary, ccHealth, ccActivity, ccInsights;
   try {
-    const [r1, r2, r3, r4, r5, r6, r7] = await Promise.all([
+    const [r1, r2, r3, r4, r5, r6, r7, r8] = await Promise.all([
       fetch('/api/owner/tab/ceo'),
       fetch('/api/owner/tab/cto'),
       fetch('/api/owner/tab/demos'),
@@ -783,6 +783,7 @@ async function loadCEO() {
       fetch('/api/owner/command-center/summary'),
       fetch('/api/owner/command-center/health'),
       fetch('/api/owner/command-center/activity'),
+      fetch('/api/owner/command-center/insights'),
     ]);
     if (r1.status === 401) { location.href = '/login.html'; return; }
     if (r1.status === 403 || r1.status === 503) { showAccessError(); return; }
@@ -793,6 +794,7 @@ async function loadCEO() {
     ccSummary  = r5.ok ? await r5.json() : null;
     ccHealth   = r6.ok ? await r6.json() : null;
     ccActivity = r7.ok ? await r7.json() : null;
+    ccInsights = r8.ok ? await r8.json() : null;
   } catch {
     loading.innerHTML = '<div class="error-box">Fehler beim Laden der CEO-Daten.</div>';
     return;
@@ -921,6 +923,110 @@ async function loadCEO() {
                     </div>
                   </li>`).join('')}
               </ul>`}
+        </div>
+      </div>`;
+  })();
+
+  /* ── Sprint 4: Tasks · Warnings · Recommendations aus Live-Daten ─────── */
+  const deptIcon  = { ceo: '👑', cfo: '💶', cto: '🛡️', support_marketing: '💬', ops: '⚙️' };
+  const deptLabel = { ceo: 'CEO', cfo: 'CFO', cto: 'CTO', support_marketing: 'Support/Marketing', ops: 'Operations' };
+  const insightsHtml = (() => {
+    if (!ccInsights) {
+      return `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">CEO Tasks · Warnings · Recommendations</div>
+              <div class="card-sub">/api/owner/command-center/insights derzeit nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">
+            Insights konnten nicht geladen werden.
+          </div>
+        </div>`;
+    }
+    const t = Array.isArray(ccInsights.tasks)            ? ccInsights.tasks            : [];
+    const w = Array.isArray(ccInsights.warnings)         ? ccInsights.warnings         : [];
+    const r = Array.isArray(ccInsights.recommendations)  ? ccInsights.recommendations  : [];
+
+    const taskItem = it => `
+      <li class="risk-item" style="align-items:flex-start;">
+        <div class="risk-dot ${it.priority === 'high' ? 'danger' : it.priority === 'medium' ? 'warn' : 'info'}"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;">
+            <span class="chip chip-blue" style="font-size:.7rem;">${esc(deptIcon[it.department]||'·')} ${esc(deptLabel[it.department]||it.department||'·')}</span>
+            <span>${esc(it.title||'')}</span>
+          </div>
+          ${it.detail ? `<div style="font-size:.8rem;color:var(--c-text-muted);margin-top:.2rem;">${esc(it.detail)}</div>` : ''}
+        </div>
+      </li>`;
+
+    const warnItem = it => `
+      <li class="risk-item" style="align-items:flex-start;">
+        <div class="risk-dot ${it.level === 'danger' ? 'danger' : 'warn'}"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;display:flex;gap:.4rem;flex-wrap:wrap;align-items:center;">
+            <span class="chip ${it.level === 'danger' ? 'chip-red' : 'chip-yellow'}" style="font-size:.7rem;">
+              ${esc(deptIcon[it.department]||'·')} ${esc(deptLabel[it.department]||it.department||'·')}
+            </span>
+            <span>${esc(it.message||'')}</span>
+          </div>
+          ${Array.isArray(it.sections) && it.sections.length ? `
+            <div style="font-size:.78rem;color:var(--c-text-muted);margin-top:.25rem;">
+              Sektionen: ${it.sections.map(s => esc(s.name||s.section)+' ('+s.score+')').join(', ')}
+            </div>` : ''}
+        </div>
+      </li>`;
+
+    const recItem = it => `
+      <li class="risk-item" style="align-items:flex-start;">
+        <div class="risk-dot info"></div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:600;">${esc(it.title||'')}</div>
+          ${it.detail ? `<div style="font-size:.8rem;color:var(--c-text-muted);margin-top:.2rem;">${esc(it.detail)}</div>` : ''}
+        </div>
+      </li>`;
+
+    return `
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-header">
+          <div class="card-icon ${w.length > 0 ? 'danger' : t.length > 0 ? 'warning' : 'success'}">🎯</div>
+          <div class="card-title-block">
+            <div class="card-title">CEO Tasks · Warnings · Recommendations</div>
+            <div class="card-sub">Live abgeleitet aus lokalen Read-Only-Daten · /api/owner/command-center/insights</div>
+          </div>
+          <div class="card-action">
+            <span class="chip chip-blue">${t.length} Tasks</span>
+            <span class="chip ${w.length > 0 ? 'chip-red' : 'chip-gray'}" style="margin-left:.25rem;">${w.length} Warnings</span>
+            <span class="chip chip-gray" style="margin-left:.25rem;">${r.length} Recos</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="panel-grid panel-grid-2">
+            <div>
+              <div class="section-lbl" style="margin-top:0;">Aufgaben</div>
+              <ul class="risk-list">
+                ${t.length === 0
+                  ? '<li class="risk-item"><div class="risk-dot info"></div>Keine offenen CEO-Aufgaben.</li>'
+                  : t.map(taskItem).join('')}
+              </ul>
+              <div class="section-lbl">Empfehlungen</div>
+              <ul class="risk-list">
+                ${r.length === 0
+                  ? '<li class="risk-item"><div class="risk-dot info"></div>Keine zusätzlichen Empfehlungen.</li>'
+                  : r.map(recItem).join('')}
+              </ul>
+            </div>
+            <div>
+              <div class="section-lbl" style="margin-top:0;">Warnungen</div>
+              <ul class="risk-list">
+                ${w.length === 0
+                  ? '<li class="risk-item"><div class="risk-dot info"></div>Keine Plattform-Warnungen.</li>'
+                  : w.map(warnItem).join('')}
+              </ul>
+            </div>
+          </div>
         </div>
       </div>`;
   })();
@@ -1129,6 +1235,7 @@ async function loadCEO() {
   content.innerHTML =
     execHtml +
     liveHtml +
+    insightsHtml +
     kpiHtml +
     `<div class="panel-grid panel-grid-2">
        <div>${approvalHtml}</div>

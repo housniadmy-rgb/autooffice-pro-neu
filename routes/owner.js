@@ -644,6 +644,140 @@ router.get('/command-center/activity', requireOwner, (req, res) => {
   });
 });
 
+// ── CEO Command Center: Insights (Tasks · Warnings · Recommendations) ───────
+// Sprint 4 – leitet aus den vorhandenen lokalen Read-Only-Quellen drei
+// Listen ab: konkrete CEO-Aufgaben, Plattform-Warnungen und strategische
+// Empfehlungen. Strikt SELECT-only und auf Aggregations-/Zähl-Werte beschränkt;
+// keine Patientendaten, keine E-Mails, keine Tokens, keine Secrets.
+router.get('/command-center/insights', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  const today = now.format('YYYY-MM-DD');
+
+  // ── Live-Zahlen aus der lokalen DB (alles COUNT/MIN/MAX – keine PII) ──
+  const totalPractices  = db.prepare('SELECT COUNT(*) as n FROM practices').get().n;
+  const trialPractices  = db.prepare("SELECT COUNT(*) as n FROM practices WHERE trial_end_date >= ? AND (account_status = 'active' OR account_status IS NULL)").get(today).n;
+  const appointmentsToday = db.prepare("SELECT COUNT(*) as n FROM appointments WHERE appointment_date = ? AND status NOT IN ('cancelled','archived')").get(today).n;
+  const openInvoices    = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid'").get().n;
+  const overdueInvoices = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid' AND due_date < ?").get(today).n;
+  const pendingReviews  = db.prepare('SELECT COUNT(*) as n FROM reviews WHERE visible = 0').get().n;
+  const openDemos       = db.prepare("SELECT COUNT(*) as n FROM demo_requests WHERE status = 'neu'").get().n;
+  const trialShare      = totalPractices > 0 ? Math.round((trialPractices / totalPractices) * 100) : 0;
+
+  // ── Health-Scores aus den AI-OS-Read-Models (spec-only, kein DB-Zugriff) ──
+  const rmRoot = path.join(__dirname, '..', 'ai', 'os');
+  const rmSections = ['core', 'engine', 'departments', 'intelligence', 'operations', 'security', 'integrations', 'dashboard'];
+  const lowHealth = [];
+  let lowestHealth = null;
+  for (const section of rmSections) {
+    try {
+      const data = JSON.parse(fs.readFileSync(path.join(rmRoot, section, 'read-model.v1.json'), 'utf8'));
+      const score = typeof data.health_score === 'number' ? data.health_score : null;
+      if (score !== null) {
+        if (lowestHealth === null || score < lowestHealth) lowestHealth = score;
+        if (score < 50) lowHealth.push({ section, name: data.name || section, score });
+      }
+    } catch {
+      // Read-Model nicht lesbar zählt nicht als niedriger Score; sichtbar
+      // ist die Situation bereits über /command-center/health bzw. /read-models.
+    }
+  }
+
+  // Schwelle für „viele Praxen in Testphase":
+  //   • absolut mehr als 5 Trials ODER
+  //   • Trial-Anteil ≥ 50 % bei mindestens 4 Praxen insgesamt.
+  const manyTrials = trialPractices > 5 || (trialShare >= 50 && totalPractices >= 4);
+
+  // ── Tasks ────────────────────────────────────────────────────────────────
+  const tasks = [];
+  if (openDemos > 0) {
+    tasks.push({
+      code: 'demo_requests_open',
+      department: 'ceo',
+      priority: 'high',
+      title: `${openDemos} offene Demo-Anfrage(n) prüfen`,
+      detail: 'Status auf „eingeladen" oder „kontaktiert" setzen und Folgeaktion einleiten.',
+      count: openDemos,
+    });
+  }
+  if (pendingReviews > 0) {
+    tasks.push({
+      code: 'reviews_pending',
+      department: 'support_marketing',
+      priority: pendingReviews > 10 ? 'high' : 'medium',
+      title: `${pendingReviews} Bewertung(en) freigeben oder beantworten`,
+      detail: 'Support/Marketing-Team: Bewertungen sichten – sichtbar schalten oder Reaktion senden.',
+      count: pendingReviews,
+    });
+  }
+
+  // ── Warnings ─────────────────────────────────────────────────────────────
+  const warnings = [];
+  if (openInvoices > 0) {
+    warnings.push({
+      code: 'cfo_open_invoices',
+      department: 'cfo',
+      level: overdueInvoices > 0 ? 'danger' : 'warn',
+      message: overdueInvoices > 0
+        ? `${openInvoices} offene Rechnung(en), davon ${overdueInvoices} überfällig`
+        : `${openInvoices} offene Rechnung(en)`,
+      count: openInvoices,
+      overdue: overdueInvoices,
+    });
+  }
+  if (lowHealth.length > 0) {
+    warnings.push({
+      code: 'cto_low_health_score',
+      department: 'cto',
+      level: 'danger',
+      message: `${lowHealth.length} AI-OS-Sektion(en) mit niedrigem Health Score (< 50)`,
+      sections: lowHealth.map(h => ({ section: h.section, name: h.name, score: h.score })),
+    });
+  }
+
+  // ── Recommendations ──────────────────────────────────────────────────────
+  const recommendations = [];
+  if (appointmentsToday === 0) {
+    recommendations.push({
+      code: 'no_appointments_today',
+      area: 'operations',
+      title: 'Buchungsseite prüfen',
+      detail: 'Heute sind keine Termine eingetragen. Online-Buchungsseite, Verfügbarkeiten und Praktiker-Status verifizieren.',
+    });
+  }
+  if (manyTrials) {
+    recommendations.push({
+      code: 'many_trials_followup',
+      area: 'growth',
+      title: 'Follow-up für Testphasen-Praxen vorbereiten',
+      detail: `${trialPractices} von ${totalPractices} Praxen in Testphase (${trialShare} %). Persönliches Follow-up und Conversion-Strategie planen.`,
+      trial: trialPractices,
+      total: totalPractices,
+      share_percent: trialShare,
+    });
+  }
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only: true,
+    counters: {
+      total_practices: totalPractices,
+      trial_practices: trialPractices,
+      trial_share_percent: trialShare,
+      appointments_today: appointmentsToday,
+      open_invoices: openInvoices,
+      overdue_invoices: overdueInvoices,
+      pending_reviews: pendingReviews,
+      open_demo_requests: openDemos,
+      lowest_health_score: lowestHealth,
+      low_health_sections: lowHealth.length,
+    },
+    tasks,
+    warnings,
+    recommendations,
+  });
+});
+
 // ── AI OS Read Models (System Health Panel) ──────────────────────────────────
 // Liefert die acht versionierten Read-Models aus ai/os/<section>/read-model.v1.json
 // als read-only Liste. Reine Spec-Auslieferung, keine DB-Zugriffe, keine Mutationen.
