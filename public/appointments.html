@@ -54,36 +54,105 @@
 
     <div id="limit-bar" style="display:none;"></div>
 
-    <div class="cal-controls">
-      <button id="btn-prev-month" class="btn btn-secondary btn-sm" data-i18n="btn_prev">← Zurück</button>
-      <span id="cal-month-title" class="cal-title"></span>
-      <button id="btn-next-month" class="btn btn-secondary btn-sm" data-i18n="btn_next">Weiter →</button>
-      <button id="btn-today" class="btn btn-secondary btn-sm" data-i18n="btn_today">Heute</button>
-      <div style="flex:1;"></div>
-      <select id="filter-practitioner" class="form-control" style="width:auto;min-width:200px;"></select>
-      <select id="filter-archive" class="form-control" style="width:auto;min-width:160px;">
-        <option value="active" data-i18n="filter_active">Aktive Termine</option>
-        <option value="archived" data-i18n="filter_archived">Archivierte Termine</option>
-        <option value="all" data-i18n="filter_all_apts">Alle Termine</option>
-      </select>
-      <button id="btn-new-apt" class="btn btn-primary" data-i18n="btn_new_appointment">+ Neuer Termin</button>
+    <div class="pcal-shell">
+
+      <!-- Left filter panel -->
+      <aside class="pcal-filters" id="pcal-filters">
+        <div class="pcal-filters-head">
+          <h3 class="pcal-filters-title" data-i18n="cal_filters">Filter</h3>
+          <button type="button" class="pcal-filters-close" id="btn-close-filters" aria-label="Filter schließen">&times;</button>
+        </div>
+
+        <div class="pcal-filter-group">
+          <label class="pcal-filter-label" data-i18n="form_practitioner">Behandler</label>
+          <select id="filter-practitioner" class="form-control"></select>
+        </div>
+
+        <div class="pcal-filter-group">
+          <label class="pcal-filter-label" data-i18n="cal_filter_status">Status</label>
+          <div class="pcal-filter-chips" id="filter-status-chips"></div>
+        </div>
+
+        <div class="pcal-filter-group">
+          <label class="pcal-filter-label" data-i18n="form_type">Terminart</label>
+          <select id="filter-type" class="form-control">
+            <option value="" data-i18n="filter_all">Alle</option>
+          </select>
+        </div>
+
+        <div class="pcal-filter-group">
+          <label class="pcal-filter-label" data-i18n="cal_filter_archive">Archiv</label>
+          <select id="filter-archive" class="form-control">
+            <option value="active" data-i18n="filter_active">Aktive Termine</option>
+            <option value="archived" data-i18n="filter_archived">Archivierte Termine</option>
+            <option value="all" data-i18n="filter_all_apts">Alle Termine</option>
+          </select>
+        </div>
+
+        <div class="pcal-filter-group">
+          <label class="pcal-filter-label" data-i18n="cal_legend">Legende</label>
+          <div class="pcal-legend">
+            <span class="pcal-legend-item"><span class="pcal-legend-dot status-scheduled"></span> <span data-i18n="status_scheduled">Geplant</span></span>
+            <span class="pcal-legend-item"><span class="pcal-legend-dot status-completed"></span> <span data-i18n="status_completed">Abgeschlossen</span></span>
+            <span class="pcal-legend-item"><span class="pcal-legend-dot status-noshow"></span> <span data-i18n="status_noshow">Nicht erschienen</span></span>
+            <span class="pcal-legend-item"><span class="pcal-legend-dot status-cancelled"></span> <span data-i18n="status_cancel">Abgesagt</span></span>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main calendar -->
+      <section class="pcal-main">
+        <div class="pcal-toolbar">
+          <button type="button" class="pcal-icon-btn pcal-filters-toggle" id="btn-toggle-filters" aria-label="Filter">
+            <span aria-hidden="true">⚙</span>
+          </button>
+
+          <div class="pcal-nav-group">
+            <button type="button" id="btn-prev" class="pcal-icon-btn" title="Zurück" aria-label="Zurück">&#8249;</button>
+            <button type="button" id="btn-today" class="btn btn-secondary btn-sm" data-i18n="btn_today">Heute</button>
+            <button type="button" id="btn-next" class="pcal-icon-btn" title="Weiter" aria-label="Weiter">&#8250;</button>
+          </div>
+
+          <h2 id="pcal-title" class="pcal-title"></h2>
+
+          <div class="pcal-view-tabs" role="tablist">
+            <button type="button" class="pcal-view-tab" data-view="day" role="tab" data-i18n="cal_view_day">Tag</button>
+            <button type="button" class="pcal-view-tab" data-view="week" role="tab" data-i18n="cal_view_week">Woche</button>
+            <button type="button" class="pcal-view-tab is-active" data-view="month" role="tab" data-i18n="cal_view_month">Monat</button>
+          </div>
+
+          <button id="btn-new-apt" class="btn btn-primary btn-sm" data-i18n="btn_new_appointment">+ Neuer Termin</button>
+        </div>
+
+        <!-- Month View -->
+        <div id="view-month" class="pcal-view">
+          <div class="pcal-month-grid" id="pcal-month-grid"></div>
+        </div>
+
+        <!-- Week View -->
+        <div id="view-week" class="pcal-view" style="display:none;">
+          <div class="pcal-week-wrap" id="pcal-week-wrap"></div>
+        </div>
+
+        <!-- Day View -->
+        <div id="view-day" class="pcal-view" style="display:none;">
+          <div class="pcal-day-wrap" id="pcal-day-wrap"></div>
+        </div>
+      </section>
+
     </div>
 
-    <!-- Month View -->
-    <div id="view-month">
-      <div class="cal-grid" id="cal-grid"></div>
-    </div>
-
-    <!-- Day View -->
-    <div id="view-day" style="display:none;">
-      <div class="day-view-header">
-        <button id="btn-back-month" class="btn btn-secondary btn-sm" data-i18n="btn_back_month">← Monatsansicht</button>
-        <button id="btn-prev-day" class="btn btn-secondary btn-sm" title="Vorheriger Tag">&#8249;</button>
-        <h2 id="day-view-date" style="flex:1;font-size:1.25rem;"></h2>
-        <button id="btn-next-day" class="btn btn-secondary btn-sm" title="Nächster Tag">&#8250;</button>
+    <!-- Right Detail Drawer -->
+    <div class="pcal-detail-backdrop" id="pcal-detail-backdrop" hidden></div>
+    <aside class="pcal-detail" id="pcal-detail" aria-hidden="true">
+      <div class="pcal-detail-head">
+        <h3 id="detail-title" data-i18n="cal_detail_title">Termin-Details</h3>
+        <button type="button" class="pcal-detail-close" id="btn-close-detail" aria-label="Schließen">&times;</button>
       </div>
-      <div id="day-apt-list" class="day-apt-list"></div>
-    </div>
+      <div class="pcal-detail-body" id="detail-body">
+        <p class="pcal-detail-empty" data-i18n="cal_detail_empty">Wählen Sie einen Termin aus.</p>
+      </div>
+    </aside>
 
   </div>
 </div>
