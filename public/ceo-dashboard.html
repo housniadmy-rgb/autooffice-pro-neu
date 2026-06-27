@@ -766,6 +766,38 @@ document.getElementById('btn-refresh').addEventListener('click', () => {
   loadFns[tab]();
 });
 
+/* ── Sprint 5 · Auto-Refresh (Dashboard automatisch aktualisieren) ──────── */
+// Aktualisiert den aktiven Tab alle 60s im Hintergrund. Kein Spinner-Flackern:
+// das alte Panel bleibt sichtbar, bis das neue Markup gerendert ist. Pausiert,
+// während der Tab versteckt ist (Hintergrund-Tab) und bei Netzwerkfehlern.
+const AUTO_REFRESH_MS = 60 * 1000;
+let autoRefreshing = false;
+async function autoRefreshActiveTab() {
+  if (autoRefreshing) return;
+  if (document.hidden) return;
+  const activeBtn = document.querySelector('.tab-btn.active');
+  if (!activeBtn) return;
+  const tab = activeBtn.dataset.tab;
+  if (!loadFns[tab]) return;
+  // Owner-Status erneut prüfen – wenn Session abgelaufen ist, gar nicht erst nachladen.
+  try {
+    const me = await fetch('/api/auth/me');
+    if (me.status === 401) { location.href = '/login.html'; return; }
+  } catch { return; }
+  autoRefreshing = true;
+  try {
+    delete loaded[tab];
+    // Wir lassen das Content-DIV sichtbar, damit kein Flackern entsteht;
+    // loadFns ersetzt es atomar nach erfolgreichem Fetch.
+    await loadFns[tab]();
+  } catch { /* Auto-Refresh ist best effort */ }
+  finally { autoRefreshing = false; }
+}
+setInterval(autoRefreshActiveTab, AUTO_REFRESH_MS);
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) autoRefreshActiveTab();
+});
+
 /* ── 3) Modernized CEO Tab with new panels ───────────────────────────────── */
 async function loadCEO() {
   if (loaded.ceo) return;
@@ -773,9 +805,10 @@ async function loadCEO() {
   const content = document.getElementById('content-ceo');
   loading.style.display = 'block'; content.style.display = 'none';
 
-  let ceoData, ctoData, demosData, rmData, ccSummary, ccHealth, ccActivity, ccInsights;
+  let ceoData, ctoData, demosData, rmData, ccSummary, ccHealth, ccActivity, ccInsights,
+      ccTimeline, ccNotifs, ccTrends, ccBriefing;
   try {
-    const [r1, r2, r3, r4, r5, r6, r7, r8] = await Promise.all([
+    const [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12] = await Promise.all([
       fetch('/api/owner/tab/ceo'),
       fetch('/api/owner/tab/cto'),
       fetch('/api/owner/tab/demos'),
@@ -784,6 +817,10 @@ async function loadCEO() {
       fetch('/api/owner/command-center/health'),
       fetch('/api/owner/command-center/activity'),
       fetch('/api/owner/command-center/insights'),
+      fetch('/api/owner/command-center/timeline'),
+      fetch('/api/owner/command-center/notifications'),
+      fetch('/api/owner/command-center/trends'),
+      fetch('/api/owner/command-center/briefing'),
     ]);
     if (r1.status === 401) { location.href = '/login.html'; return; }
     if (r1.status === 403 || r1.status === 503) { showAccessError(); return; }
@@ -795,6 +832,10 @@ async function loadCEO() {
     ccHealth   = r6.ok ? await r6.json() : null;
     ccActivity = r7.ok ? await r7.json() : null;
     ccInsights = r8.ok ? await r8.json() : null;
+    ccTimeline = r9.ok  ? await r9.json()  : null;
+    ccNotifs   = r10.ok ? await r10.json() : null;
+    ccTrends   = r11.ok ? await r11.json() : null;
+    ccBriefing = r12.ok ? await r12.json() : null;
   } catch {
     loading.innerHTML = '<div class="error-box">Fehler beim Laden der CEO-Daten.</div>';
     return;
@@ -1232,13 +1273,268 @@ async function loadCEO() {
     </div>
   `;
 
+  /* ── Sprint 5 · AI Daily Briefing ─────────────────────────────────────── */
+  const moodClass  = { critical: 'danger', attention: 'warning', steady: '', calm: 'success' };
+  const moodLabel  = { critical: 'Kritisch', attention: 'Aufmerksamkeit', steady: 'Stabil', calm: 'Ruhig' };
+  const prioDotCls = { high: 'high', medium: 'medium', low: 'low' };
+  const briefingHtml = (() => {
+    if (!ccBriefing) {
+      return `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">AI Daily Briefing</div>
+              <div class="card-sub">/api/owner/command-center/briefing derzeit nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">Keine Daten verfügbar.</div>
+        </div>`;
+    }
+    const b = ccBriefing;
+    const cls   = moodClass[b.mood] || '';
+    const label = moodLabel[b.mood] || '—';
+    return `
+      <section class="exec-summary" style="background:linear-gradient(135deg, var(--c-brand-soft) 0%, color-mix(in srgb, var(--c-success-soft) 50%, var(--c-surface)) 100%);">
+        <div class="exec-head">
+          <span class="exec-badge">AI Daily Briefing</span>
+          <div class="exec-title">${esc(b.greeting||'Guten Tag')} – ${esc(b.date||'')}</div>
+          <div class="exec-status ${b.mood==='critical'?'danger':b.mood==='attention'?'warn':''}">
+            <span class="exec-status-dot"></span> ${esc(label)}
+          </div>
+        </div>
+        ${(b.headlines||[]).length === 0
+          ? '<div class="exec-rec">Keine Daten verfügbar</div>'
+          : b.headlines.map(h => `<div class="exec-task"><div class="exec-task-dot low"></div><span>${esc(h)}</span></div>`).join('')}
+        ${(b.priorities||[]).length > 0 ? `
+          <div class="exec-block-label">Heutige Prioritäten</div>
+          ${b.priorities.map(p => `
+            <div class="exec-task">
+              <div class="exec-task-dot ${esc(prioDotCls[p.level]||'low')}"></div>
+              <span>${esc(p.text||'')}</span>
+            </div>`).join('')}
+        ` : `
+          <div class="exec-block-label">Heutige Prioritäten</div>
+          <div class="exec-rec">Keine offenen Prioritäten – freie Bahn.</div>
+        `}
+        <div class="exec-rec" style="margin-top:.5rem;">${esc(b.conclusion||'')}</div>
+      </section>
+    `;
+  })();
+
+  /* ── Sprint 5 · Trend Cards (7 Tage) ──────────────────────────────────── */
+  const trendsHtml = (() => {
+    if (!ccTrends || !ccTrends.trends) {
+      return `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">Trends · 7 Tage</div>
+              <div class="card-sub">/api/owner/command-center/trends derzeit nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">Keine Daten verfügbar.</div>
+        </div>`;
+    }
+    const t = ccTrends.trends;
+    const trendDefs = [
+      { key: 'appointments_booked', icon: '📅', label: 'Termine gebucht' },
+      { key: 'registrations',       icon: '🏢', label: 'Neue Praxen' },
+      { key: 'demo_requests',       icon: '📨', label: 'Demo-Anfragen' },
+      { key: 'reviews_received',    icon: '⭐', label: 'Neue Bewertungen' },
+      { key: 'activity_events',     icon: '⚙️', label: 'System-Aktionen' },
+      { key: 'revenue_paid',        icon: '💶', label: 'Bezahlt (Summe)' },
+    ];
+    function spark(series, isCurrency) {
+      if (!series || series.length === 0) {
+        return '<span style="color:var(--c-text-subtle);font-size:.75rem;">Keine Daten</span>';
+      }
+      const max = Math.max(...series.map(p => p.count || 0), 1);
+      const bars = series.map(p => {
+        const h = Math.max(Math.round(((p.count || 0) / max) * 100), 3);
+        const tip = `${p.date}: ${isCurrency ? fmt(p.count) : fmtNum(p.count)}`;
+        return `<div class="bar-col" title="${esc(tip)}"><div class="bar-fill" style="height:${h}%;"></div></div>`;
+      }).join('');
+      return `<div class="bar-wrap" style="height:38px;gap:3px;">${bars}</div>`;
+    }
+    const cards = trendDefs.map(def => {
+      const tr = t[def.key] || { series_7d: [], total_7d: 0, delta: 0, delta_percent: 0, direction: 'flat' };
+      const isCurrency = def.key === 'revenue_paid';
+      const dirCls = tr.direction === 'up' ? 'up' : tr.direction === 'down' ? 'down' : 'flat';
+      const dirArrow = tr.direction === 'up' ? '▲' : tr.direction === 'down' ? '▼' : '—';
+      const totalLbl = isCurrency ? fmt(tr.total_7d) : fmtNum(tr.total_7d);
+      const deltaTxt = (tr.delta === 0 && tr.previous_total === 0)
+        ? 'keine Vorwoche'
+        : `${tr.delta >= 0 ? '+' : ''}${isCurrency ? fmt(tr.delta) : fmtNum(tr.delta)} (${tr.delta_percent >= 0 ? '+' : ''}${tr.delta_percent}%)`;
+      return `
+        <div class="kpi-card">
+          <div class="kpi-top">
+            <div class="kpi-icon">${def.icon}</div>
+            <div class="kpi-label">${esc(def.label)}</div>
+          </div>
+          <div class="kpi-value">${totalLbl}</div>
+          <div class="kpi-trend ${dirCls}">${dirArrow} ${esc(deltaTxt)} · Vorwoche</div>
+          <div style="margin-top:.45rem;">${spark(tr.series_7d, isCurrency)}</div>
+        </div>`;
+    }).join('');
+    return `
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-header">
+          <div class="card-icon">📈</div>
+          <div class="card-title-block">
+            <div class="card-title">Trends · letzte 7 Tage</div>
+            <div class="card-sub">Tageswerte mit Vergleich zur Vorwoche · read-only</div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="kpi-grid kpi-grid-3" style="gap:.75rem;">${cards}</div>
+        </div>
+      </div>`;
+  })();
+
+  /* ── Sprint 5 · Notifications Center ──────────────────────────────────── */
+  const notificationsHtml = (() => {
+    if (!ccNotifs) {
+      return `
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">Notifications Center</div>
+              <div class="card-sub">/api/owner/command-center/notifications nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">Keine Daten verfügbar.</div>
+        </div>`;
+    }
+    const items = Array.isArray(ccNotifs.items) ? ccNotifs.items : [];
+    const c = ccNotifs.counts || {};
+    const levelIcon = { danger: '🚨', warn: '⚠️', info: 'ℹ️' };
+    const levelCls  = { danger: 'danger', warn: 'warning', info: '' };
+    const cardIconCls = c.danger > 0 ? 'danger' : c.warn > 0 ? 'warning' : 'success';
+    return `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon ${cardIconCls}">🔔</div>
+          <div class="card-title-block">
+            <div class="card-title">Notifications Center</div>
+            <div class="card-sub">Plattform-Benachrichtigungen · ${c.total||0} offen</div>
+          </div>
+          <div class="card-action">
+            ${c.danger > 0 ? `<span class="chip chip-red">${c.danger} kritisch</span> ` : ''}
+            ${c.warn   > 0 ? `<span class="chip chip-yellow">${c.warn} warn</span> ` : ''}
+            ${c.info   > 0 ? `<span class="chip chip-blue">${c.info} info</span>`     : ''}
+            ${c.total === 0 ? `<span class="chip chip-green">Alles ruhig</span>` : ''}
+          </div>
+        </div>
+        ${items.length === 0 ? `
+          <div class="approval-empty">
+            <div class="approval-empty-icon">✓</div>
+            <div>Keine offenen Benachrichtigungen.</div>
+          </div>
+        ` : items.map(it => `
+          <div class="approval-item">
+            <div class="approval-priority ${it.level==='danger'?'high':it.level==='warn'?'medium':'low'}"></div>
+            <div class="approval-body">
+              <div class="approval-title">
+                <span class="activity-dot ${levelCls[it.level]||''}" style="width:22px;height:22px;font-size:.7rem;">${levelIcon[it.level]||'·'}</span>
+                <span>${esc(it.title||'')}</span>
+              </div>
+              <div class="approval-meta">
+                ${it.detail ? `<span>${esc(it.detail)}</span>` : ''}
+                ${typeof it.count === 'number' ? `<span>Anzahl: ${fmtNum(it.count)}</span>` : ''}
+              </div>
+            </div>
+            ${it.link ? `<div class="approval-actions"><a class="btn-pill" href="${esc(it.link)}">Öffnen →</a></div>` : ''}
+          </div>
+        `).join('')}
+      </div>
+    `;
+  })();
+
+  /* ── Sprint 5 · Activity Timeline (gruppiert pro Tag) ─────────────────── */
+  const timelineHtml = (() => {
+    if (!ccTimeline) {
+      return `
+        <div class="card" style="margin-bottom:1rem;">
+          <div class="card-header">
+            <div class="card-icon warning">⚠️</div>
+            <div class="card-title-block">
+              <div class="card-title">Activity Timeline</div>
+              <div class="card-sub">/api/owner/command-center/timeline nicht erreichbar</div>
+            </div>
+          </div>
+          <div class="card-body" style="color:var(--c-text-muted);font-size:.875rem;">Keine Daten verfügbar.</div>
+        </div>`;
+    }
+    const days = Array.isArray(ccTimeline.days) ? ccTimeline.days : [];
+    const catIcon = {
+      auth: '🔓', invite: '✉', delete: '✕', register: '✨', security: '🔐',
+      appointment: '📅', invoice: '🧾', review: '⭐', waitlist: '📋',
+      demo: '📨', practice: '🏢', automation: '⚙️', system: '·',
+    };
+    const catCls = {
+      auth: 'success', invite: 'warning', delete: 'danger', register: 'success',
+      security: 'warning', appointment: '', invoice: '', review: '',
+      waitlist: '', demo: '', practice: 'success', automation: 'muted', system: '',
+    };
+    function dayHeader(key) {
+      if (key === 'today')     return 'Heute';
+      if (key === 'yesterday') return 'Gestern';
+      try { return new Date(key).toLocaleDateString('de-DE', { weekday: 'long', day: '2-digit', month: '2-digit' }); }
+      catch { return key; }
+    }
+    return `
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-header">
+          <div class="card-icon"><span class="activity-pulse"></span></div>
+          <div class="card-title-block">
+            <div class="card-title">Activity Timeline</div>
+            <div class="card-sub">Letzte ${esc(String(ccTimeline.window_hours||72))} Std. · ${fmtNum(ccTimeline.total_events||0)} Ereignis(se) · keine Patientendaten</div>
+          </div>
+        </div>
+        ${days.length === 0 ? `
+          <div class="approval-empty">Keine Daten verfügbar</div>
+        ` : days.map(d => `
+          <div style="padding:.65rem 1.125rem .25rem;">
+            <div class="section-lbl" style="margin:.25rem 0 .5rem;">${esc(dayHeader(d.day))} · ${d.count} Ereignis(se)</div>
+          </div>
+          <ul class="activity-list">
+            ${d.events.map(ev => {
+              const ic = catIcon[ev.category] || '·';
+              const cc = catCls[ev.category]  || '';
+              return `
+                <li class="activity-item">
+                  <div class="activity-dot ${cc}">${ic}</div>
+                  <div class="activity-body">
+                    <div class="activity-text">${esc(ev.action || '—')}</div>
+                    <div class="activity-meta">
+                      ${ev.entity_type ? esc(ev.entity_type) + ' · ' : ''}
+                      ${esc(ev.source)} · ${fmtRel(ev.at)} · ${fmtDt(ev.at)}
+                    </div>
+                  </div>
+                </li>`;
+            }).join('')}
+          </ul>
+        `).join('')}
+      </div>
+    `;
+  })();
+
   content.innerHTML =
+    briefingHtml +
     execHtml +
     liveHtml +
     insightsHtml +
     kpiHtml +
+    trendsHtml +
     `<div class="panel-grid panel-grid-2">
        <div>${approvalHtml}</div>
+       <div>${notificationsHtml}</div>
+     </div>` +
+    `<div class="panel-grid panel-grid-2">
+       <div>${timelineHtml}</div>
        <div>${activityHtml}</div>
      </div>` +
     healthHtml +

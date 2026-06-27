@@ -810,4 +810,330 @@ router.get('/read-models', requireOwner, (req, res) => {
   });
 });
 
+// ── CEO Command Center · Sprint 5 ─────────────────────────────────────────
+// Executive Intelligence Timeline:
+//   • /command-center/timeline      → Live-Aktivitäts-Timeline (Activity-Feed)
+//   • /command-center/notifications → Notifications Center (vereinheitlichte
+//                                     Warnungen + offene Aufgaben)
+//   • /command-center/trends        → Trend-Karten der letzten 7 Tage inkl.
+//                                     Vergleich zur Vorwoche
+//   • /command-center/briefing      → Tägliches AI-Briefing aus lokalen Daten
+//
+// Strikt read-only, requireOwner-gated, keine externen APIs, keine Secrets,
+// keine Patientendaten/E-Mails – nur Aggregate, Aktionstypen und Counts.
+
+function timelineCategory(action, entityType) {
+  const a = String(action || '').toLowerCase();
+  const e = String(entityType || '').toLowerCase();
+  if (a.includes('login') || a.includes('logout'))            return 'auth';
+  if (a.includes('invite') || a.includes('einladung'))        return 'invite';
+  if (a.includes('delete') || a.includes('löschen') || a.includes('loeschen')) return 'delete';
+  if (a.includes('register') || a.includes('signup'))         return 'register';
+  if (a.includes('password') || a.includes('passwort'))       return 'security';
+  if (e === 'appointment')   return 'appointment';
+  if (e === 'invoice')       return 'invoice';
+  if (e === 'review')        return 'review';
+  if (e === 'waitlist')      return 'waitlist';
+  if (e === 'demo_request')  return 'demo';
+  if (e === 'practice')      return 'practice';
+  return 'system';
+}
+
+router.get('/command-center/timeline', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  // 72-Stunden-Fenster reicht für „heute / gestern / vorgestern" und ist
+  // klein genug, damit die UI flüssig bleibt.
+  const since = now.clone().subtract(72, 'hours').toISOString();
+
+  // activity_log: Aktionstyp + Entitätstyp + Zeitstempel (KEINE user_email,
+  // KEINE entity_id, KEINE details – können PII enthalten).
+  const actLog = db.prepare(
+    "SELECT action, entity_type, created_at FROM activity_log WHERE created_at >= ? ORDER BY created_at DESC LIMIT 80"
+  ).all(since);
+
+  const autoLog = db.prepare(
+    "SELECT type, ran_at FROM automation_log WHERE ran_at >= ? ORDER BY ran_at DESC LIMIT 40"
+  ).all(since);
+
+  // Recent business signals (read-only, no PII): registrations, paid invoices,
+  // new demo-requests, reviews coming in.
+  const newPractices = db.prepare(
+    "SELECT COUNT(*) AS n, MAX(created_at) AS at FROM practices WHERE created_at >= ?"
+  ).get(since);
+  const newDemos = db.prepare(
+    "SELECT COUNT(*) AS n, MAX(created_at) AS at FROM demo_requests WHERE created_at >= ?"
+  ).get(since);
+  const newReviews = db.prepare(
+    "SELECT COUNT(*) AS n, MAX(created_at) AS at FROM reviews WHERE created_at >= ?"
+  ).get(since);
+  const newAppts = db.prepare(
+    "SELECT COUNT(*) AS n, MAX(created_at) AS at FROM appointments WHERE created_at >= ?"
+  ).get(since);
+
+  const events = [];
+
+  for (const r of actLog) {
+    events.push({
+      source: 'activity',
+      category: timelineCategory(r.action, r.entity_type),
+      action: r.action,
+      entity_type: r.entity_type || null,
+      at: r.created_at,
+    });
+  }
+  for (const r of autoLog) {
+    events.push({
+      source: 'automation',
+      category: 'automation',
+      action: r.type,
+      entity_type: 'cron',
+      at: r.ran_at,
+    });
+  }
+
+  // Aggregierte Geschäfts-Signale nur dann hinzufügen, wenn überhaupt etwas
+  // passiert ist. Sonst entstehen keine künstlichen "0"-Einträge.
+  if (newPractices.n > 0) {
+    events.push({ source: 'aggregate', category: 'register',    action: `${newPractices.n} neue Praxis/en registriert`, entity_type: 'practice',     at: newPractices.at });
+  }
+  if (newDemos.n > 0) {
+    events.push({ source: 'aggregate', category: 'demo',        action: `${newDemos.n} neue Demo-Anfrage(n)`,            entity_type: 'demo_request', at: newDemos.at });
+  }
+  if (newReviews.n > 0) {
+    events.push({ source: 'aggregate', category: 'review',      action: `${newReviews.n} neue Bewertung(en) eingegangen`, entity_type: 'review',       at: newReviews.at });
+  }
+  if (newAppts.n > 0) {
+    events.push({ source: 'aggregate', category: 'appointment', action: `${newAppts.n} neue Terminbuchung(en)`,           entity_type: 'appointment',  at: newAppts.at });
+  }
+
+  events.sort((a, b) => new Date(b.at || 0) - new Date(a.at || 0));
+
+  // Bucket pro Kalendertag (lokal) – „heute", „gestern", sonst Datum.
+  const today     = now.clone().startOf('day');
+  const yesterday = today.clone().subtract(1, 'day');
+  function dayLabel(at) {
+    const d = moment(at);
+    if (d.isSameOrAfter(today))     return 'today';
+    if (d.isSameOrAfter(yesterday)) return 'yesterday';
+    return d.format('YYYY-MM-DD');
+  }
+  const buckets = {};
+  for (const ev of events) {
+    const key = dayLabel(ev.at);
+    if (!buckets[key]) buckets[key] = [];
+    if (buckets[key].length < 50) buckets[key].push(ev);
+  }
+
+  // Stabile Tag-Reihenfolge: today, yesterday, dann absteigend.
+  const order = Object.keys(buckets).sort((a, b) => {
+    if (a === 'today')     return -1;
+    if (b === 'today')     return 1;
+    if (a === 'yesterday') return -1;
+    if (b === 'yesterday') return 1;
+    return b.localeCompare(a);
+  });
+  const days = order.map(key => ({ day: key, count: buckets[key].length, events: buckets[key] }));
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only:    true,
+    window_hours: 72,
+    total_events: events.length,
+    days,
+  });
+});
+
+router.get('/command-center/notifications', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  const today = now.format('YYYY-MM-DD');
+  const in7days = now.clone().add(7, 'days').format('YYYY-MM-DD');
+
+  const trialsExpired   = db.prepare("SELECT COUNT(*) as n FROM practices WHERE trial_end_date < ? AND (account_status IS NULL OR account_status = 'active')").get(today).n;
+  const trialsExpiring  = db.prepare('SELECT COUNT(*) as n FROM practices WHERE trial_end_date BETWEEN ? AND ?').get(today, in7days).n;
+  const pausedPractices = db.prepare("SELECT COUNT(*) as n FROM practices WHERE account_status = 'paused'").get().n;
+  const openInvoices    = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid'").get().n;
+  const overdueInvoices = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid' AND due_date < ?").get(today).n;
+  const pendingReviews  = db.prepare('SELECT COUNT(*) as n FROM reviews WHERE visible = 0').get().n;
+  const openDemos       = db.prepare("SELECT COUNT(*) as n FROM demo_requests WHERE status = 'neu'").get().n;
+  const waitlistOpen    = db.prepare("SELECT COUNT(*) as n FROM waitlist WHERE status = 'waiting'").get().n;
+
+  const items = [];
+  if (trialsExpired > 0)   items.push({ code: 'trials_expired',   level: 'danger', title: `${trialsExpired} Testphase(n) abgelaufen`,                    detail: 'Upgrade-Angebot senden oder Konto pausieren.',          count: trialsExpired,   link: '/ceo-dashboard.html' });
+  if (overdueInvoices > 0) items.push({ code: 'invoices_overdue', level: 'danger', title: `${overdueInvoices} überfällige Rechnung(en)`,                  detail: 'Zahlungserinnerung versenden.',                          count: overdueInvoices, link: '/invoices.html' });
+  if (trialsExpiring > 0)  items.push({ code: 'trials_expiring',  level: 'warn',   title: `${trialsExpiring} Testphase(n) enden binnen 7 Tagen`,         detail: 'Persönliches Follow-up vorbereiten.',                   count: trialsExpiring,  link: '/ceo-dashboard.html' });
+  if (pausedPractices > 0) items.push({ code: 'practices_paused', level: 'warn',   title: `${pausedPractices} Konto/Konten pausiert`,                     detail: 'Reaktivierung anbieten oder endgültig schließen.',      count: pausedPractices, link: '/ceo-dashboard.html' });
+  if (openInvoices > 0)    items.push({ code: 'invoices_open',    level: 'info',   title: `${openInvoices} offene Rechnung(en) plattformweit`,            detail: 'Status der offenen Rechnungen prüfen.',                 count: openInvoices,    link: '/invoices.html' });
+  if (pendingReviews > 0)  items.push({ code: 'reviews_pending',  level: 'info',   title: `${pendingReviews} Bewertung(en) warten auf Freigabe`,         detail: 'Sichten und sichtbar schalten oder antworten.',         count: pendingReviews,  link: '/reviews.html' });
+  if (openDemos > 0)       items.push({ code: 'demo_new',         level: 'info',   title: `${openDemos} neue Demo-Anfrage(n)`,                            detail: 'Einladung verschicken oder kontaktieren.',              count: openDemos,       link: '/ceo-dashboard.html' });
+  if (waitlistOpen > 0)    items.push({ code: 'waitlist_open',    level: 'info',   title: `${waitlistOpen} Patient(en) auf der Warteliste`,               detail: 'Freie Slots prüfen und Wartende informieren.',          count: waitlistOpen,    link: '/waitlist-admin.html' });
+
+  const counts = {
+    danger: items.filter(i => i.level === 'danger').length,
+    warn:   items.filter(i => i.level === 'warn').length,
+    info:   items.filter(i => i.level === 'info').length,
+    total:  items.length,
+  };
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only:    true,
+    counts,
+    items,
+  });
+});
+
+router.get('/command-center/trends', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+
+  // Helper: counts a date column per day for the last N days. Verwendet
+  // bind-Werte ohne SQL-Interpolation des Datumsformats.
+  function dailyCounts(table, dateCol, days, extraWhere = '') {
+    const from = now.clone().subtract(days - 1, 'days').format('YYYY-MM-DD');
+    const rows = db.prepare(
+      `SELECT DATE(${dateCol}) AS d, COUNT(*) AS n
+       FROM ${table}
+       WHERE DATE(${dateCol}) >= ? ${extraWhere}
+       GROUP BY DATE(${dateCol})`
+    ).all(from);
+    const map = Object.fromEntries(rows.map(r => [r.d, r.n]));
+    const out = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = now.clone().subtract(i, 'days').format('YYYY-MM-DD');
+      out.push({ date: d, count: map[d] || 0 });
+    }
+    return out;
+  }
+  function dailySum(table, dateCol, valueCol, days, extraWhere = '') {
+    const from = now.clone().subtract(days - 1, 'days').format('YYYY-MM-DD');
+    const rows = db.prepare(
+      `SELECT DATE(${dateCol}) AS d, COALESCE(SUM(${valueCol}),0) AS s
+       FROM ${table}
+       WHERE DATE(${dateCol}) >= ? ${extraWhere}
+       GROUP BY DATE(${dateCol})`
+    ).all(from);
+    const map = Object.fromEntries(rows.map(r => [r.d, r.s]));
+    const out = [];
+    for (let i = days - 1; i >= 0; i--) {
+      const d = now.clone().subtract(i, 'days').format('YYYY-MM-DD');
+      out.push({ date: d, count: map[d] || 0 });
+    }
+    return out;
+  }
+
+  // Letzte 7 + Vorwoche – 14 Tage am Stück, dann in zwei Hälften teilen.
+  function trend(table, dateCol, valueCol = null, extraWhere = '') {
+    const series = valueCol
+      ? dailySum(table, dateCol, valueCol, 14, extraWhere)
+      : dailyCounts(table, dateCol, 14, extraWhere);
+    const prev = series.slice(0, 7);
+    const cur  = series.slice(7);
+    const sum  = arr => arr.reduce((s, x) => s + (x.count || 0), 0);
+    const totalCur  = sum(cur);
+    const totalPrev = sum(prev);
+    const delta     = totalCur - totalPrev;
+    const pct       = totalPrev > 0
+      ? Math.round((delta / totalPrev) * 100)
+      : (totalCur > 0 ? 100 : 0);
+    return {
+      series_7d:    cur,
+      previous_7d: prev,
+      total_7d:        totalCur,
+      previous_total:  totalPrev,
+      delta,
+      delta_percent: pct,
+      direction:     delta > 0 ? 'up' : delta < 0 ? 'down' : 'flat',
+    };
+  }
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only:    true,
+    window_days:  7,
+    trends: {
+      appointments_booked: trend('appointments',  'created_at'),
+      registrations:       trend('practices',     'created_at'),
+      demo_requests:       trend('demo_requests', 'created_at'),
+      activity_events:     trend('activity_log',  'created_at'),
+      reviews_received:    trend('reviews',       'created_at'),
+      revenue_paid:        trend('payments',      'payment_date', 'amount', "AND status = 'completed'"),
+    },
+  });
+});
+
+router.get('/command-center/briefing', requireOwner, (req, res) => {
+  const db = getDb();
+  const now = moment();
+  const today = now.format('YYYY-MM-DD');
+  const yesterday = now.clone().subtract(1, 'day').format('YYYY-MM-DD');
+  const in7days   = now.clone().add(7, 'days').format('YYYY-MM-DD');
+  const weekStart = now.clone().startOf('isoWeek').format('YYYY-MM-DD');
+
+  const aptsToday      = db.prepare("SELECT COUNT(*) as n FROM appointments WHERE appointment_date = ? AND status NOT IN ('cancelled','archived')").get(today).n;
+  const aptsYesterday  = db.prepare("SELECT COUNT(*) as n FROM appointments WHERE appointment_date = ? AND status NOT IN ('cancelled','archived')").get(yesterday).n;
+  const newPracticesWk = db.prepare("SELECT COUNT(*) as n FROM practices WHERE DATE(created_at) >= ?").get(weekStart).n;
+  const openInvoices   = db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid'").get().n;
+  const overdueInvoices= db.prepare("SELECT COUNT(*) as n FROM invoices WHERE status != 'paid' AND due_date < ?").get(today).n;
+  const pendingReviews = db.prepare("SELECT COUNT(*) as n FROM reviews WHERE visible = 0").get().n;
+  const openDemos      = db.prepare("SELECT COUNT(*) as n FROM demo_requests WHERE status = 'neu'").get().n;
+  const trialsExpired  = db.prepare("SELECT COUNT(*) as n FROM practices WHERE trial_end_date < ? AND (account_status IS NULL OR account_status = 'active')").get(today).n;
+  const trialsExpiring = db.prepare("SELECT COUNT(*) as n FROM practices WHERE trial_end_date BETWEEN ? AND ?").get(today, in7days).n;
+
+  const hour = now.hour();
+  const greeting = hour < 5 ? 'Gute Nacht' : hour < 11 ? 'Guten Morgen' : hour < 17 ? 'Guten Tag' : 'Guten Abend';
+  const dateStr  = now.locale('de').format('dddd, D. MMMM YYYY');
+
+  const headlines = [];
+  headlines.push(aptsToday > 0
+    ? `${aptsToday} Termin(e) heute geplant (gestern: ${aptsYesterday}).`
+    : 'Heute sind aktuell keine Termine in der Plattform eingetragen.');
+  headlines.push(newPracticesWk > 0
+    ? `${newPracticesWk} neue Praxis-Registrierung(en) seit Wochenbeginn.`
+    : 'Diese Woche bisher keine Neuregistrierungen.');
+
+  const priorities = [];
+  if (trialsExpired > 0)   priorities.push({ level: 'high',   text: `${trialsExpired} Testphase(n) abgelaufen – Upgrade-Angebot senden.` });
+  if (overdueInvoices > 0) priorities.push({ level: 'high',   text: `${overdueInvoices} überfällige Rechnung(en) – Mahnung anstoßen.` });
+  if (trialsExpiring > 0)  priorities.push({ level: 'medium', text: `${trialsExpiring} Testphase(n) enden binnen 7 Tagen – persönlich kontaktieren.` });
+  if (openDemos > 0)       priorities.push({ level: 'medium', text: `${openDemos} offene Demo-Anfrage(n) – Einladung verschicken.` });
+  if (pendingReviews > 0)  priorities.push({ level: 'low',    text: `${pendingReviews} Bewertung(en) warten auf Freigabe.` });
+  if (openInvoices > 0 && overdueInvoices === 0) priorities.push({ level: 'low', text: `${openInvoices} offene Rechnung(en) im normalen Lauf.` });
+
+  let mood;
+  if (trialsExpired > 0 || overdueInvoices > 0) mood = 'critical';
+  else if (trialsExpiring > 0 || pendingReviews > 5 || openDemos > 3) mood = 'attention';
+  else if (priorities.length === 0)             mood = 'calm';
+  else                                          mood = 'steady';
+
+  const conclusion =
+    mood === 'critical'  ? 'Heute liegt der Fokus auf Risiko-Eindämmung – kritische Punkte zuerst.'
+  : mood === 'attention' ? 'Aktive Themen vorhanden – konzentriert abarbeiten.'
+  : mood === 'calm'      ? 'Keine offenen Brennpunkte – ein guter Tag für strategische Arbeit.'
+  :                        'Plattform läuft stabil – Routine-Themen abarbeiten.';
+
+  res.json({
+    generated_at: now.toISOString(),
+    read_only:    true,
+    greeting,
+    date:         dateStr,
+    mood,
+    headlines,
+    priorities,
+    conclusion,
+    counters: {
+      appointments_today:     aptsToday,
+      appointments_yesterday: aptsYesterday,
+      new_practices_this_week: newPracticesWk,
+      open_invoices:    openInvoices,
+      overdue_invoices: overdueInvoices,
+      pending_reviews:  pendingReviews,
+      open_demo_requests: openDemos,
+      trials_expired:   trialsExpired,
+      trials_expiring_7d: trialsExpiring,
+    },
+  });
+});
+
 module.exports = router;
