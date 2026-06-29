@@ -6,6 +6,9 @@ node_modules/
 .env.local
 .env.*.local
 
+# Lokale Secret-Backups (Vercel ENV exports etc.)
+backups/
+
 # Datenbank (lokal & Backups)
 data/
 *.sqlite
