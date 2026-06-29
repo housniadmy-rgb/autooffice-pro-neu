@@ -127,7 +127,7 @@
             <span id="label-language">Bevorzugte Sprache</span>
           </label>
           <select id="demo-language" name="language" class="form-control">
-            <option value="">– Bitte wählen –</option>
+            <option value="" id="demo-lang-placeholder">– Bitte wählen –</option>
             <option value="de">Deutsch</option>
             <option value="en">English</option>
             <option value="fr">Français</option>
@@ -182,6 +182,9 @@
     document.getElementById('label-practice').textContent  = pT('demo_label_practice') || 'Praxisname';
     document.getElementById('label-contact').textContent   = pT('demo_label_contact')  || 'Ansprechpartner';
     document.getElementById('label-country').textContent   = pT('demo_label_country')  || 'Land';
+    document.getElementById('label-phone').textContent     = pT('demo_label_phone')    || 'Telefon';
+    document.getElementById('label-language').textContent  = pT('demo_label_language') || 'Bevorzugte Sprache';
+    document.getElementById('demo-lang-placeholder').textContent = pT('demo_ph_select') || '– Bitte wählen –';
     document.getElementById('label-message').textContent   = pT('demo_label_message')  || 'Nachricht';
     document.getElementById('demo-practice').placeholder   = pT('demo_ph_practice')   || '';
     document.getElementById('demo-contact').placeholder    = pT('demo_ph_contact')    || '';

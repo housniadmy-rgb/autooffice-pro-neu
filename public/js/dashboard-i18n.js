@@ -32,7 +32,7 @@
       status_offered: 'Angebot gesendet', status_booked: 'Gebucht',
       status_visible: 'Freigegeben', status_archived: 'Archiviert',
       // Archive settings
-      section_archive: 'Terminarchivierung',
+      section_archive: 'Terminarchivierung', section_subscription: 'Abonnement',
       archive_info: 'Abgeschlossene und abgesagte Termine werden automatisch archiviert und aus der Standardansicht ausgeblendet.',
       archive_never: 'Nie archivieren', archive_6m: 'Nach 6 Monaten',
       archive_12m: 'Nach 12 Monaten (Standard)', archive_24m: 'Nach 24 Monaten',
@@ -235,7 +235,7 @@
       status_pending: 'Pending', status_waiting: 'Waiting',
       status_offered: 'Offer sent', status_booked: 'Booked',
       status_visible: 'Published', status_archived: 'Archived',
-      section_archive: 'Appointment Archiving',
+      section_archive: 'Appointment Archiving', section_subscription: 'Subscription',
       archive_info: 'Completed and cancelled appointments are automatically archived and hidden from the default view.',
       archive_never: 'Never archive', archive_6m: 'After 6 months',
       archive_12m: 'After 12 months (default)', archive_24m: 'After 24 months',

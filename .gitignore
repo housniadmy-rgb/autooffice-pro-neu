@@ -39,3 +39,8 @@ Thumbs.db
 
 # Vercel (Legacy)
 .vercel
+
+# Demo/marketing build artifacts (temporary)
+sale/assets/demo/frames/
+sale/assets/demo/frames-en/
+sale/assets/demo/captures/
