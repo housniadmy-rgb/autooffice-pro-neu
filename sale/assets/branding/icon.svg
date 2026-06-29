@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  PraxisOnline24 — square icon / app mark.
+  Brand color: #2563EB (matches public/css/style.css :root --primary).
+  Monogram derived directly from the wordmark "PraxisOnline24" → "P24".
+  Rounded square in the brand color with the monogram in white.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1024 1024"
+     width="1024" height="1024"
+     role="img" aria-label="PraxisOnline24">
+  <title>PraxisOnline24</title>
+  <rect x="0" y="0" width="1024" height="1024" rx="220" ry="220" fill="#2563EB"/>
+  <text x="50%" y="52%"
+        text-anchor="middle" dominant-baseline="central"
+        font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', Inter, Arial, sans-serif"
+        font-weight="800"
+        font-size="520"
+        letter-spacing="-20"
+        fill="#FFFFFF">P24</text>
+</svg>
