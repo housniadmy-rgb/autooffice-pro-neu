@@ -44,3 +44,10 @@ Thumbs.db
 sale/assets/demo/frames/
 sale/assets/demo/frames-en/
 sale/assets/demo/captures/
+
+# Acquire.com listing tooling (runtime artifacts of scripts/acquire-tech-dropdown.js)
+.playwright-acquire-profile/
+acquire-technologies.json
+.acquire-trigger-read
+.acquire-trigger-close
+acquire-page-dump.html
