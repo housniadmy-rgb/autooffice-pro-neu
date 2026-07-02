@@ -4,8 +4,17 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
 const { getDb } = require('../database');
+const PRICING = require('../config/pricing');
 
-const PKG_PRICE = { BASIC: 19, PROFESSIONAL: 39, PRO: 39, UNLIMITED: 79 };
+// Build PKG_PRICE map from central config so MRR always matches the public pricing page.
+const PKG_PRICE = (() => {
+  const map = {};
+  Object.entries(PRICING.plans).forEach(([key, plan]) => { map[key] = plan.amount; });
+  Object.entries(PRICING.aliases || {}).forEach(([alias, target]) => {
+    if (PRICING.plans[target]) map[alias] = PRICING.plans[target].amount;
+  });
+  return map;
+})();
 
 const router = express.Router();
 

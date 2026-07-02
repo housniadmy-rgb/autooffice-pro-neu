@@ -72,7 +72,7 @@
 
         <div class="subscription-plan-card" id="card-basic">
           <div class="subscription-plan-name">Basic</div>
-          <div class="subscription-plan-price">$19 / Monat</div>
+          <div class="subscription-plan-price" data-plan="BASIC">$29 / Monat</div>
           <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
             <li>Bis 200 Termine pro Monat</li>
             <li>Bis zu 3 Behandler</li>
@@ -84,7 +84,7 @@
 
         <div class="subscription-plan-card" id="card-professional">
           <div class="subscription-plan-name" style="color:var(--primary);">Pro</div>
-          <div class="subscription-plan-price">$39 / Monat</div>
+          <div class="subscription-plan-price" data-plan="PROFESSIONAL">$59 / Monat</div>
           <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
             <li>Bis 500 Termine pro Monat</li>
             <li>Bis zu 10 Behandler</li>
@@ -98,7 +98,7 @@
 
         <div class="subscription-plan-card" id="card-unlimited">
           <div class="subscription-plan-name" style="color:var(--secondary);">Unlimited</div>
-          <div class="subscription-plan-price">$79 / Monat</div>
+          <div class="subscription-plan-price" data-plan="UNLIMITED">$99 / Monat</div>
           <ul class="package-features" style="text-align:left;margin:0 auto;max-width:220px;">
             <li>Unbegrenzte Termine</li>
             <li>Unbegrenzte Behandler</li>
@@ -175,8 +175,20 @@
 <script src="/js/dashboard-i18n.js"></script>
 <script src="/js/hamburger.js"></script>
 <script src="/js/lang-switcher.js"></script>
+<script src="/js/pricing-config.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', async () => {
+  // Sync plan prices with the central config (config/pricing.js → window.PRICING)
+  (function syncPlanPrices() {
+    const P = window.PRICING;
+    if (!P || !P.plans) return;
+    const perMonth = P.perMonthDefault || ' / Monat';
+    document.querySelectorAll('.subscription-plan-price[data-plan]').forEach(el => {
+      const plan = P.plans[el.getAttribute('data-plan')];
+      if (plan) el.textContent = P.currency + plan.amount + perMonth;
+    });
+  })();
+
   const ok = await checkAuth();
   if (!ok) return;
 

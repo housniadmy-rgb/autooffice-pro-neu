@@ -101,7 +101,7 @@
           <input type="radio" name="package" value="BASIC" checked>
           <div class="package-inner">
             <div class="package-name">Basic</div>
-            <div id="reg-price-basic" class="package-price">$19 / Monat</div>
+            <div id="reg-price-basic" class="package-price">$29 / Monat</div>
             <ul class="package-features">
               <li id="reg-basic-f1">Bis 200 Termine pro Monat</li>
               <li id="reg-basic-f2">Bis 3 Behandler</li>
@@ -116,7 +116,7 @@
           <div class="package-inner">
             <div class="package-badge" id="reg-pro-badge">Beliebteste Wahl</div>
             <div class="package-name">Pro</div>
-            <div id="reg-price-pro" class="package-price">$39 / Monat</div>
+            <div id="reg-price-pro" class="package-price">$59 / Monat</div>
             <ul class="package-features">
               <li id="reg-pro-f1">Bis 500 Termine pro Monat</li>
               <li id="reg-pro-f2">Bis 10 Behandler</li>
@@ -132,7 +132,7 @@
           <input type="radio" name="package" value="UNLIMITED">
           <div class="package-inner">
             <div class="package-name">Unlimited</div>
-            <div id="reg-price-unl" class="package-price">$79 / Monat</div>
+            <div id="reg-price-unl" class="package-price">$99 / Monat</div>
             <ul class="package-features">
               <li id="reg-unl-f1">Unbegrenzte Termine</li>
               <li id="reg-unl-f2">Unbegrenzte Behandler</li>
@@ -183,6 +183,7 @@
 
 <script src="/js/public-i18n.js"></script>
 <script src="/js/main.js"></script>
+<script src="/js/pricing-config.js"></script>
 <script src="/js/password-toggle.js"></script>
 <script>
   (function () {
@@ -205,11 +206,17 @@
     document.getElementById('reg-city-label').textContent = pT('city_label');
     document.getElementById('reg-phone-label').textContent = pT('phone_label');
     document.getElementById('reg-section-package').textContent = pT('reg_package_title');
-    // Prices
-    var perMonth = pT('preise_per_month') || ' / Monat';
-    document.getElementById('reg-price-basic').textContent = '$19' + perMonth;
-    document.getElementById('reg-price-pro').textContent   = '$39' + perMonth;
-    document.getElementById('reg-price-unl').textContent   = '$79' + perMonth;
+    // Prices — from central config (config/pricing.js → window.PRICING)
+    var perMonth  = pT('preise_per_month') || (window.PRICING && window.PRICING.perMonthDefault) || ' / Monat';
+    var plans     = (window.PRICING && window.PRICING.plans)    || {};
+    var currency  = (window.PRICING && window.PRICING.currency) || '$';
+    function priceLabel(planKey) {
+      var p = plans[planKey];
+      return p ? (currency + p.amount + perMonth) : '';
+    }
+    document.getElementById('reg-price-basic').textContent = priceLabel('BASIC');
+    document.getElementById('reg-price-pro').textContent   = priceLabel('PROFESSIONAL');
+    document.getElementById('reg-price-unl').textContent   = priceLabel('UNLIMITED');
     // Basic features
     document.getElementById('reg-basic-f1').textContent = pT('preise_f_appt200');
     document.getElementById('reg-basic-f2').textContent = pT('preise_f_treat3');

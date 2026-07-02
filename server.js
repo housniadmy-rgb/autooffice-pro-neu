@@ -26,6 +26,15 @@ async function main() {
   const { securityHeaders } = require('./middleware/security');
   app.use(securityHeaders);
 
+  // Central pricing config exposed to the browser as window.PRICING.
+  // Source of truth: config/pricing.js — do not hardcode prices in HTML/JS.
+  app.get('/js/pricing-config.js', (req, res) => {
+    const pricing = require('./config/pricing');
+    res.type('application/javascript');
+    res.set('Cache-Control', 'public, max-age=300');
+    res.send('window.PRICING = ' + JSON.stringify(pricing) + ';');
+  });
+
   // Static files served early – before session/CORS – so CSS/JS never hit heavy middleware
   app.use(express.static(path.join(__dirname, 'public'), {
     etag: true,

@@ -206,7 +206,7 @@
         <div class="pricing-badge-placeholder"></div>
         <div id="pr-basic-name" class="pricing-name">Basic</div>
         <div class="pricing-price-row">
-          <span class="pricing-period">$</span>
+          <span class="pricing-period pricing-currency">$</span>
           <span id="pr-basic-amount" class="pricing-amount">29</span>
           <span class="pricing-period"><span id="pr-basic-period"> / Monat</span></span>
         </div>
@@ -227,7 +227,7 @@
         <span id="pr-badge" class="pricing-badge">Beliebteste Wahl</span>
         <div id="pr-pro-name" class="pricing-name">Pro</div>
         <div class="pricing-price-row">
-          <span class="pricing-period">$</span>
+          <span class="pricing-period pricing-currency">$</span>
           <span id="pr-pro-amount" class="pricing-amount">59</span>
           <span class="pricing-period"><span id="pr-pro-period"> / Monat</span></span>
         </div>
@@ -250,7 +250,7 @@
         <div class="pricing-badge-placeholder"></div>
         <div id="pr-unl-name" class="pricing-name">Unlimited</div>
         <div class="pricing-price-row">
-          <span class="pricing-period">$</span>
+          <span class="pricing-period pricing-currency">$</span>
           <span id="pr-unl-amount" class="pricing-amount">99</span>
           <span class="pricing-period"><span id="pr-unl-period"> / Monat</span></span>
         </div>
@@ -303,10 +303,26 @@
 
 <script src="/js/main.js"></script>
 <script src="/js/public-i18n.js"></script>
+<script src="/js/pricing-config.js"></script>
 <script>
 (function () {
   pApplyDir();
   renderLangSwitcher(document.getElementById('pub-lang-switcher'));
+
+  // Prices come from the central config (config/pricing.js) via window.PRICING.
+  // HTML defaults are kept as a no-JS fallback and must match the config.
+  var PLANS   = (window.PRICING && window.PRICING.plans)    || {};
+  var CURRENCY= (window.PRICING && window.PRICING.currency) || '$';
+  function setPrice(id, planKey) {
+    var el = document.getElementById(id);
+    if (el && PLANS[planKey]) el.textContent = String(PLANS[planKey].amount);
+  }
+  setPrice('pr-basic-amount', 'BASIC');
+  setPrice('pr-pro-amount',   'PROFESSIONAL');
+  setPrice('pr-unl-amount',   'UNLIMITED');
+  document.querySelectorAll('.pricing-currency').forEach(function(el) {
+    el.textContent = CURRENCY;
+  });
 
   // Header nav
   document.getElementById('pr-nav-preise').textContent      = pT('nav_preise')               || 'Preise';
@@ -327,10 +343,10 @@
   // Badge
   document.getElementById('pr-badge').textContent = pT('preise_badge')  || 'Beliebteste Wahl';
 
-  // Plan names
-  document.getElementById('pr-basic-name').textContent = pT('preise_basic_name') || 'BASIC';
-  document.getElementById('pr-pro-name').textContent   = pT('preise_pro_name')   || 'PROFESSIONAL';
-  document.getElementById('pr-unl-name').textContent   = pT('preise_unl_name')   || 'UNLIMITED';
+  // Plan names — prefer i18n label, else fall back to the central config's name.
+  document.getElementById('pr-basic-name').textContent = pT('preise_basic_name') || (PLANS.BASIC && PLANS.BASIC.name)               || 'Basic';
+  document.getElementById('pr-pro-name').textContent   = pT('preise_pro_name')   || (PLANS.PROFESSIONAL && PLANS.PROFESSIONAL.name) || 'Pro';
+  document.getElementById('pr-unl-name').textContent   = pT('preise_unl_name')   || (PLANS.UNLIMITED && PLANS.UNLIMITED.name)       || 'Unlimited';
 
   // Periods
   var perMonth = pT('preise_per_month') || ' / Monat';
