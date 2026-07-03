@@ -1,8 +1,8 @@
 # Free-Tier Test-Setup für PraxisOnline24
 # - Kein Persistent Disk (Free unterstützt das nicht; SQLite ist ephemeral)
 # - Service spinnt nach 15 Min Inaktivität ab; nächster Request ~30 s Cold-Start
-# - EMAIL_DEV_MODE=true → Mails werden nur ins Render-Log geschrieben, nicht versendet
-# Für Produktion später: plan auf "starter", disk-Block wieder hinzufügen, EMAIL_DEV_MODE=false.
+# - EMAIL_DEV_MODE=false → Mails werden echt via Brevo verschickt (BREVO_API_KEY erforderlich)
+# Für Produktion später: plan auf "starter", disk-Block wieder hinzufügen.
 
 services:
   - type: web
@@ -22,10 +22,13 @@ services:
         value: 10000
       - key: SESSION_SECRET
         generateValue: true
-      # Test-Phase: Mails nur loggen, nicht versenden
+      # false = Mails werden echt versendet (via Brevo HTTPS-API).
+      # Auf true setzen, um Mails nur ins Render-Log zu schreiben (lokaler Test / Wartung).
       - key: EMAIL_DEV_MODE
-        value: true
-      # Optional in der Test-Phase – nur befüllen, wenn EMAIL_DEV_MODE auf false steht
+        value: false
+      # Brevo Transactional-API-Key. Wert NICHT hier eintragen – im Render Dashboard
+      # unter Service → Environment als Secret setzen (sync:false hält den Wert dort).
+      # Erforderlich, sobald EMAIL_DEV_MODE=false.
       - key: BREVO_API_KEY
         sync: false
       - key: SMTP_FROM
