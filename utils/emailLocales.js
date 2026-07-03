@@ -70,7 +70,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Wir haben Ihre Nachricht erhalten – PraxisOnline24',
-      body: () => `Vielen Dank für Ihre Nachricht über unser Kontaktformular. Wir haben Ihre Anfrage erhalten und melden uns innerhalb von 1–2 Werktagen bei Ihnen.`,
+      body: () => `Vielen Dank für Ihre Nachricht über unser Kontaktformular. Wir haben Ihre Anfrage erhalten und melden uns schnellstmöglich bei Ihnen.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Abo-Bestätigung: ${v.plan} – PraxisOnline24`,
@@ -128,7 +128,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'We received your message – PraxisOnline24',
-      body: () => `Thank you for your message via our contact form. We have received your request and will get back to you within 1–2 business days.`,
+      body: () => `Thank you for your message via our contact form. We have received your request and will get back to you as soon as possible.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Subscription confirmation: ${v.plan} – PraxisOnline24`,
@@ -186,7 +186,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Nous avons bien reçu votre message – PraxisOnline24',
-      body: () => `Merci pour votre message via notre formulaire de contact. Nous avons reçu votre demande et nous reviendrons vers vous sous 1 à 2 jours ouvrés.`,
+      body: () => `Merci pour votre message via notre formulaire de contact. Nous avons reçu votre demande et nous reviendrons vers vous dans les plus brefs délais.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Confirmation d'abonnement : ${v.plan} – PraxisOnline24`,
@@ -244,7 +244,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Hemos recibido su mensaje – PraxisOnline24',
-      body: () => `Gracias por su mensaje a través de nuestro formulario de contacto. Hemos recibido su consulta y le responderemos en un plazo de 1 a 2 días laborables.`,
+      body: () => `Gracias por su mensaje a través de nuestro formulario de contacto. Hemos recibido su consulta y le responderemos lo antes posible.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Confirmación de suscripción: ${v.plan} – PraxisOnline24`,
@@ -302,7 +302,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Abbiamo ricevuto il tuo messaggio – PraxisOnline24',
-      body: () => `Grazie per il tuo messaggio tramite il nostro modulo di contatto. Abbiamo ricevuto la tua richiesta e ti risponderemo entro 1–2 giorni lavorativi.`,
+      body: () => `Grazie per il tuo messaggio tramite il nostro modulo di contatto. Abbiamo ricevuto la tua richiesta e ti risponderemo il prima possibile.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Conferma abbonamento: ${v.plan} – PraxisOnline24`,
@@ -360,7 +360,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Recebemos sua mensagem – PraxisOnline24',
-      body: () => `Obrigado pela sua mensagem via nosso formulário de contato. Recebemos sua solicitação e retornaremos em 1–2 dias úteis.`,
+      body: () => `Obrigado pela sua mensagem via nosso formulário de contato. Recebemos sua solicitação e retornaremos o mais rápido possível.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Confirmação de assinatura: ${v.plan} – PraxisOnline24`,
@@ -418,7 +418,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'We hebben uw bericht ontvangen – PraxisOnline24',
-      body: () => `Bedankt voor uw bericht via ons contactformulier. We hebben uw aanvraag ontvangen en nemen binnen 1–2 werkdagen contact met u op.`,
+      body: () => `Bedankt voor uw bericht via ons contactformulier. We hebben uw aanvraag ontvangen en nemen zo spoedig mogelijk contact met u op.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Abonnementsbevestiging: ${v.plan} – PraxisOnline24`,
@@ -476,7 +476,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Mesajınızı aldık – PraxisOnline24',
-      body: () => `İletişim formumuz aracılığıyla gönderdiğiniz mesaj için teşekkür ederiz. Talebinizi aldık ve 1–2 iş günü içinde size geri döneceğiz.`,
+      body: () => `İletişim formumuz aracılığıyla gönderdiğiniz mesaj için teşekkür ederiz. Talebinizi aldık ve en kısa sürede size geri döneceğiz.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Abonelik onayı: ${v.plan} – PraxisOnline24`,
@@ -534,7 +534,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'لقد استلمنا رسالتك – PraxisOnline24',
-      body: () => `شكراً لرسالتك عبر نموذج الاتصال. لقد استلمنا طلبك وسنرد عليك خلال 1–2 يوم عمل.`,
+      body: () => `شكراً لرسالتك عبر نموذج الاتصال. لقد استلمنا طلبك وسنرد عليك في أقرب وقت ممكن.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `تأكيد الاشتراك: ${v.plan} – PraxisOnline24`,
@@ -592,7 +592,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Мы получили ваше сообщение – PraxisOnline24',
-      body: () => `Спасибо за ваше сообщение через нашу контактную форму. Мы получили запрос и ответим вам в течение 1–2 рабочих дней.`,
+      body: () => `Спасибо за ваше сообщение через нашу контактную форму. Мы получили запрос и ответим вам как можно скорее.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Подтверждение подписки: ${v.plan} – PraxisOnline24`,
@@ -650,7 +650,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'Kami telah menerima pesan Anda – PraxisOnline24',
-      body: () => `Terima kasih atas pesan Anda melalui formulir kontak kami. Kami telah menerima permintaan Anda dan akan menghubungi Anda kembali dalam 1–2 hari kerja.`,
+      body: () => `Terima kasih atas pesan Anda melalui formulir kontak kami. Kami telah menerima permintaan Anda dan akan menghubungi Anda kembali sesegera mungkin.`,
     },
     subscriptionConfirmation: {
       subject: (v) => `Konfirmasi langganan: ${v.plan} – PraxisOnline24`,
@@ -708,7 +708,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'हमें आपका संदेश मिल गया है – PraxisOnline24',
-      body: () => `हमारे संपर्क फ़ॉर्म के माध्यम से आपके संदेश के लिए धन्यवाद। हमें आपका अनुरोध मिल गया है और हम 1–2 कार्यदिवसों के भीतर आपसे संपर्क करेंगे।`,
+      body: () => `हमारे संपर्क फ़ॉर्म के माध्यम से आपके संदेश के लिए धन्यवाद। हमें आपका अनुरोध मिल गया है और हम जल्द से जल्द आपसे संपर्क करेंगे।`,
     },
     subscriptionConfirmation: {
       subject: (v) => `सदस्यता पुष्टि: ${v.plan} – PraxisOnline24`,
@@ -766,7 +766,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: '我们已收到您的留言 – PraxisOnline24',
-      body: () => `感谢您通过我们的联系表单发送的消息。我们已收到您的请求，将在 1–2 个工作日内回复您。`,
+      body: () => `感谢您通过我们的联系表单发送的消息。我们已收到您的请求，将尽快回复您。`,
     },
     subscriptionConfirmation: {
       subject: (v) => `订阅确认：${v.plan} – PraxisOnline24`,
@@ -824,7 +824,7 @@ const emailLocales = {
     },
     contactConfirmation: {
       subject: 'เราได้รับข้อความของคุณแล้ว – PraxisOnline24',
-      body: () => `ขอบคุณสำหรับข้อความของคุณผ่านแบบฟอร์มติดต่อของเรา เราได้รับคำขอของคุณแล้วและจะติดต่อกลับภายใน 1–2 วันทำการ`,
+      body: () => `ขอบคุณสำหรับข้อความของคุณผ่านแบบฟอร์มติดต่อของเรา เราได้รับคำขอของคุณแล้วและจะติดต่อกลับโดยเร็วที่สุด`,
     },
     subscriptionConfirmation: {
       subject: (v) => `ยืนยันการสมัครสมาชิก: ${v.plan} – PraxisOnline24`,
