@@ -68,29 +68,55 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ error: 'Anfrage konnte nicht gespeichert werden. Bitte später erneut versuchen.' });
   }
 
-  // 2) Auto-Onboarding (DB-Operationen) – synchron, damit der Invite-Link existiert
+  // 2) Auto-Onboarding (DB-Operationen) – synchron, damit der Invite-Link existiert.
+  //
+  // Drei Wege für die gefundene E-Mail:
+  //   (a) unbekannt        → Praxis + User + Invite anlegen, Mail schicken
+  //   (b) existiert, active=0 → identischen User wiederverwenden, offene Token
+  //                             invalidieren, neuen Token erzeugen, Mail schicken
+  //   (c) existiert, active=1 → skip (bereits aktivierter Account darf per
+  //                             Demo-Formular NICHT überschrieben werden)
   let inviteContext = null;
   let inviteSkipReason = null;
   try {
-    const existingUser = db.prepare('SELECT id, active FROM users WHERE LOWER(email) = LOWER(?)').get(email);
+    const existingUser = db.prepare(
+      'SELECT id, active, practice_id FROM users WHERE LOWER(email) = LOWER(?)'
+    ).get(email);
 
-    if (existingUser) {
-      inviteSkipReason = `Benutzer ${email} existiert bereits (user_id=${existingUser.id}, active=${existingUser.active}) – keine neue Einladung erzeugt`;
+    if (existingUser && existingUser.active === 1) {
+      // (c) Aktivierter User – Sicherheits-Skip.
+      inviteSkipReason = `Benutzer ${email} ist bereits aktiviert (user_id=${existingUser.id}) – keine neue Einladung erzeugt`;
       console.log(`[demo] ${inviteSkipReason}`);
     } else {
-      const practiceId = uuidv4();
-      const userId = uuidv4();
-      const placeholderHash = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 10);
+      let userId, practiceId;
       const lang = language || 'de';
 
-      db.prepare(
-        'INSERT INTO practices (id, name, email, package, language, account_status) VALUES (?, ?, ?, ?, ?, ?)'
-      ).run(practiceId, practice, email.toLowerCase(), 'BASIC', lang, 'active');
+      if (existingUser) {
+        // (b) Bestehender inaktiver User – Resend.
+        userId = existingUser.id;
+        practiceId = existingUser.practice_id;
+        // Offene Token entwerten, damit alte Links nicht mehr genutzt werden können.
+        db.prepare(
+          'UPDATE invite_tokens SET used = 1 WHERE user_id = ? AND used = 0'
+        ).run(userId);
+        console.log(`[demo] Bestehender inaktiver Benutzer ${email} (user_id=${userId}) – offene Invite-Token invalidiert, neuer Token wird erzeugt`);
+      } else {
+        // (a) Neuer User – Praxis + User anlegen.
+        practiceId = uuidv4();
+        userId = uuidv4();
+        const placeholderHash = await bcrypt.hash(crypto.randomBytes(32).toString('hex'), 10);
 
-      db.prepare(
-        'INSERT INTO users (id, practice_id, email, password_hash, first_name, last_name, role, active) VALUES (?, ?, ?, ?, ?, ?, ?, 0)'
-      ).run(userId, practiceId, email.toLowerCase(), placeholderHash, contact, '', 'admin');
+        db.prepare(
+          'INSERT INTO practices (id, name, email, package, language, account_status) VALUES (?, ?, ?, ?, ?, ?)'
+        ).run(practiceId, practice, email.toLowerCase(), 'BASIC', lang, 'active');
 
+        db.prepare(
+          'INSERT INTO users (id, practice_id, email, password_hash, first_name, last_name, role, active) VALUES (?, ?, ?, ?, ?, ?, ?, 0)'
+        ).run(userId, practiceId, email.toLowerCase(), placeholderHash, contact, '', 'admin');
+      }
+
+      // Gemeinsamer Rest für (a) + (b): neuer Invite-Token, demo_requests updaten,
+      // inviteContext für den späteren Mailversand aufbauen.
       const { raw, hash } = generateInviteToken();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().replace('T', ' ').slice(0, 19);
       // Sprache am Token speichern → /i/<token>-Redirect kennt das Locale ohne
