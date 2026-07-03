@@ -32,6 +32,12 @@ services:
         value: "PraxisOnline24 <info@praxisonline24.com>"
       - key: OWNER_EMAIL
         value: info@praxisonline24.com
+      # Initial-Passwort für den Owner-Account (info@praxisonline24.com).
+      # Wert NICHT hier eintragen – im Render Dashboard unter
+      # Service → Environment als Secret setzen (sync:false hält den Wert dort).
+      # Wird beim Startup von database.js::ensureOwnerAccount gelesen.
+      - key: OWNER_INITIAL_PASSWORD
+        sync: false
       # Nach erstem Deploy auf die echte onrender.com-URL setzen
       - key: APP_URL
         sync: false

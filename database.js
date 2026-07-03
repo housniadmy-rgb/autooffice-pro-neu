@@ -101,6 +101,25 @@ class DB {
   }
 }
 
+function logOwnerPasswordMissing(headline, ownerEmail) {
+  console.error('');
+  console.error('=========================================================');
+  console.error(`[db] ${headline}`);
+  console.error(`     Grund:       Env-Var OWNER_INITIAL_PASSWORD fehlt.`);
+  console.error(`     OWNER_EMAIL: ${ownerEmail}`);
+  console.error('');
+  console.error('     So beheben im Render Dashboard:');
+  console.error('       1. https://dashboard.render.com → Service "praxisonline24"');
+  console.error('       2. Tab "Environment" → "Add Environment Variable"');
+  console.error('       3. Key:   OWNER_INITIAL_PASSWORD');
+  console.error('       4. Value: <starkes Passwort, mind. 8 Zeichen; 16+ empfohlen>');
+  console.error('       5. Speichern → Render startet den Service automatisch neu.');
+  console.error('');
+  console.error('     Der Server läuft normal weiter; nur der Owner-Login ist gesperrt.');
+  console.error('=========================================================');
+  console.error('');
+}
+
 async function ensureOwnerAccount(db) {
   const ownerEmail = process.env.OWNER_EMAIL;
   if (!ownerEmail) return;
@@ -118,6 +137,8 @@ async function ensureOwnerAccount(db) {
         const hash = await bcrypt.hash(ownerPassword, 12);
         db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, existing.id);
         console.log(`[db] Owner ${ownerEmail}: Passwort per OWNER_FORCE_RESET zurückgesetzt`);
+      } else {
+        logOwnerPasswordMissing('OWNER_FORCE_RESET=true, aber Passwort-Reset übersprungen', ownerEmail);
       }
     }
     return;
@@ -125,7 +146,12 @@ async function ensureOwnerAccount(db) {
 
   const ownerPassword = process.env.OWNER_INITIAL_PASSWORD;
   if (!ownerPassword) {
-    console.warn('[db] WARNUNG: OWNER_EMAIL gesetzt, aber OWNER_INITIAL_PASSWORD fehlt – kein Owner-Account angelegt');
+    logOwnerPasswordMissing('Owner-Account NICHT angelegt', ownerEmail);
+    return;
+  }
+
+  if (ownerPassword.length < 8) {
+    console.error('[db] Owner-Account NICHT angelegt: OWNER_INITIAL_PASSWORD ist zu kurz (mindestens 8 Zeichen erforderlich).');
     return;
   }
 
