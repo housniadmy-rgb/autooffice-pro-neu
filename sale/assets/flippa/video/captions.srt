@@ -1,0 +1,59 @@
+1
+00:00:00,000 --> 00:00:08,000
+This is PraxisOnline24, a multilingual practice management platform. The landing page introduces a single value proposition: run your entire practice online, in twelve languages.
+
+2
+00:00:08,000 --> 00:00:15,000
+The commercial model is priced in from day one. Three subscription tiers — Basic, Pro and Unlimited — at 29, 59, and 99 dollars per month.
+
+3
+00:00:15,000 --> 00:00:23,000
+Every visitor can request a demo in seconds. The form captures practice name, contact and email — all validated client-side and server-side.
+
+4
+00:00:23,000 --> 00:00:29,000
+Immediately after submission, the practice receives an automated confirmation email in their chosen language. Delivered through Brevo with verified SPF, DKIM and DMARC.
+
+5
+00:00:29,000 --> 00:00:36,000
+A one-click activation link creates the account. The password field ships with a visibility toggle — a small usability detail that reduces onboarding friction.
+
+6
+00:00:36,000 --> 00:00:41,000
+Standard email and password authentication. Bcrypt hashing at cost twelve, rate-limited endpoints, session cookies over HTTPS.
+
+7
+00:00:41,000 --> 00:00:50,000
+The dashboard is the operator's daily home. Appointments today, appointments this month, revenue, trial countdown, and an AI-generated briefing card on the right.
+
+8
+00:00:50,000 --> 00:00:59,000
+The calendar handles day, week and month views. Per-practitioner availability windows, waitlist auto-offer, and token-based patient cancellation with no login required for the patient.
+
+9
+00:00:59,000 --> 00:01:07,000
+Patient records are deliberately lightweight — no diagnoses, no medication, no dates of birth. Privacy by design, ready for GDPR alignment.
+
+10
+00:01:07,000 --> 00:01:16,000
+The AI Practice Manager produces daily briefings, capacity warnings, and recommended actions. It runs through a swappable adapter — Claude or OpenAI, your choice.
+
+11
+00:01:16,000 --> 00:01:24,000
+Invoicing generates PDFs through pdfkit. Payment tracking, status workflow, automated reminders via cron. All the billing plumbing is complete.
+
+12
+00:01:24,000 --> 00:01:31,000
+Each practice gets a public profile page. Patients see practitioners, reviews and opening hours, then click through to a booking flow that takes no accounts.
+
+13
+00:01:31,000 --> 00:01:38,000
+Twelve languages ship out of the box, including right-to-left Arabic and traditional Chinese. Full UI, full email templates, all centrally maintained.
+
+14
+00:01:38,000 --> 00:01:46,000
+The settings surface covers everything an operator needs to configure — practice details, opening hours, cancellation policy, invoice defaults, integrations.
+
+15
+00:01:46,000 --> 00:01:53,900
+PraxisOnline24. The product is complete. The domain, the deployment, the branding, the source code — asking price forty-nine thousand dollars. Serious offers via Flippa.
