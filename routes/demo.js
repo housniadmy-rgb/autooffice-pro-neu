@@ -148,20 +148,47 @@ router.post('/', async (req, res) => {
   // 3) Sofort antworten – E-Mails laufen im Hintergrund
   res.status(200).json({ ok: true });
 
-  // 4) Hintergrund-Versand (blockiert die Antwort nie)
+  // 4) Hintergrund-Versand (blockiert die Antwort nie).
+  // Admin-Benachrichtigung läuft parallel – hat keinen zeitlichen Bezug zur Kunden-Mail.
   fireAndForget('Benachrichtigungs-E-Mail', () =>
     sendDemoRequest({ practice, contact, email, phone, country, language, message })
   );
 
-  fireAndForget('Kontakt-Bestätigung', () =>
-    sendContactConfirmation({ to: email, contactName: contact, lang: language || 'de' })
-  );
+  // Kontakt-Bestätigung und Einladungs-Mail STRIKT SERIELL im selben Wrapper.
+  //
+  // Warum nicht zwei fireAndForget-Calls? Die würden parallel via setImmediate
+  // loslaufen und die Reihenfolge dem Zufall überlassen.
+  //
+  // Warum der 2000ms-Puffer NACH der Bestätigung? Selbst wenn wir seriell
+  // awaiten, akzeptiert Brevo den ersten Request in ~50–200ms und queued die
+  // Mail intern. Wenn der zweite Request unmittelbar folgt, kann Brevos
+  // SMTP-Queue-Worker beide gleichzeitig picken → Reihenfolge im Postfach
+  // undefiniert. 2 s Wartezeit stellt sicher, dass die erste Mail Brevos
+  // Delivery-Pipeline verlassen hat, bevor die zweite hereinkommt.
+  //
+  // fireAndForget-Timeout auf 40 s erhöht: Brevo-Request 1 (max 12 s) + 2 s
+  // Puffer + Brevo-Request 2 (max 12 s) + Sicherheitsmarge.
+  const CONTACT_TO_INVITE_DELAY_MS = 2000;
+  fireAndForget('Kontakt-Bestätigung + Einladung', async () => {
+    const t0 = Date.now();
+    try {
+      await sendContactConfirmation({ to: email, contactName: contact, lang: language || 'de' });
+      console.log(`[demo] CONTACT_CONFIRMATION sent (${Date.now() - t0}ms) — waiting ${CONTACT_TO_INVITE_DELAY_MS}ms before invite`);
+    } catch (err) {
+      // Bestätigungs-Mail-Fehler darf die Einladung NICHT blockieren – nur loggen.
+      console.error('[demo] Kontakt-Bestätigung Fehler:', err && err.message ? err.message : err);
+    }
+    if (inviteContext) {
+      // Bewusste Wartezeit gegen Brevo-Queue-Race.
+      await new Promise((resolve) => setTimeout(resolve, CONTACT_TO_INVITE_DELAY_MS));
+      const t1 = Date.now();
+      await sendInviteEmail(inviteContext);
+      console.log(`[demo] INVITE_EMAIL sent (${Date.now() - t1}ms) — total pipeline ${Date.now() - t0}ms`);
+      console.log(`[demo] Einladung-Pipeline abgeschlossen für ${inviteContext.email} (${inviteContext.practice})`);
+    }
+  }, 40000);
 
   if (inviteContext) {
-    fireAndForget('Einladungs-E-Mail', async () => {
-      await sendInviteEmail(inviteContext);
-      console.log(`[demo] Einladung-Pipeline abgeschlossen für ${inviteContext.email} (${inviteContext.practice})`);
-    });
     console.log(`[demo] Invite-Link (Fallback): ${inviteContext.setPasswordUrl}`);
   } else {
     // Klare Diagnose, warum keine Invite-Mail rausging – sichtbar in Render-Logs
