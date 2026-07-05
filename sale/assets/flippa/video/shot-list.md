@@ -130,7 +130,7 @@
 - Rendered inline HTML end card
 - Title: "PraxisOnline24"
 - Tagline: "Your practice. Online. Around the clock."
-- Info row: praxisonline24.com · USD 49,000 · Listed on Flippa
+- Info row: praxisonline24.com · USD 39,000 · Listed on Flippa
 - Footer: "Serious offers only."
 
 ---

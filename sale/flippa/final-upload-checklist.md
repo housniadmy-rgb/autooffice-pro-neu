@@ -145,7 +145,7 @@ Keep these files staged for buyer requests. Flippa's messaging system allows fil
 **Editor sanity:**
 - [ ] All 15 screenshots visible in the gallery; ordering matches the numeric prefix
 - [ ] Video preview player loads and plays
-- [ ] "Asking price" set to **USD 49,000** (or your negotiated floor)
+- [ ] "Asking price" set to **USD 39,000** (or your negotiated floor)
 - [ ] Listing is set to correct category: **Businesses → SaaS → Pre-revenue** (or the closest Flippa equivalent)
 - [ ] Listing is set to correct auction type: **Buy It Now** (recommended for pre-revenue), or **Auction** if you want price discovery
 

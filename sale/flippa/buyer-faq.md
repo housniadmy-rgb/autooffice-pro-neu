@@ -22,9 +22,9 @@ The product build is done; the sales function is not started. Selling B2B SaaS i
 
 Bootstrapped by one founder over ~6 months. If replicated at typical agency rates for a senior full-stack developer (approx. €80–120/hour × 800–1,000 hours), replacement cost is in the €75,000–€120,000 range. That's the "build-vs-buy" benchmark, not a valuation.
 
-### 5. How was the asking price ($49,000) calculated?
+### 5. How was the asking price ($39,000) calculated?
 
-Pre-revenue SaaS asset pricing on Flippa typically falls between **build-cost replacement floor and buyer-opportunity ceiling**. The $49,000 asking price is well below the replacement floor and reflects that the buyer takes on all go-to-market risk. It is negotiable; final settlement price will depend on your intended use case.
+Pre-revenue SaaS asset pricing on Flippa typically falls between **build-cost replacement floor and buyer-opportunity ceiling**. The $39,000 asking price is well below the replacement floor and reflects that the buyer takes on all go-to-market risk. It is negotiable; final settlement price will depend on your intended use case.
 
 ### 6. Are you open to negotiation?
 

@@ -23,7 +23,7 @@ PraxisOnline24 is a **turnkey B2B SaaS for medical practices** — a fully built
 
 **Status honestly stated:** pre-launch, zero customers, zero revenue. The value on offer is a **production-ready product, brand and deployment**, not a book of business. The buyer skips the 6–12 months of build effort and focuses on go-to-market — pricing structure, subscription flow, and multilingual onboarding are already wired up.
 
-**Asking price: USD 49,000.** Full transfer of code, domain, brand assets and 30 days of implementation support included.
+**Asking price: USD 39,000.** Full transfer of code, domain, brand assets and 30 days of implementation support included.
 
 ---
 

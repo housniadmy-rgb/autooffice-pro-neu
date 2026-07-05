@@ -76,7 +76,7 @@ Each block corresponds to one video scene. Timecodes match `captions.srt`.
 
 ### Scene 15 — Closing (1:46–1:54)
 
-> PraxisOnline24. The product is complete. The domain, the deployment, the branding, the source code — asking price forty-nine thousand dollars. Serious offers via Flippa.
+> PraxisOnline24. The product is complete. The domain, the deployment, the branding, the source code — asking price thirty-nine thousand dollars. Serious offers via Flippa.
 
 ---
 
@@ -88,4 +88,4 @@ Approximately 275 spoken words. At 145 wpm this reads in 1:53 with natural pause
 
 If Flippa's video slot requires 60 seconds, use scenes 1, 2, 7, 8, 10, 13, 15 only. Adjust the narration accordingly:
 
-> This is PraxisOnline24 — a multilingual practice management platform. Twelve languages, three pricing tiers, complete dashboard, calendar with waitlist, and an AI-powered daily briefing. Forty-nine thousand dollars. Full source, domain and deployment included. Serious offers via Flippa.
+> This is PraxisOnline24 — a multilingual practice management platform. Twelve languages, three pricing tiers, complete dashboard, calendar with waitlist, and an AI-powered daily briefing. Thirty-nine thousand dollars. Full source, domain and deployment included. Serious offers via Flippa.
