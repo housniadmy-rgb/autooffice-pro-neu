@@ -19,7 +19,7 @@ Three access tiers are used throughout:
 
 | Classification | Who can view | Applies to |
 |---|---|---|
-| **Public** | Anyone browsing the Flippa listing | Executive summary, screenshots, buyer FAQ, brand kit previews |
+| **Public** | Anyone browsing the Flippa listing | Executive summary, screenshots, buyer FAQ, brand kit previews, DD changelog |
 | **Share after NDA** | Buyers who have signed a mutual NDA | Full technical documentation, architecture, deployment runbook, roadmap |
 | **Confidential** | Buyers under LOI or in escrow | Legal contracts, transfer credentials, financial deep-dive |
 
@@ -40,6 +40,8 @@ Three access tiers are used throughout:
 | 09 | [Legal & Transfer](./09-legal-and-transfer/) | Confidential | Asset purchase agreement template, transfer checklist, IP declarations |
 | 10 | [Roadmap](./10-roadmap/) | Share after NDA | 12-month plausible growth path, cost projections, hire plan |
 | 11 | [Buyer FAQ](./11-buyer-faq/) | Public | 32 answered questions in five categories |
+| 12 | [Risk Disclosures](./12-risk-disclosures/) | Share after NDA | Structured risk register across commercial, technical, security, legal, operational, market and reputational categories |
+| 13 | [Due Diligence Changelog](./13-changelog/) | Public | Revision history of the DD package with version log and pending-revision list |
 
 ---
 
@@ -47,13 +49,14 @@ Three access tiers are used throughout:
 
 Typical buyer path through the materials:
 
-1. **Public discovery** — read `01-executive-summary/`, browse `08-screenshots-and-media/`, skim `11-buyer-faq/`
+1. **Public discovery** — read `01-executive-summary/`, browse `08-screenshots-and-media/`, skim `11-buyer-faq/`, review `13-changelog/` for revision history
 2. **Interest confirmation** — request mutual NDA from seller (template in `09-legal-and-transfer/` once counter-signed)
-3. **Technical review** — study `04-technical-documentation/`, `05-architecture/`, `06-deployment/`; optionally clone the private repo via time-limited read access
-4. **Commercial review** — walk through `02-investment-report/`, `03-pitch-deck/`, `10-roadmap/`
-5. **Domain & brand check** — verify `07-domain-and-brand-assets/` — registrar records, trademark search results, transfer feasibility
-6. **Letter of Intent (LOI)** — non-binding offer, unlocks `09-legal-and-transfer/` full contents
-7. **Escrow + transfer** — asset purchase agreement executed, Flippa Escrow initiated, transfer completes within 7 days per checklist in section 09
+3. **Risk review** — study `12-risk-disclosures/` under NDA to size known risks before deeper technical or commercial evaluation
+4. **Technical review** — study `04-technical-documentation/`, `05-architecture/`, `06-deployment/`; optionally clone the private repo via time-limited read access
+5. **Commercial review** — walk through `02-investment-report/`, `03-pitch-deck/`, `10-roadmap/`
+6. **Domain & brand check** — verify `07-domain-and-brand-assets/` — registrar records, trademark search results, transfer feasibility
+7. **Letter of Intent (LOI)** — non-binding offer, unlocks `09-legal-and-transfer/` full contents
+8. **Escrow + transfer** — asset purchase agreement executed, Flippa Escrow initiated, transfer completes within 7 days per checklist in section 09
 
 ---
 
@@ -88,5 +91,6 @@ For DD questions, use the Flippa messaging system on the active listing. Respons
 
 ## Version
 
-Document set version: **DD-Rev.1 (2026-07-07)**
+Document set version: **DD-Rev.1.2 (2026-07-08)**
+Full revision log: [Due Diligence Changelog](./13-changelog/Due_Diligence_Changelog.md)
 Repository commit: check `git log --oneline -1` for the latest revision of these materials.
