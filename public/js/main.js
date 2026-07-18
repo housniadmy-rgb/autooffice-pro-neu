@@ -1,3 +1,9 @@
+function mT(key) {
+  if (window.dT) return window.dT(key);
+  if (window.pT) return window.pT(key);
+  return key;
+}
+
 const API = {
   async request(method, url, data) {
     const opts = {
@@ -10,9 +16,9 @@ const API = {
     const json = await res.json().catch(() => ({}));
     if (res.status === 402 && json.account_status === 'paused') {
       showPausedBanner();
-      throw new Error(json.error || 'Konto pausiert');
+      throw new Error(json.error || mT('msg_account_paused_short'));
     }
-    if (!res.ok) throw new Error(json.error || 'Fehler beim Server');
+    if (!res.ok) throw new Error(json.error || mT('msg_server_error'));
     return json;
   },
   get: (url) => API.request('GET', url),
@@ -39,8 +45,8 @@ function formatDate(dateStr) {
 const MAIN_LOCALE_MAP = { de:'de-DE', en:'en-GB', fr:'fr-FR', es:'es-ES', pt:'pt-BR', ar:'ar-SA', ru:'ru-RU', zh:'zh-CN', hi:'hi-IN', th:'th-TH', tr:'tr-TR', id:'id-ID' };
 
 function getLocale() {
-  const lang = window.dLang ? window.dLang() : (document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('lang='))?.split('=')[1] || 'de');
-  return MAIN_LOCALE_MAP[lang] || 'de-DE';
+  const lang = window.dLang ? window.dLang() : (document.cookie.split(';').map(c=>c.trim()).find(c=>c.startsWith('lang='))?.split('=')[1] || 'en');
+  return MAIN_LOCALE_MAP[lang] || 'en-GB';
 }
 
 function formatCurrency(amount) {
@@ -50,15 +56,15 @@ function formatCurrency(amount) {
 function statusBadge(status) {
   const t = window.dT || ((k) => k);
   const labels = {
-    scheduled: t('status_scheduled') || 'Geplant',
-    completed: t('status_completed') || 'Abgeschlossen',
-    cancelled: t('status_cancel') || 'Abgesagt',
-    noshow: t('status_noshow') || 'Nicht erschienen',
-    archived: t('status_archived') || 'Archiviert',
-    draft: 'Entwurf',
-    paid: 'Bezahlt',
-    pending: 'Ausstehend',
-    waiting: 'Wartend',
+    scheduled: t('status_scheduled'),
+    completed: t('status_completed'),
+    cancelled: t('status_cancelled'),
+    noshow: t('status_noshow'),
+    archived: t('status_archived'),
+    draft: t('status_draft'),
+    paid: t('status_paid'),
+    pending: t('status_pending'),
+    waiting: t('status_waiting'),
   };
   return `<span class="badge badge-${status}">${labels[status] || status}</span>`;
 }
@@ -82,7 +88,8 @@ function showPausedBanner() {
   const banner = document.createElement('div');
   banner.id = 'paused-banner';
   banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:9999;background:#d93025;color:#fff;text-align:center;padding:.875rem 1rem;font-size:.9375rem;font-weight:500;';
-  banner.innerHTML = 'Ihr Konto ist pausiert. <a href="/subscription.html" style="color:#fff;text-decoration:underline;">Jetzt erneuern</a>';
+  const renewText = mT('msg_paused_renew');
+  banner.innerHTML = `${mT('msg_paused_banner')} <a href="/subscription.html" style="color:#fff;text-decoration:underline;">${renewText}</a>`;
   document.body.prepend(banner);
 }
 
@@ -103,6 +110,7 @@ function normalizeAppointmentType(type) {
   return TYPE_MIGRATION[type] || type;
 }
 
+window.mT = mT;
 window.API = API;
 window.showAlert = showAlert;
 window.formatDate = formatDate;

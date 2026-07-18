@@ -134,17 +134,17 @@
       <div id="step-3" style="display:none;" class="card">
         <div style="text-align:center;padding:1rem 0 1.5rem;">
           <div style="font-size:2.5rem;margin-bottom:.5rem;">✓</div>
-          <h2 style="color:var(--secondary);margin-bottom:.25rem;">Termin erfolgreich gebucht!</h2>
-          <p style="color:var(--text-secondary);font-size:.9375rem;">Eine Bestätigungs-E-Mail wird in Kürze gesendet.</p>
+          <h2 id="s3-title" style="color:var(--secondary);margin-bottom:.25rem;">Termin erfolgreich gebucht!</h2>
+          <p id="s3-sub" style="color:var(--text-secondary);font-size:.9375rem;">Eine Bestätigungs-E-Mail wird in Kürze gesendet.</p>
         </div>
 
         <div style="background:var(--bg);border-radius:var(--radius);padding:1.25rem;margin-bottom:1.5rem;">
           <table style="width:100%;border-collapse:collapse;">
-            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;white-space:nowrap;">Patient</td><td id="conf-name" style="font-weight:500;"></td></tr>
-            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Behandler</td><td id="conf-practitioner"></td></tr>
-            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Datum</td><td id="conf-date"></td></tr>
-            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Uhrzeit</td><td id="conf-time"></td></tr>
-            <tr><td style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Terminart</td><td id="conf-type"></td></tr>
+            <tr><td id="s3-lbl-patient" style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;white-space:nowrap;">Patient</td><td id="conf-name" style="font-weight:500;"></td></tr>
+            <tr><td id="s3-lbl-practitioner" style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Behandler</td><td id="conf-practitioner"></td></tr>
+            <tr><td id="s3-lbl-date" style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Datum</td><td id="conf-date"></td></tr>
+            <tr><td id="s3-lbl-time" style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Uhrzeit</td><td id="conf-time"></td></tr>
+            <tr><td id="s3-lbl-type" style="padding:.4rem 1rem .4rem 0;color:var(--text-secondary);font-size:.875rem;">Terminart</td><td id="conf-type"></td></tr>
           </table>
         </div>
 
@@ -154,7 +154,7 @@
         </div>
 
         <div style="text-align:center;margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);">
-          <a href="#" onclick="location.reload();return false;" class="btn btn-primary">Weiteren Termin buchen</a>
+          <a id="book-another-link" href="#" onclick="location.reload();return false;" class="btn btn-primary">Weiteren Termin buchen</a>
         </div>
       </div>
 
@@ -165,12 +165,12 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-inner">
-      <p class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
+      <p id="book-footer-note" class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.</p>
       <div class="footer-links">
-        <a href="/agb.html">AGB</a>
-        <a href="/datenschutz.html">Datenschutz</a>
+        <a id="book-footer-agb" href="/agb.html">AGB</a>
+        <a id="book-footer-datenschutz" href="/datenschutz.html">Datenschutz</a>
         <a id="book-sec-comp" href="/security-compliance.html">Security &amp; Compliance</a>
-        <a href="/impressum.html">Impressum</a>
+        <a id="book-footer-impressum" href="/impressum.html">Impressum</a>
       </div>
     </div>
   </div>

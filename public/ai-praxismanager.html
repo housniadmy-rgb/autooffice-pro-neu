@@ -401,7 +401,7 @@
           <option value="tr">🇹🇷</option><option value="id">🇮🇩</option>
         </select>
       </div>
-      <button id="btn-logout" class="btn btn-secondary btn-sm">Abmelden</button>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
     </nav>
   </div>
 </header>
@@ -409,16 +409,16 @@
 <div class="app-layout">
   <aside class="sidebar">
     <ul class="sidebar-nav">
-      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> Übersicht</a></li>
-      <li><a href="/appointments.html"><span class="nav-icon">📅</span> Kalender</a></li>
-      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> Rechnungen</a></li>
-      <li><a href="/recipes.html"><span class="nav-icon">📄</span> Rezepte</a></li>
-      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> Bewertungen</a></li>
-      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> Patienten</a></li>
-      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> Behandler</a></li>
-      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> Warteliste</a></li>
-      <li><a href="/ai-praxismanager.html" class="active"><span class="nav-icon">🤖</span> AI Praxismanager</a></li>
-      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> Einstellungen</a></li>
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/recipes.html"><span class="nav-icon">📄</span> <span data-i18n="nav_recipes">Rezepte</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html" class="active"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
     </ul>
   </aside>
 
@@ -426,11 +426,11 @@
 
     <div class="ai-page-header">
       <div>
-        <div class="ai-page-title">AI Praxismanager</div>
+        <div class="ai-page-title" data-i18n="ai_page_title">AI Praxismanager</div>
         <div class="ai-page-sub" id="practice-name">Intelligenter Assistent für Ihre Praxis</div>
       </div>
       <div class="ai-page-right">
-        <span class="ai-badge-live">Live</span>
+        <span class="ai-badge-live" data-i18n="ai_live">Live</span>
         <span class="ai-ts" id="ai-ts"></span>
         <button class="btn btn-secondary btn-sm" id="btn-refresh">↻</button>
       </div>
@@ -438,7 +438,7 @@
 
     <div id="ai-loading" class="ai-loading">
       <div class="ai-spinner"></div>
-      KI analysiert Praxisdaten…
+      <span data-i18n="ai_analyzing">KI analysiert Praxisdaten…</span>
     </div>
     <div id="ai-error" class="ai-error" style="display:none;"></div>
 
@@ -447,7 +447,7 @@
       <!-- ── 1. Prioritäten heute ── -->
       <div class="ai-card">
         <div class="ai-card-header">
-          <span class="ai-card-title">Prioritäten heute</span>
+          <span class="ai-card-title" data-i18n="ai_card_prio">Prioritäten heute</span>
           <span class="ai-card-count" id="prio-count">0</span>
         </div>
         <div class="ai-card-body-flush" id="prio-list"></div>
@@ -456,7 +456,7 @@
       <!-- ── 2. Ampel-Handlungsempfehlungen ── -->
       <div class="ai-card">
         <div class="ai-card-header">
-          <span class="ai-card-title">Handlungsempfehlungen</span>
+          <span class="ai-card-title" data-i18n="ai_card_ampel">Handlungsempfehlungen</span>
         </div>
         <div class="ai-card-body">
           <div class="ampel-grid" id="ampel-grid"></div>
@@ -468,7 +468,7 @@
 
         <div class="ai-card">
           <div class="ai-card-header">
-            <span class="ai-card-title">Automatische Warnungen</span>
+            <span class="ai-card-title" data-i18n="ai_card_warn">Automatische Warnungen</span>
             <span class="ai-card-count" id="warn-count">0</span>
           </div>
           <div class="ai-card-body-flush" id="warn-list"></div>
@@ -476,7 +476,7 @@
 
         <div class="ai-card">
           <div class="ai-card-header">
-            <span class="ai-card-title">KI-Empfehlungen</span>
+            <span class="ai-card-title" data-i18n="ai_card_empf">KI-Empfehlungen</span>
           </div>
           <div class="ai-card-body-flush" id="empf-list"></div>
         </div>
@@ -488,36 +488,36 @@
 
         <div class="ai-card">
           <div class="ai-card-header">
-            <span class="ai-card-title">Umsatzprognose</span>
+            <span class="ai-card-title" data-i18n="ai_card_forecast">Umsatzprognose</span>
           </div>
           <div class="ai-card-body" id="forecast-body">
             <div class="forecast-main" id="forecast-kpis"></div>
-            <div class="section-eyebrow">Monatsfortschritt</div>
+            <div class="section-eyebrow" data-i18n="ai_month_progress">Monatsfortschritt</div>
             <div class="progress-month">
               <div class="progress-month-fill" id="month-progress-bar" style="width:0%"></div>
             </div>
             <div style="display:flex;justify-content:space-between;font-size:.6875rem;color:var(--ai-subtle);">
-              <span>Monatsbeginn</span>
+              <span data-i18n="ai_month_start">Monatsbeginn</span>
               <span id="month-progress-label">0%</span>
-              <span>Monatsende</span>
+              <span data-i18n="ai_month_end">Monatsende</span>
             </div>
-            <div class="section-eyebrow" style="margin-top:1rem;">Umsatz letzte 6 Monate</div>
+            <div class="section-eyebrow" data-i18n="ai_revenue_6m" style="margin-top:1rem;">Umsatz letzte 6 Monate</div>
             <div class="bar-chart-area" id="revenue-chart"></div>
           </div>
         </div>
 
         <div class="ai-card">
           <div class="ai-card-header">
-            <span class="ai-card-title">Auslastung nächste 7 Tage</span>
+            <span class="ai-card-title" data-i18n="ai_card_util7d">Auslastung nächste 7 Tage</span>
           </div>
           <div class="ai-card-body" id="auslastung-body">
-            <div class="section-eyebrow" style="margin-bottom:.75rem;">Termine pro Tag vs. Ø letzter 30 Tage</div>
+            <div class="section-eyebrow" data-i18n="ai_appts_vs_avg" style="margin-bottom:.75rem;">Termine pro Tag vs. Ø letzter 30 Tage</div>
             <div class="forecast-7d" id="forecast-7d"></div>
             <div class="f7-legend">
-              <span><span class="f7-dot" style="background:#6ee7b7;"></span> Normal</span>
-              <span><span class="f7-dot" style="background:var(--ai-green);"></span> Gut</span>
-              <span><span class="f7-dot" style="background:var(--ai-yellow);"></span> Hoch</span>
-              <span><span class="f7-dot" style="background:var(--ai-red);"></span> Überbucht</span>
+              <span><span class="f7-dot" style="background:#6ee7b7;"></span> <span data-i18n="ai_legend_normal">Normal</span></span>
+              <span><span class="f7-dot" style="background:var(--ai-green);"></span> <span data-i18n="ai_legend_gut">Gut</span></span>
+              <span><span class="f7-dot" style="background:var(--ai-yellow);"></span> <span data-i18n="ai_legend_hoch">Hoch</span></span>
+              <span><span class="f7-dot" style="background:var(--ai-red);"></span> <span data-i18n="ai_legend_ueberbucht">Überbucht</span></span>
             </div>
           </div>
         </div>
@@ -527,7 +527,7 @@
       <!-- ── 5. To-do Liste (operativ) ── -->
       <div class="ai-card">
         <div class="ai-card-header">
-          <span class="ai-card-title">To-do Liste</span>
+          <span class="ai-card-title" data-i18n="ai_card_todo">To-do Liste</span>
           <span class="ai-card-count" id="todo-count">0</span>
         </div>
         <div class="ai-card-body-flush" id="todo-list"></div>
@@ -536,7 +536,7 @@
       <!-- ── 6. Praxis-Optimierung ── -->
       <div class="ai-card">
         <div class="ai-card-header">
-          <span class="ai-card-title">Praxis-Optimierung</span>
+          <span class="ai-card-title" data-i18n="ai_card_setup">Praxis-Optimierung</span>
           <span class="ai-card-count" id="setup-count">0</span>
         </div>
         <div class="ai-card-body-flush" id="setup-list"></div>
@@ -549,12 +549,12 @@
 <footer class="site-footer">
   <div class="container">
     <div class="footer-inner">
-      <p class="footer-disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen und Rechnungsinhalte.</p>
+      <p class="footer-disclaimer" data-i18n="footer_disclaimer">PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen und Rechnungsinhalte.</p>
       <div class="footer-links">
-        <a href="/agb.html">AGB</a>
-        <a href="/datenschutz.html">Datenschutz</a>
-        <a href="/security-compliance.html">Sicherheit</a>
-        <a href="/impressum.html">Impressum</a>
+        <a href="/agb.html" data-i18n="agb">AGB</a>
+        <a href="/datenschutz.html" data-i18n="datenschutz">Datenschutz</a>
+        <a href="/security-compliance.html" data-i18n="footer.security_compliance">Sicherheit</a>
+        <a href="/impressum.html" data-i18n="nav_impressum">Impressum</a>
       </div>
     </div>
   </div>
@@ -568,8 +568,9 @@
 (function () {
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
-  const fmtEur = n => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
-  const fmtEurDec = n => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n || 0);
+  const _locale = () => (typeof getLocale === 'function' ? getLocale() : 'en-GB');
+  const fmtEur = n => new Intl.NumberFormat(_locale(), { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(n || 0);
+  const fmtEurDec = n => new Intl.NumberFormat(_locale(), { style: 'currency', currency: 'EUR' }).format(n || 0);
   const esc = s => String(s || '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
   function setHtml(id, html) {
@@ -600,7 +601,8 @@
   }
 
   function badgeLabel(l) {
-    return { kritisch:'Kritisch', dringend:'Dringend', heute:'Heute', info:'Info', ok:'OK' }[l] || l;
+    const t = window.dT || ((k) => k);
+    return { kritisch: t('ai_badge_kritisch'), dringend: t('ai_badge_dringend'), heute: t('ai_badge_heute'), info: t('ai_badge_info'), ok: t('ai_badge_ok') }[l] || l;
   }
 
   function renderAmpel(items) {
@@ -643,13 +645,14 @@
   function renderEmpfehlungen(items) {
     const el = document.getElementById('empf-list');
     if (!el) return;
-    const impactLabel = { hoch:'Hoch', mittel:'Mittel', niedrig:'Niedrig', gut:'OK', setup:'Tipp' };
+    const t = window.dT || ((k) => k);
+    const impactLabel = { hoch: t('ai_impact_high'), mittel: t('ai_impact_medium'), niedrig: t('ai_impact_low'), gut: t('ai_impact_ok'), setup: t('ai_impact_tip') };
     el.innerHTML = items.map(item => {
       const isSetup = item.impact === 'setup' && item.link;
       const tag = isSetup ? 'a' : 'div';
       const hrefAttr = isSetup ? ` href="${esc(item.link)}"` : '';
       const ctaHtml = isSetup
-        ? `<div class="empf-cta-row"><span class="empf-cta">Praxisprofil vervollständigen →</span></div>`
+        ? `<div class="empf-cta-row"><span class="empf-cta">${t('ai_complete_profile')} →</span></div>`
         : '';
       return `<${tag} class="empf-item${isSetup ? ' empf-clickable' : ''}"${hrefAttr}>
         <span class="empf-impact ${esc(item.impact)}">${impactLabel[item.impact] || item.impact}</span>
@@ -664,12 +667,13 @@
     const body = document.getElementById('forecast-body');
     if (!body) return;
 
+    const t = window.dT || ((k) => k);
     if (p.no_data) {
       body.innerHTML = `
         <div class="ai-empty-state">
           <span class="ai-empty-icon">💶</span>
-          <p class="ai-empty-text">Noch keine Rechnungsdaten vorhanden.<br>Die Umsatzprognose erscheint automatisch nach den ersten Abrechnungen.</p>
-          <a href="/invoices.html" class="ai-empty-action">Erste Rechnung erstellen →</a>
+          <p class="ai-empty-text">${esc(t('ai_empty_revenue'))}</p>
+          <a href="/invoices.html" class="ai-empty-action">${esc(t('ai_empty_first_invoice'))} →</a>
         </div>`;
       return;
     }
@@ -681,16 +685,16 @@
     setHtml('forecast-kpis', `
       <div class="forecast-kpi">
         <div class="forecast-val">${fmtEur(p.diesen_monat_bisher)}</div>
-        <div class="forecast-lbl">Bisher diesen Monat</div>
+        <div class="forecast-lbl">${esc(t('ai_this_month_so_far'))}</div>
       </div>
       <div class="forecast-kpi">
         <div class="forecast-val">${fmtEur(p.prognose_monatsende)}</div>
-        <div class="forecast-lbl">KI-Prognose Monatsende</div>
-        <div class="forecast-trend ${trendCls}">${trendLabel} vs. Vormonat</div>
+        <div class="forecast-lbl">${esc(t('ai_forecast_end'))}</div>
+        <div class="forecast-trend ${trendCls}">${trendLabel} ${esc(t('ai_vs_last_month'))}</div>
       </div>
       <div class="forecast-kpi">
         <div class="forecast-val">${fmtEur(p.vormonat)}</div>
-        <div class="forecast-lbl">Vormonat tatsächlich</div>
+        <div class="forecast-lbl">${esc(t('ai_last_month_actual'))}</div>
       </div>
     `);
 
@@ -702,7 +706,7 @@
     const chartEl = document.getElementById('revenue-chart');
     if (!chartEl) return;
     const rows = p.verlauf || [];
-    if (rows.length === 0) { chartEl.innerHTML = '<span style="color:var(--ai-subtle);font-size:.8125rem;">Keine Daten</span>'; return; }
+    if (rows.length === 0) { chartEl.innerHTML = `<span style="color:var(--ai-subtle);font-size:.8125rem;">${esc(t('ai_no_data'))}</span>`; return; }
     const max = Math.max(...rows.map(r => r.revenue || 0), 1);
     chartEl.innerHTML = rows.map(r => {
       const pct = Math.max(Math.round(((r.revenue || 0) / max) * 100), 2);
@@ -718,12 +722,13 @@
     const body = document.getElementById('auslastung-body');
     if (!body) return;
 
+    const t = window.dT || ((k) => k);
     if (!hasData) {
       body.innerHTML = `
         <div class="ai-empty-state">
           <span class="ai-empty-icon">📅</span>
-          <p class="ai-empty-text">Noch keine ausreichenden Termindaten vorhanden.<br>Die Auslastungsanalyse startet automatisch nach den ersten Buchungen.</p>
-          <a href="/appointments.html" class="ai-empty-action">Ersten Termin anlegen →</a>
+          <p class="ai-empty-text">${esc(t('ai_empty_util'))}</p>
+          <a href="/appointments.html" class="ai-empty-action">${esc(t('ai_empty_first_appt'))} →</a>
         </div>`;
       return;
     }
@@ -750,10 +755,13 @@
     }).join('');
   }
 
-  const CATEGORY_LABELS = {
-    profil: 'Profil', oeffnungszeiten: 'Öffnungszeiten', behandler: 'Behandler',
-    bewertungen: 'Bewertungen', warteliste: 'Warteliste', auslastung: 'Auslastung',
-  };
+  function categoryLabels() {
+    const t = window.dT || ((k) => k);
+    return {
+      profil: t('ai_cat_profil'), oeffnungszeiten: t('ai_cat_oeffnungszeiten'), behandler: t('ai_cat_behandler'),
+      bewertungen: t('ai_cat_bewertungen'), warteliste: t('ai_cat_warteliste'), auslastung: t('ai_cat_auslastung'),
+    };
+  }
 
   function renderTodos(items) {
     const el = document.getElementById('todo-list');
@@ -763,8 +771,9 @@
       cnt.className = 'ai-card-count ' + (items.length > 3 ? 'red' : items.length > 0 ? 'yellow' : 'green');
     }
     if (!el) return;
+    const tr = window.dT || ((k) => k);
     if (items.length === 0) {
-      el.innerHTML = '<div class="todo-item"><span class="todo-text" style="color:var(--ai-subtle);">Keine offenen Aufgaben – alles erledigt.</span></div>';
+      el.innerHTML = `<div class="todo-item"><span class="todo-text" style="color:var(--ai-subtle);">${esc(tr('ai_no_todos'))}</span></div>`;
       return;
     }
     el.innerHTML = items.map((t, i) => {
@@ -779,12 +788,15 @@
     }).join('');
   }
 
-  const PRIORITY_GROUPS = [
-    { key: 'kritisch', emoji: '🔴', label: 'Kritisch' },
-    { key: 'hoch',     emoji: '🟠', label: 'Wichtig' },
-    { key: 'mittel',   emoji: '🟡', label: 'Empfohlen' },
-    { key: 'niedrig',  emoji: '⚪', label: 'Optional' },
-  ];
+  function priorityGroups() {
+    const t = window.dT || ((k) => k);
+    return [
+      { key: 'kritisch', emoji: '🔴', label: t('ai_prio_grp_kritisch') },
+      { key: 'hoch',     emoji: '🟠', label: t('ai_prio_grp_hoch') },
+      { key: 'mittel',   emoji: '🟡', label: t('ai_prio_grp_mittel') },
+      { key: 'niedrig',  emoji: '⚪', label: t('ai_prio_grp_niedrig') },
+    ];
+  }
 
   function renderSetupTodos(items) {
     const el = document.getElementById('setup-list');
@@ -794,17 +806,19 @@
       cnt.className = 'ai-card-count ' + (items.length > 4 ? 'red' : items.length > 0 ? 'yellow' : 'green');
     }
     if (!el) return;
+    const tr = window.dT || ((k) => k);
     if (items.length === 0) {
-      el.innerHTML = '<div class="setup-item" style="padding:.875rem 1rem;font-size:.875rem;color:var(--ai-subtle);">Praxis vollständig eingerichtet – keine offenen Punkte.</div>';
+      el.innerHTML = `<div class="setup-item" style="padding:.875rem 1rem;font-size:.875rem;color:var(--ai-subtle);">${esc(tr('ai_setup_complete'))}</div>`;
       return;
     }
     let html = '';
-    PRIORITY_GROUPS.forEach(function(group) {
+    const CATS = categoryLabels();
+    priorityGroups().forEach(function(group) {
       const groupItems = items.filter(function(t) { return t.priority === group.key; });
       if (groupItems.length === 0) return;
       html += `<div class="setup-group-header">${group.emoji} ${group.label}</div>`;
       groupItems.forEach(function(t) {
-        const catLabel = t.category ? CATEGORY_LABELS[t.category] || t.category : null;
+        const catLabel = t.category ? CATS[t.category] || t.category : null;
         const catChip = catLabel ? `<span class="todo-cat ${esc(t.category)}">${esc(catLabel)}</span>` : '';
         html += `<a class="setup-item" href="${esc(t.link || '#')}">
           <span class="setup-icon">${t.icon || ''}</span>
@@ -832,8 +846,10 @@
         }
         if (d.generated_at) {
           const ts = new Date(d.generated_at);
+          const t = window.dT || ((k) => k);
+          const uhrSuffix = t('ai_ts_uhr');
           document.getElementById('ai-ts').textContent =
-            ts.toLocaleTimeString('de-DE', { hour:'2-digit', minute:'2-digit' }) + ' Uhr';
+            ts.toLocaleTimeString(_locale(), { hour:'2-digit', minute:'2-digit' }) + (uhrSuffix ? ' ' + uhrSuffix : '');
         }
 
         renderPrioritaeten(d.prioritaeten_heute || []);

@@ -209,7 +209,8 @@ function renderPractitionerFilter() {
 function renderFormAppointmentTypes() {
   const sel = document.getElementById('form-apt-type');
   if (!sel) return;
-  sel.innerHTML = `<option value="">${window.dT ? dT('ph_select') : '– wählen –'}</option>` +
+  const tr = window.dT || ((k) => k);
+  sel.innerHTML = `<option value="">${tr('ph_select')}</option>` +
     APPOINTMENT_TYPES.map(t => `<option value="${t}">${t}</option>`).join('');
 }
 

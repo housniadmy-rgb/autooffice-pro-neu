@@ -51,6 +51,13 @@ const T = {
     errorRequired: 'Bitte alle Pflichtfelder ausfüllen.',
     errorSlot: 'Bitte Uhrzeit wählen.',
     limitReached: 'Das monatliche Terminlimit der Praxis ist erreicht. Bitte wenden Sie sich direkt an die Praxis.',
+    errorNoPracticeId: 'Keine Praxis-ID angegeben.',
+    errorNoPractitioners: 'Keine Behandler verfügbar.',
+    errorLoadPractice: 'Die Praxis konnte nicht geladen werden.',
+    errorBooking: 'Fehler beim Buchen.',
+    errorConnection: 'Verbindungsfehler. Bitte versuchen Sie es erneut.',
+    loadingScreen: 'Wird geladen…',
+    lblPatient: 'Patient',
   },
   en: {
     step1: 'Appointment', step2: 'Details', step3: 'Confirmation',
@@ -85,6 +92,13 @@ const T = {
     errorRequired: 'Please fill in all required fields.',
     errorSlot: 'Please select a time.',
     limitReached: 'This practice has reached the monthly appointment limit. Please contact them directly.',
+    errorNoPracticeId: 'No practice ID provided.',
+    errorNoPractitioners: 'No practitioners available.',
+    errorLoadPractice: 'Could not load the practice.',
+    errorBooking: 'Booking failed.',
+    errorConnection: 'Connection error. Please try again.',
+    loadingScreen: 'Loading…',
+    lblPatient: 'Patient',
   },
   fr: {
     step1: 'Rendez-vous', step2: 'Coordonnées', step3: 'Confirmation',
@@ -119,6 +133,13 @@ const T = {
     errorRequired: 'Veuillez remplir tous les champs obligatoires.',
     errorSlot: 'Veuillez sélectionner un horaire.',
     limitReached: 'Le cabinet a atteint sa limite mensuelle de rendez-vous. Veuillez les contacter directement.',
+    errorNoPracticeId: "Aucun identifiant de cabinet fourni.",
+    errorNoPractitioners: 'Aucun praticien disponible.',
+    errorLoadPractice: 'Impossible de charger le cabinet.',
+    errorBooking: 'Échec de la réservation.',
+    errorConnection: 'Erreur de connexion. Veuillez réessayer.',
+    loadingScreen: 'Chargement…',
+    lblPatient: 'Patient',
   },
   es: {
     step1: 'Cita', step2: 'Datos', step3: 'Confirmación',
@@ -153,6 +174,13 @@ const T = {
     errorRequired: 'Por favor complete todos los campos obligatorios.',
     errorSlot: 'Por favor seleccione una hora.',
     limitReached: 'El consultorio ha alcanzado el límite mensual de citas. Contáctelos directamente.',
+    errorNoPracticeId: 'No se proporcionó ID de consultorio.',
+    errorNoPractitioners: 'No hay profesionales disponibles.',
+    errorLoadPractice: 'No se pudo cargar el consultorio.',
+    errorBooking: 'Error al reservar.',
+    errorConnection: 'Error de conexión. Por favor intente de nuevo.',
+    loadingScreen: 'Cargando…',
+    lblPatient: 'Paciente',
   },
   pt: {
     step1: 'Consulta', step2: 'Dados', step3: 'Confirmação',
@@ -187,6 +215,13 @@ const T = {
     errorRequired: 'Por favor preencha todos os campos obrigatórios.',
     errorSlot: 'Por favor selecione um horário.',
     limitReached: 'O consultório atingiu o limite mensal de consultas. Entre em contato diretamente.',
+    errorNoPracticeId: 'ID da clínica não fornecido.',
+    errorNoPractitioners: 'Nenhum profissional disponível.',
+    errorLoadPractice: 'Não foi possível carregar a clínica.',
+    errorBooking: 'Falha ao reservar.',
+    errorConnection: 'Erro de conexão. Por favor tente novamente.',
+    loadingScreen: 'Carregando…',
+    lblPatient: 'Paciente',
   },
   ar: {
     step1: 'موعد', step2: 'بيانات', step3: 'تأكيد',
@@ -221,6 +256,13 @@ const T = {
     errorRequired: 'يرجى ملء جميع الحقول المطلوبة.',
     errorSlot: 'يرجى اختيار وقت.',
     limitReached: 'وصلت العيادة إلى الحد الشهري للمواعيد. يرجى التواصل معهم مباشرة.',
+    errorNoPracticeId: 'لم يتم توفير معرّف العيادة.',
+    errorNoPractitioners: 'لا يوجد أطباء متاحون.',
+    errorLoadPractice: 'تعذر تحميل العيادة.',
+    errorBooking: 'فشل الحجز.',
+    errorConnection: 'خطأ في الاتصال. يرجى المحاولة مرة أخرى.',
+    loadingScreen: 'جارٍ التحميل…',
+    lblPatient: 'المريض',
   },
   tr: {
     step1: 'Randevu', step2: 'Bilgiler', step3: 'Onay',
@@ -255,6 +297,13 @@ const T = {
     errorRequired: 'Lütfen tüm zorunlu alanları doldurun.',
     errorSlot: 'Lütfen bir saat seçin.',
     limitReached: 'Klinik aylık randevu limitine ulaştı. Lütfen doğrudan iletişime geçin.',
+    errorNoPracticeId: 'Klinik kimliği sağlanmadı.',
+    errorNoPractitioners: 'Uygun uzman yok.',
+    errorLoadPractice: 'Klinik yüklenemedi.',
+    errorBooking: 'Rezervasyon başarısız.',
+    errorConnection: 'Bağlantı hatası. Lütfen tekrar deneyin.',
+    loadingScreen: 'Yükleniyor…',
+    lblPatient: 'Hasta',
   },
   id: {
     step1: 'Janji', step2: 'Data', step3: 'Konfirmasi',
@@ -289,6 +338,13 @@ const T = {
     errorRequired: 'Harap isi semua kolom yang wajib diisi.',
     errorSlot: 'Harap pilih jam.',
     limitReached: 'Klinik telah mencapai batas janji bulanan. Hubungi mereka langsung.',
+    errorNoPracticeId: 'ID klinik tidak disediakan.',
+    errorNoPractitioners: 'Tidak ada dokter tersedia.',
+    errorLoadPractice: 'Tidak dapat memuat klinik.',
+    errorBooking: 'Gagal memesan.',
+    errorConnection: 'Kesalahan koneksi. Silakan coba lagi.',
+    loadingScreen: 'Memuat…',
+    lblPatient: 'Pasien',
   },
   ru: {
     step1: 'Запись', step2: 'Данные', step3: 'Подтверждение',
@@ -323,6 +379,13 @@ const T = {
     errorRequired: 'Пожалуйста, заполните все обязательные поля.',
     errorSlot: 'Пожалуйста, выберите время.',
     limitReached: 'Клиника достигла месячного лимита записей. Обратитесь к ним напрямую.',
+    errorNoPracticeId: 'ID клиники не указан.',
+    errorNoPractitioners: 'Нет доступных врачей.',
+    errorLoadPractice: 'Не удалось загрузить клинику.',
+    errorBooking: 'Ошибка бронирования.',
+    errorConnection: 'Ошибка соединения. Пожалуйста, попробуйте ещё раз.',
+    loadingScreen: 'Загрузка…',
+    lblPatient: 'Пациент',
   },
   zh: {
     step1: '预约', step2: '信息', step3: '确认',
@@ -357,6 +420,13 @@ const T = {
     errorRequired: '请填写所有必填项。',
     errorSlot: '请选择时间。',
     limitReached: '该诊所已达到本月预约上限，请直接联系他们。',
+    errorNoPracticeId: '未提供诊所 ID。',
+    errorNoPractitioners: '没有可用的医生。',
+    errorLoadPractice: '无法加载诊所。',
+    errorBooking: '预约失败。',
+    errorConnection: '连接错误。请重试。',
+    loadingScreen: '加载中…',
+    lblPatient: '患者',
   },
   hi: {
     step1: 'अपॉइंटमेंट', step2: 'विवरण', step3: 'पुष्टि',
@@ -391,6 +461,13 @@ const T = {
     errorRequired: 'कृपया सभी आवश्यक फ़ील्ड भरें।',
     errorSlot: 'कृपया एक समय चुनें।',
     limitReached: 'क्लिनिक मासिक अपॉइंटमेंट सीमा तक पहुँच गया है। कृपया सीधे उनसे संपर्क करें।',
+    errorNoPracticeId: 'क्लिनिक आईडी प्रदान नहीं की गई।',
+    errorNoPractitioners: 'कोई चिकित्सक उपलब्ध नहीं।',
+    errorLoadPractice: 'क्लिनिक लोड नहीं हो सका।',
+    errorBooking: 'बुकिंग विफल।',
+    errorConnection: 'कनेक्शन त्रुटि। कृपया पुनः प्रयास करें।',
+    loadingScreen: 'लोड हो रहा है…',
+    lblPatient: 'मरीज़',
   },
   th: {
     step1: 'นัดหมาย', step2: 'ข้อมูล', step3: 'ยืนยัน',
@@ -425,6 +502,13 @@ const T = {
     errorRequired: 'กรุณากรอกข้อมูลในช่องที่จำเป็นทั้งหมด',
     errorSlot: 'กรุณาเลือกเวลา',
     limitReached: 'คลินิกถึงขีดจำกัดนัดหมายรายเดือนแล้ว กรุณาติดต่อพวกเขาโดยตรง',
+    errorNoPracticeId: 'ไม่มีการระบุ ID คลินิก',
+    errorNoPractitioners: 'ไม่มีแพทย์ให้บริการ',
+    errorLoadPractice: 'ไม่สามารถโหลดคลินิกได้',
+    errorBooking: 'การจองล้มเหลว',
+    errorConnection: 'การเชื่อมต่อผิดพลาด กรุณาลองอีกครั้ง',
+    loadingScreen: 'กำลังโหลด…',
+    lblPatient: 'ผู้ป่วย',
   },
 };
 
@@ -473,7 +557,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   bkApplyDir();
 
   if (!bk.practiceId) {
-    showError('Keine Praxis-ID angegeben.');
+    showError(t('errorNoPracticeId'));
     return;
   }
 
@@ -485,6 +569,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 function applyTranslations() {
+  const loadingEl = document.getElementById('loading-screen');
+  if (loadingEl) loadingEl.textContent = t('loadingScreen');
   document.getElementById('step-label-1').textContent = t('step1');
   document.getElementById('step-label-2').textContent = t('step2');
   document.getElementById('step-label-3').textContent = t('step3');
@@ -501,6 +587,28 @@ function applyTranslations() {
   document.getElementById('btn-back').textContent = t('back');
   document.getElementById('btn-book').textContent = t('bookBtn');
 
+  // Step 3 confirmation
+  const s3Title = document.getElementById('s3-title');
+  if (s3Title) s3Title.textContent = t('booked');
+  const s3Sub = document.getElementById('s3-sub');
+  if (s3Sub) s3Sub.textContent = t('confirmEmail');
+  const s3LblPatient = document.getElementById('s3-lbl-patient');
+  if (s3LblPatient) s3LblPatient.textContent = t('lblPatient');
+  const s3LblPrac = document.getElementById('s3-lbl-practitioner');
+  if (s3LblPrac) s3LblPrac.textContent = t('practitioner');
+  const s3LblDate = document.getElementById('s3-lbl-date');
+  if (s3LblDate) s3LblDate.textContent = t('date');
+  const s3LblTime = document.getElementById('s3-lbl-time');
+  if (s3LblTime) s3LblTime.textContent = t('time');
+  const s3LblType = document.getElementById('s3-lbl-type');
+  if (s3LblType) s3LblType.textContent = t('appointmentType');
+  const icsLink = document.getElementById('ics-link');
+  if (icsLink) icsLink.textContent = '📅 ' + t('addToCalendar');
+  const cancelLink = document.getElementById('cancel-link');
+  if (cancelLink) cancelLink.textContent = t('cancelLink');
+  const bookAnotherLink = document.getElementById('book-another-link');
+  if (bookAnotherLink) bookAnotherLink.textContent = t('bookAnother');
+
   const sel = document.getElementById('inp-type');
   sel.innerHTML = `<option value="">${t('none')}</option>` +
     t('types').map((tp, i) => `<option value="${esc(APPOINTMENT_TYPES[i])}">${esc(tp)}</option>`).join('');
@@ -512,6 +620,18 @@ function applyTranslations() {
   if (myLink) myLink.textContent = t('myAppointments');
   const wlLink = document.getElementById('waitlist-link');
   if (wlLink) wlLink.textContent = t('joinWaitlist');
+
+  // Footer via PUBLIC_T (loaded on booking.html)
+  if (window.pT) {
+    const fn = document.getElementById('book-footer-note');
+    if (fn) fn.textContent = window.pT('footer_note');
+    const fa = document.getElementById('book-footer-agb');
+    if (fa) fa.textContent = window.pT('nav_agb');
+    const fd = document.getElementById('book-footer-datenschutz');
+    if (fd) fd.textContent = window.pT('nav_datenschutz');
+    const fi = document.getElementById('book-footer-impressum');
+    if (fi) fi.textContent = window.pT('nav_impressum') || 'Impressum';
+  }
 }
 
 // ── Load Practice ─────────────────────────────────────────
@@ -545,7 +665,7 @@ async function loadPractice() {
     bk.practitioners = practitioners || [];
 
     if (bk.practitioners.length === 0) {
-      showError('Keine Behandler verfügbar.');
+      showError(t('errorNoPractitioners'));
       return;
     }
 
@@ -562,7 +682,7 @@ async function loadPractice() {
     document.getElementById('booking-main').style.display = '';
     document.getElementById('loading-screen').style.display = 'none';
   } catch (err) {
-    showError('Die Praxis konnte nicht geladen werden.');
+    showError(t('errorLoadPractice'));
   }
 }
 
@@ -772,7 +892,7 @@ async function submitBooking() {
     const json = await res.json();
     if (!res.ok) {
       document.getElementById('step2-alert').innerHTML =
-        `<div class="alert alert-danger">${esc(json.error || 'Fehler beim Buchen.')}</div>`;
+        `<div class="alert alert-danger">${esc(json.error || t('errorBooking'))}</div>`;
       btn.disabled = false;
       return;
     }
@@ -799,7 +919,7 @@ async function submitBooking() {
     goStep(3);
   } catch {
     document.getElementById('step2-alert').innerHTML =
-      '<div class="alert alert-danger">Verbindungsfehler. Bitte versuchen Sie es erneut.</div>';
+      `<div class="alert alert-danger">${t('errorConnection')}</div>`;
     btn.disabled = false;
   }
 }

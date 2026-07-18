@@ -165,7 +165,7 @@
     <a href="/dashboard.html" class="logo">PraxisOnline24</a>
     <nav class="nav">
       <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
-      <button id="btn-logout" class="btn btn-secondary btn-sm">Abmelden</button>
+      <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
     </nav>
   </div>
 </header>
@@ -173,17 +173,17 @@
 <div class="app-layout">
   <aside class="sidebar">
     <ul class="sidebar-nav">
-      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> Übersicht</a></li>
-      <li><a href="/appointments.html"><span class="nav-icon">📅</span> Kalender</a></li>
-      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> Rechnungen</a></li>
-      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> Bewertungen</a></li>
-      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> Patienten</a></li>
-      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> Behandler</a></li>
-      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> Warteliste</a></li>
-      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> AI Praxismanager</a></li>
-      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> Einstellungen</a></li>
+      <li><a href="/dashboard.html"><span class="nav-icon">📊</span> <span data-i18n="nav_dashboard">Übersicht</span></a></li>
+      <li><a href="/appointments.html"><span class="nav-icon">📅</span> <span data-i18n="nav_calendar">Kalender</span></a></li>
+      <li><a href="/invoices.html"><span class="nav-icon">🧾</span> <span data-i18n="nav_invoices">Rechnungen</span></a></li>
+      <li><a href="/reviews.html"><span class="nav-icon">⭐</span> <span data-i18n="nav_reviews">Bewertungen</span></a></li>
+      <li><a href="/patients.html"><span class="nav-icon">🧑‍🤝‍🧑</span> <span data-i18n="nav_patients">Patienten</span></a></li>
+      <li><a href="/practitioners.html"><span class="nav-icon">👨‍⚕️</span> <span data-i18n="nav_practitioners">Behandler</span></a></li>
+      <li><a href="/waitlist-admin.html"><span class="nav-icon">📋</span> <span data-i18n="nav_waitlist">Warteliste</span></a></li>
+      <li><a href="/ai-praxismanager.html"><span class="nav-icon">🤖</span> <span data-i18n="nav_ai">AI Praxismanager</span></a></li>
+      <li><a href="/settings.html"><span class="nav-icon">⚙️</span> <span data-i18n="nav_settings">Einstellungen</span></a></li>
       <li class="sidebar-divider" style="border-top:1px solid var(--border);margin:.5rem 0;"></li>
-      <li><a href="/ceo-dashboard.html" class="active" style="background:#eef2ff;color:#2563EB;font-weight:600;"><span class="nav-icon">👑</span> Management Center</a></li>
+      <li><a href="/ceo-dashboard.html" class="active" style="background:#eef2ff;color:#2563EB;font-weight:600;"><span class="nav-icon">👑</span> <span data-i18n="ceo_title">Management Center</span></a></li>
     </ul>
   </aside>
 
@@ -196,12 +196,12 @@
     <div id="main-ui" style="display:none;">
       <div class="mc-header">
         <div>
-          <div class="mc-title">Management Center</div>
-          <div class="mc-sub">Nur für Plattform-Owner &middot; Keine Patientendaten</div>
+          <div class="mc-title" data-i18n="ceo_title">Management Center</div>
+          <div class="mc-sub" data-i18n="ceo_sub">Nur für Plattform-Owner &middot; Keine Patientendaten</div>
         </div>
         <div class="mc-header-right">
           <span class="mc-ts" id="ts-active"></span>
-          <button id="btn-refresh" class="btn btn-secondary btn-sm">↻ Aktualisieren</button>
+          <button id="btn-refresh" class="btn btn-secondary btn-sm" data-i18n="btn_refresh_ai">↻ Aktualisieren</button>
         </div>
       </div>
 

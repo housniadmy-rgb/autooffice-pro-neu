@@ -155,13 +155,12 @@ function renderTodayAppointments(appointments) {
   const tbody = document.getElementById('today-appointments');
   if (!tbody) return;
 
+  const t = window.dT || ((k) => k);
   if (!appointments || appointments.length === 0) {
-    const msg = window.dT ? dT('msg_no_apts_today') : 'Keine Termine heute';
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:2rem;">${msg}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:var(--text-secondary);padding:2rem;">${t('msg_no_apts_today')}</td></tr>`;
     return;
   }
 
-  const t = window.dT || ((k) => k);
   const uhrSuffix = t('lbl_uhr');
   tbody.innerHTML = appointments.map((a) => {
     const timeDisplay = uhrSuffix ? `${a.appointment_time} ${uhrSuffix}` : a.appointment_time;

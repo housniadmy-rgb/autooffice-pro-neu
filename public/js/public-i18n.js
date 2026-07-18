@@ -77,6 +77,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Kostenlos registrieren – keine Kreditkarte erforderlich.',
     idx_cta_btn: 'Praxis registrieren',
     footer_note: 'PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.',
+    msg_account_paused_short: 'Konto pausiert', msg_server_error: 'Serverfehler',
+    msg_paused_banner: 'Ihr Konto ist pausiert.', msg_paused_renew: 'Jetzt erneuern',
   },
   en: {
     loading: 'Loading…',
@@ -147,6 +149,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Register for free – no credit card required.',
     idx_cta_btn: 'Register practice',
     footer_note: 'PraxisOnline24 is an appointment management tool. The practice is solely responsible for patient data, medical decisions, invoice content, and prescription details.',
+    msg_account_paused_short: 'Account paused', msg_server_error: 'Server error',
+    msg_paused_banner: 'Your account is paused.', msg_paused_renew: 'Renew now',
   },
   fr: {
     loading: 'Chargement…',
@@ -217,6 +221,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Inscription gratuite – aucune carte de crédit requise.',
     idx_cta_btn: 'Inscrire le cabinet',
     footer_note: "PraxisOnline24 est un outil de gestion de rendez-vous. Le cabinet est seul responsable des données des patients, des décisions médicales, du contenu des factures et des prescriptions.",
+    msg_account_paused_short: 'Compte suspendu', msg_server_error: 'Erreur serveur',
+    msg_paused_banner: 'Votre compte est suspendu.', msg_paused_renew: 'Renouveler maintenant',
   },
   es: {
     loading: 'Cargando…',
@@ -287,6 +293,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Regístrese gratis – no se requiere tarjeta de crédito.',
     idx_cta_btn: 'Registrar consultorio',
     footer_note: 'PraxisOnline24 es una herramienta de gestión de citas. El consultorio es el único responsable de los datos de pacientes, decisiones médicas, facturas y recetas.',
+    msg_account_paused_short: 'Cuenta pausada', msg_server_error: 'Error del servidor',
+    msg_paused_banner: 'Su cuenta está en pausa.', msg_paused_renew: 'Renovar ahora',
   },
   pt: {
     loading: 'Carregando…',
@@ -357,6 +365,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Cadastro gratuito – sem cartão de crédito.',
     idx_cta_btn: 'Cadastrar clínica',
     footer_note: 'PraxisOnline24 é uma ferramenta de gestão de consultas. A clínica é a única responsável pelos dados dos pacientes, decisões médicas, faturas e prescrições.',
+    msg_account_paused_short: 'Conta pausada', msg_server_error: 'Erro do servidor',
+    msg_paused_banner: 'Sua conta está pausada.', msg_paused_renew: 'Renovar agora',
   },
   ar: {
     loading: 'جارٍ التحميل…',
@@ -427,6 +437,8 @@ const PUBLIC_T = {
     idx_cta_p: 'التسجيل مجاني – لا يلزم بطاقة ائتمان.',
     idx_cta_btn: 'تسجيل العيادة',
     footer_note: 'PraxisOnline24 هو أداة لإدارة المواعيد. العيادة وحدها مسؤولة عن بيانات المرضى والقرارات الطبية والفواتير والوصفات.',
+    msg_account_paused_short: 'الحساب موقوف', msg_server_error: 'خطأ في الخادم',
+    msg_paused_banner: 'حسابك موقوف.', msg_paused_renew: 'جدد الآن',
   },
   tr: {
     loading: 'Yükleniyor…',
@@ -497,6 +509,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Ücretsiz kayıt – kredi kartı gerekmez.',
     idx_cta_btn: 'Kliniği kaydet',
     footer_note: 'PraxisOnline24 bir randevu yönetim aracıdır. Klinik; hasta verileri, tıbbi kararlar, faturalar ve reçetelerden tek başına sorumludur.',
+    msg_account_paused_short: 'Hesap duraklatıldı', msg_server_error: 'Sunucu hatası',
+    msg_paused_banner: 'Hesabınız duraklatıldı.', msg_paused_renew: 'Şimdi yenile',
   },
   id: {
     loading: 'Memuat…',
@@ -567,6 +581,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Pendaftaran gratis – tidak perlu kartu kredit.',
     idx_cta_btn: 'Daftarkan klinik',
     footer_note: 'PraxisOnline24 adalah alat manajemen janji. Klinik bertanggung jawab sepenuhnya atas data pasien, keputusan medis, faktur, dan resep.',
+    msg_account_paused_short: 'Akun dijeda', msg_server_error: 'Kesalahan server',
+    msg_paused_banner: 'Akun Anda dijeda.', msg_paused_renew: 'Perpanjang sekarang',
   },
   ru: {
     loading: 'Загрузка…',
@@ -637,6 +653,8 @@ const PUBLIC_T = {
     idx_cta_p: 'Бесплатная регистрация – кредитная карта не требуется.',
     idx_cta_btn: 'Зарегистрировать клинику',
     footer_note: 'PraxisOnline24 — инструмент управления записями. Клиника несёт исключительную ответственность за данные пациентов, медицинские решения, счета и рецепты.',
+    msg_account_paused_short: 'Аккаунт приостановлен', msg_server_error: 'Ошибка сервера',
+    msg_paused_banner: 'Ваш аккаунт приостановлен.', msg_paused_renew: 'Продлить сейчас',
   },
   zh: {
     loading: '加载中…',
@@ -707,6 +725,8 @@ const PUBLIC_T = {
     idx_cta_p: '免费注册 – 无需信用卡。',
     idx_cta_btn: '注册诊所',
     footer_note: 'PraxisOnline24是一款预约管理工具。诊所对患者数据、医疗决策、账单内容和处方信息负完全责任。',
+    msg_account_paused_short: '账户已暂停', msg_server_error: '服务器错误',
+    msg_paused_banner: '您的账户已暂停。', msg_paused_renew: '立即续订',
   },
   hi: {
     loading: 'लोड हो रहा है…',
@@ -777,6 +797,8 @@ const PUBLIC_T = {
     idx_cta_p: 'मुफ़्त पंजीकरण – क्रेडिट कार्ड की आवश्यकता नहीं।',
     idx_cta_btn: 'क्लिनिक रजिस्टर करें',
     footer_note: 'PraxisOnline24 एक अपॉइंटमेंट प्रबंधन उपकरण है। क्लिनिक मरीज़ के डेटा, चिकित्सा निर्णयों, बिल और नुस्खों के लिए पूरी तरह जिम्मेदार है।',
+    msg_account_paused_short: 'खाता रोका गया', msg_server_error: 'सर्वर त्रुटि',
+    msg_paused_banner: 'आपका खाता रोका गया है।', msg_paused_renew: 'अभी नवीनीकृत करें',
   },
   th: {
     loading: 'กำลังโหลด…',
@@ -847,6 +869,8 @@ const PUBLIC_T = {
     idx_cta_p: 'ลงทะเบียนฟรี – ไม่ต้องใช้บัตรเครดิต',
     idx_cta_btn: 'ลงทะเบียนคลินิก',
     footer_note: 'PraxisOnline24 เป็นเครื่องมือจัดการนัดหมาย คลินิกรับผิดชอบข้อมูลผู้ป่วย การตัดสินใจทางการแพทย์ ใบแจ้งหนี้ และใบสั่งยาแต่เพียงผู้เดียว',
+    msg_account_paused_short: 'บัญชีถูกระงับ', msg_server_error: 'ข้อผิดพลาดของเซิร์ฟเวอร์',
+    msg_paused_banner: 'บัญชีของคุณถูกระงับ', msg_paused_renew: 'ต่ออายุตอนนี้',
   },
 };
 
