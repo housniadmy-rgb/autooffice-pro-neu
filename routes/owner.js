@@ -4,6 +4,8 @@ const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
 const { getDb } = require('../database');
+const { getLang } = require('../utils/language');
+const { getOwnerLocale } = require('../utils/ownerLocales');
 const PRICING = require('../config/pricing');
 
 // Build PKG_PRICE map from central config so MRR always matches the public pricing page.
@@ -70,6 +72,7 @@ router.get('/check', (req, res) => {
 router.get('/tab/ceo', requireOwner, (req, res) => {
   const db = getDb();
   const now = moment();
+  const L = getOwnerLocale(getLang(req));
   const today = now.format('YYYY-MM-DD');
   const weekStart = now.clone().startOf('isoWeek').format('YYYY-MM-DD');
   const monthStart = now.clone().startOf('month').format('YYYY-MM-DD');
@@ -95,25 +98,26 @@ router.get('/tab/ceo', requireOwner, (req, res) => {
   const todos = [];
 
   if (trialsExpired > 0)
-    risks.push({ level: 'danger', msg: `${trialsExpired} Praxis/en: Testphase abgelaufen – kein Upgrade` });
+    risks.push({ level: 'danger', msg: L.risk_trials_expired(trialsExpired) });
   if (trialsExpiring7d > 0)
-    risks.push({ level: 'warn', msg: `${trialsExpiring7d} Praxis/en: Testphase endet in 7 Tagen` });
+    risks.push({ level: 'warn', msg: L.risk_trials_expiring(trialsExpiring7d) });
   if (pausedPractices > 0)
-    risks.push({ level: 'warn', msg: `${pausedPractices} Konto/en pausiert` });
+    risks.push({ level: 'warn', msg: L.risk_paused_accounts(pausedPractices) });
   if (newThisMonth === 0)
-    risks.push({ level: 'info', msg: 'Keine Neuregistrierungen diesen Monat' });
+    risks.push({ level: 'info', msg: L.risk_no_new_this_month });
 
   if (trialsExpiring7d > 0)
-    todos.push(`Kontakt mit ${trialsExpiring7d} Praxis/en vor Trial-Ende`);
+    todos.push(L.todo_contact_trials_expiring(trialsExpiring7d));
   if (pausedPractices > 0)
-    todos.push(`Follow-up bei ${pausedPractices} pausierten Konten`);
+    todos.push(L.todo_followup_paused(pausedPractices));
   if (trialsExpired > 0)
-    todos.push(`Upgrade-Angebot an ${trialsExpired} Praxis/en senden`);
-  todos.push('Monatsbericht prüfen und Wachstumsstrategie anpassen');
+    todos.push(L.todo_upgrade_offer(trialsExpired));
+  todos.push(L.todo_monthly_review);
 
   let ampel = 'green';
-  if (risks.some(r => r.level === 'warn'))   ampel = 'yellow';
-  if (risks.some(r => r.level === 'danger')) ampel = 'red';
+  let ampelLabel = L.ampel_green;
+  if (risks.some(r => r.level === 'warn'))   { ampel = 'yellow'; ampelLabel = L.ampel_yellow; }
+  if (risks.some(r => r.level === 'danger')) { ampel = 'red';    ampelLabel = L.ampel_red; }
 
   // Demo-Anfragen – CEO Übersicht
   const demoTotal      = db.prepare('SELECT COUNT(*) as n FROM demo_requests').get().n;
@@ -130,18 +134,18 @@ router.get('/tab/ceo', requireOwner, (req, res) => {
   const automationsToday = db.prepare("SELECT COUNT(*) as n FROM automation_log WHERE DATE(ran_at) = ?").get(today).n;
 
   const aiTasks = [];
-  if (trialsExpired > 0)    aiTasks.push({ priority: 'high',   text: `${trialsExpired} abgelaufene Trial(s) – Upgrade-Angebot senden` });
-  if (trialsExpiring7d > 0) aiTasks.push({ priority: 'high',   text: `${trialsExpiring7d} Trial(s) laufen in 7 Tagen ab – jetzt kontaktieren` });
-  if (openInvoices > 0)     aiTasks.push({ priority: 'medium', text: `${openInvoices} offene Rechnungen plattformweit` });
-  if (pausedPractices > 0)  aiTasks.push({ priority: 'medium', text: `${pausedPractices} pausierte Konten – Reaktivierung prüfen` });
-  if (pendingReviews > 0)   aiTasks.push({ priority: 'low',    text: `${pendingReviews} Bewertungen warten auf Freigabe` });
-  if (aiTasks.length === 0) aiTasks.push({ priority: 'none',   text: 'Keine offenen Aufgaben – Plattform läuft stabil' });
+  if (trialsExpired > 0)    aiTasks.push({ priority: 'high',   text: L.ai_task_trials_expired(trialsExpired) });
+  if (trialsExpiring7d > 0) aiTasks.push({ priority: 'high',   text: L.ai_task_trials_expiring(trialsExpiring7d) });
+  if (openInvoices > 0)     aiTasks.push({ priority: 'medium', text: L.ai_task_open_invoices(openInvoices) });
+  if (pausedPractices > 0)  aiTasks.push({ priority: 'medium', text: L.ai_task_paused(pausedPractices) });
+  if (pendingReviews > 0)   aiTasks.push({ priority: 'low',    text: L.ai_task_pending_reviews(pendingReviews) });
+  if (aiTasks.length === 0) aiTasks.push({ priority: 'none',   text: L.ai_task_all_ok });
 
   const aiRecommendations = [
-    totalPractices < 10 ? 'Onboarding-Kampagne starten: Zielgruppe Arztpraxen DE/AT/CH' : null,
-    newThisMonth < 3    ? 'Marketing-Aktivierung: Unter 3 Neuanmeldungen diesen Monat' : null,
-    'A/B-Test Landingpage: Video-Hero vs. Screenshot-Hero',
-    'Retargeting-Kampagne für abgebrochene Registrierungen einrichten',
+    totalPractices < 10 ? L.ai_reco_onboarding : null,
+    newThisMonth < 3    ? L.ai_reco_marketing_activation : null,
+    L.ai_reco_ab_landing,
+    L.ai_reco_retargeting,
   ].filter(Boolean);
 
   res.json({
@@ -151,6 +155,7 @@ router.get('/tab/ceo', requireOwner, (req, res) => {
     risks,
     todos,
     ampel,
+    ampel_label: ampelLabel,
     demo: { total: demoTotal, this_week: demoThisWeek, this_month: demoThisMonth, countries: demoCountries, conversion: demoConversion },
     ai: {
       tasks: aiTasks,
@@ -220,6 +225,7 @@ router.get('/tab/cfo', requireOwner, (req, res) => {
 router.get('/tab/marketing', requireOwner, (req, res) => {
   const db = getDb();
   const now = moment();
+  const L = getOwnerLocale(getLang(req));
   const weekStart  = now.clone().startOf('isoWeek').format('YYYY-MM-DD');
   const monthStart = now.clone().startOf('month').format('YYYY-MM-DD');
 
@@ -256,18 +262,18 @@ router.get('/tab/marketing', requireOwner, (req, res) => {
   `).all();
 
   const seoHints = [
-    'Keywords "Praxisverwaltung online" und "Online Terminbuchung Arzt" in Blog-Artikeln ausbauen',
-    'Google My Business Eintrag für PraxisOnline24 aktuell halten',
-    'Bewertungs-Funktion als USP auf Landingpage prominent platzieren',
-    'Mehrsprachige Landing Pages für EN, FR, ES, AR erstellen',
-    'Structured Data (LocalBusiness, SoftwareApplication) auf Startseite einbinden',
+    L.seo_keywords,
+    L.seo_gmb,
+    L.seo_reviews_usp,
+    L.seo_multilingual,
+    L.seo_structured_data,
   ];
   const socialIdeas = [
-    'LinkedIn: "Wie Arztpraxen 2 Std./Woche durch Online-Buchung sparen" – Case Study Post',
-    'Instagram: Vorher/Nachher – Papierkalender vs. digitale Buchung (Reel)',
-    'YouTube-Short: 60-Sek. Setup-Demo – Praxis in 5 Minuten online',
-    'Facebook: Umfrage "Was nervt Patienten am Telefon-Termin am meisten?"',
-    'TikTok: Tag-im-Leben einer Praxis mit PraxisOnline24 (humorvoller Short)',
+    L.social_linkedin,
+    L.social_instagram,
+    L.social_youtube,
+    L.social_facebook,
+    L.social_tiktok,
   ];
 
   res.json({
@@ -294,6 +300,7 @@ router.get('/tab/marketing', requireOwner, (req, res) => {
 router.get('/tab/cto', requireOwner, (req, res) => {
   const db  = getDb();
   const now = moment();
+  const L = getOwnerLocale(getLang(req));
 
   const dbStats = {
     total_practices:    db.prepare('SELECT COUNT(*) as n FROM practices').get().n,
@@ -348,13 +355,25 @@ router.get('/tab/cto', requireOwner, (req, res) => {
   };
 
   const updateHints = [
-    'sql.js regelmäßig auf neueste Version aktualisieren',
-    'bcrypt: aktuelle Major-Version sicherstellen',
-    'Rate-Limiting für /api/auth/* Endpunkte prüfen',
-    'NODE_ENV=production in Produktion setzen',
-    'SESSION_SECRET mit mindestens 32 Zeichen konfigurieren',
-    'SMTP konfigurieren für echte Passwort-Reset-Mails',
+    L.update_sqljs,
+    L.update_bcrypt,
+    L.update_ratelimit,
+    L.update_nodeenv,
+    L.update_secret,
+    L.update_smtp,
   ];
+
+  const securityLabels = {
+    session_secret: L.sec_session_secret,
+    owner_email:    L.sec_owner_email,
+    smtp_ok:        L.sec_smtp_ok,
+    smtp_missing:   L.sec_smtp_missing,
+    setup_token_active:   L.sec_setup_token_active,
+    setup_token_inactive: L.sec_setup_token_inactive,
+    node_env:      L.sec_node_env(securityStatus.node_env),
+    email_dev_on:  L.sec_email_dev_on,
+    email_dev_off: L.sec_email_dev_off,
+  };
 
   res.json({
     generated_at:    now.toISOString(),
@@ -366,6 +385,7 @@ router.get('/tab/cto', requireOwner, (req, res) => {
     recent_activity: recentActivity,
     automation_log:  automationLog,
     security_status: securityStatus,
+    security_labels: securityLabels,
     update_hints:    updateHints,
   });
 });

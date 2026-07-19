@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Management Center – PraxisOnline24</title>
+  <title data-i18n="ceo_page_title">Management Center – PraxisOnline24</title>
   <link rel="stylesheet" href="/css/style.css">
   <style>
     :root {
@@ -165,6 +165,16 @@
     <a href="/dashboard.html" class="logo">PraxisOnline24</a>
     <nav class="nav">
       <span id="user-name" style="color:var(--text-secondary);font-size:.9375rem;"></span>
+      <div class="lang-switcher">
+        <select id="header-lang-select" title="Sprache">
+          <option value="de">🇩🇪</option><option value="en">🇬🇧</option>
+          <option value="fr">🇫🇷</option><option value="es">🇪🇸</option>
+          <option value="pt">🇧🇷</option><option value="ar">🇸🇦</option>
+          <option value="ru">🇷🇺</option><option value="zh">🇨🇳</option>
+          <option value="hi">🇮🇳</option><option value="th">🇹🇭</option>
+          <option value="tr">🇹🇷</option><option value="id">🇮🇩</option>
+        </select>
+      </div>
       <button id="btn-logout" class="btn btn-secondary btn-sm" data-i18n="btn_logout">Abmelden</button>
     </nav>
   </div>
@@ -189,7 +199,7 @@
 
   <div class="app-content" style="padding:0 1.5rem 2rem;">
 
-    <div id="access-error" class="error-box" style="display:none;margin-top:2rem;">
+    <div id="access-error" class="error-box" style="display:none;margin-top:2rem;" data-i18n="ceo_access_denied">
       Kein Zugriff. Dieses Dashboard ist nur für den Plattform-Owner zugänglich.
     </div>
 
@@ -197,7 +207,7 @@
       <div class="mc-header">
         <div>
           <div class="mc-title" data-i18n="ceo_title">Management Center</div>
-          <div class="mc-sub" data-i18n="ceo_sub">Nur für Plattform-Owner &middot; Keine Patientendaten</div>
+          <div class="mc-sub" data-i18n="ceo_sub_full">Nur für Plattform-Owner &middot; Keine Patientendaten</div>
         </div>
         <div class="mc-header-right">
           <span class="mc-ts" id="ts-active"></span>
@@ -206,11 +216,11 @@
       </div>
 
       <nav class="tab-nav">
-        <button class="tab-btn active" data-tab="ceo">CEO</button>
-        <button class="tab-btn" data-tab="cfo">CFO</button>
-        <button class="tab-btn" data-tab="marketing">Marketing</button>
-        <button class="tab-btn" data-tab="demos">Demo-Anfragen</button>
-        <button class="tab-btn" data-tab="cto">CTO</button>
+        <button class="tab-btn active" data-tab="ceo" data-i18n="ceo_tab_ceo">CEO</button>
+        <button class="tab-btn" data-tab="cfo" data-i18n="ceo_tab_cfo">CFO</button>
+        <button class="tab-btn" data-tab="marketing" data-i18n="ceo_tab_marketing">Marketing</button>
+        <button class="tab-btn" data-tab="demos" data-i18n="ceo_tab_demos">Demo-Anfragen</button>
+        <button class="tab-btn" data-tab="cto" data-i18n="ceo_tab_cto">CTO</button>
       </nav>
 
       <div id="panel-ceo"       class="tab-panel active"><div class="panel-loading" id="loading-ceo"></div><div id="content-ceo"       style="display:none;"></div></div>
@@ -223,21 +233,47 @@
   </div>
 </div>
 
+<script src="/js/dashboard-i18n.js"></script>
+<script src="/js/ceo-i18n.js"></script>
+<script src="/js/lang-switcher.js"></script>
 <script>
-const fmt    = n => new Intl.NumberFormat('de-DE',{style:'currency',currency:'EUR'}).format(n||0);
-const fmtNum = n => new Intl.NumberFormat('de-DE').format(n||0);
-const fmtDt  = s => s ? new Date(s).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
-const fmtD   = s => s ? new Date(s).toLocaleDateString('de-DE',{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
-const fmtTs  = s => s ? 'Stand: '+new Date(s).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+const T  = (k, params) => {
+  const raw = (typeof dT === 'function') ? dT(k) : k;
+  if (!params) return raw;
+  return String(raw).replace(/\{(\w+)\}/g, (_, name) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : `{${name}}`);
+};
+const _lang = () => (typeof dLang === 'function' ? dLang() : (document.documentElement.lang || 'en'));
+const _loc  = () => {
+  const m = { de:'de-DE', en:'en-GB', fr:'fr-FR', es:'es-ES', pt:'pt-BR', ar:'ar-SA',
+              ru:'ru-RU', zh:'zh-CN', hi:'hi-IN', th:'th-TH', tr:'tr-TR', id:'id-ID' };
+  return m[_lang()] || 'en-GB';
+};
+const fmt    = n => new Intl.NumberFormat(_loc(),{style:'currency',currency:'EUR'}).format(n||0);
+const fmtNum = n => new Intl.NumberFormat(_loc()).format(n||0);
+const fmtDt  = s => s ? new Date(s).toLocaleString(_loc(),{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}) : '—';
+const fmtD   = s => s ? new Date(s).toLocaleDateString(_loc(),{day:'2-digit',month:'2-digit',year:'numeric'}) : '—';
+const fmtTs  = s => s ? T('ceo_ts_prefix') + new Date(s).toLocaleString(_loc(),{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
 
 const LANG_FLAG = {de:'🇩🇪',en:'🇬🇧',fr:'🇫🇷',es:'🇪🇸',pt:'🇧🇷',ar:'🇸🇦',ru:'🇷🇺',zh:'🇨🇳',hi:'🇮🇳',th:'🇹🇭',tr:'🇹🇷',id:'🇮🇩'};
-const MONTH_NAMES = ['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'];
-function monthLabel(s) { const m=parseInt((s||'').split('-')[1],10); return isNaN(m)?String(s||'').slice(-5):MONTH_NAMES[m-1]; }
+function monthNames() {
+  const raw = T('ceo_month_names') || 'Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec';
+  return raw.split(',');
+}
+function monthLabel(s) {
+  const m=parseInt((s||'').split('-')[1],10);
+  const names = monthNames();
+  return isNaN(m)?String(s||'').slice(-5):names[m-1];
+}
 function conversionCls(r) { return r>50?'up':r>=20?'warn':'danger'; }
-function conversionTxt(r) { return r>50?'gut':r>=20?'mittel':'niedrig'; }
+function conversionTxt(r) {
+  const raw = T('mkt_conv_mittel');
+  const midLabel = raw.indexOf('–') >= 0 ? raw.split('–')[0].trim() : raw;
+  return r>50 ? T('ceo_txt_gut') : (r>=20 ? midLabel : T('ceo_txt_low'));
+}
 
 function buildBar(rows, labelKey, valueKey, color, labelFmt) {
-  if (!rows || !rows.length) return '<span style="color:var(--mc-subtle);font-size:.8125rem;">Keine Daten</span>';
+  if (!rows || !rows.length) return '<span style="color:var(--mc-subtle);font-size:.8125rem;">'+T('ceo_no_data')+'</span>';
   const max = Math.max(...rows.map(r => r[valueKey]||0), 1);
   return `<div class="bar-wrap">${rows.map(r => {
     const pct = Math.max(Math.round(((r[valueKey]||0)/max)*100), 2);
@@ -286,42 +322,47 @@ async function loadCEO() {
     if (r.status === 401) { location.href='/login.html'; return; }
     if (r.status === 403||r.status === 503) { showAccessError(); return; }
     d = await r.json();
-  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+  } catch { loading.innerHTML='<div class="error-box">'+T('ceo_err_load')+'</div>'; return; }
 
   loaded.ceo = true;
   document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
   const ov = d.overview;
   const ai = d.ai;
-  const ampelLabels = { green:'Plattform stabil – kein Handlungsbedarf', yellow:'Achtung – Handlungsbedarf', red:'Kritisch – sofortiger Handlungsbedarf' };
+  const ampelLabels = {
+    green:  T('ceo_ampel_green'),
+    yellow: T('ceo_ampel_yellow'),
+    red:    T('ceo_ampel_red'),
+  };
+  const ampelLabel = d.ampel_label || ampelLabels[d.ampel] || ampelLabels.green;
 
   const dm = d.demo || {};
   content.innerHTML = `
-    <div class="ampel ${d.ampel}"><div class="ampel-dot"></div>${ampelLabels[d.ampel]||ampelLabels.green}</div>
+    <div class="ampel ${d.ampel}"><div class="ampel-dot"></div>${ampelLabel}</div>
     <div class="kpi-row">
-      ${kpi(fmtNum(ov.totalPractices),'Praxen gesamt')}
-      ${kpi(fmtNum(ov.activePractices),'Aktiv',ov.activePractices>0?{cls:'up',text:'aktiv'}:null)}
-      ${kpi(fmtNum(ov.trialPractices),'In Trial')}
-      ${kpi(fmtNum(ov.pausedPractices),'Pausiert',ov.pausedPractices>0?{cls:'warn',text:'prüfen'}:null)}
-      ${kpi(fmtNum(ov.newToday),'Neu heute')}
-      ${kpi(fmtNum(ov.newThisWeek),'Neu diese Woche')}
-      ${kpi(fmtNum(ov.newThisMonth),'Neu diesen Monat')}
-      ${kpi(fmtNum(ov.trialsExpiring7d),'Trial endet in 7d',ov.trialsExpiring7d>0?{cls:'warn',text:'bald'}:null)}
+      ${kpi(fmtNum(ov.totalPractices),T('ceo_kpi_total'))}
+      ${kpi(fmtNum(ov.activePractices),T('ceo_kpi_active'),ov.activePractices>0?{cls:'up',text:T('ceo_badge_active')}:null)}
+      ${kpi(fmtNum(ov.trialPractices),T('ceo_kpi_trial'))}
+      ${kpi(fmtNum(ov.pausedPractices),T('ceo_kpi_paused'),ov.pausedPractices>0?{cls:'warn',text:T('ceo_badge_review')}:null)}
+      ${kpi(fmtNum(ov.newToday),T('ceo_kpi_new_today'))}
+      ${kpi(fmtNum(ov.newThisWeek),T('ceo_kpi_new_week'))}
+      ${kpi(fmtNum(ov.newThisMonth),T('ceo_kpi_new_month'))}
+      ${kpi(fmtNum(ov.trialsExpiring7d),T('ceo_kpi_trials_7d'),ov.trialsExpiring7d>0?{cls:'warn',text:T('ceo_badge_soon')}:null)}
     </div>
     <div class="mc-card" style="margin-bottom:1rem;">
       <div class="mc-card-header">
-        <span class="mc-card-title">Demo-Anfragen</span>
-        <span class="mc-card-sub">Conversion Demo → Registrierung: <strong>${dm.conversion||0}%</strong></span>
+        <span class="mc-card-title">${T('ceo_demo_card')}</span>
+        <span class="mc-card-sub">${T('ceo_demo_conv')} <strong>${dm.conversion||0}%</strong></span>
       </div>
       <div class="mc-card-body">
         <div class="kpi-row" style="margin-bottom:.75rem;">
-          ${kpi(fmtNum(dm.total||0),'Anfragen gesamt')}
-          ${kpi(fmtNum(dm.this_week||0),'Diese Woche')}
-          ${kpi(fmtNum(dm.this_month||0),'Diesen Monat')}
-          ${kpi((dm.conversion||0)+'%','Conversion Demo→Reg.',{cls:(dm.conversion||0)>=20?'up':'warn',text:(dm.conversion||0)>=20?'gut':'niedrig'})}
+          ${kpi(fmtNum(dm.total||0),T('ceo_demo_total'))}
+          ${kpi(fmtNum(dm.this_week||0),T('ceo_demo_week'))}
+          ${kpi(fmtNum(dm.this_month||0),T('ceo_demo_month'))}
+          ${kpi((dm.conversion||0)+'%',T('ceo_demo_conv_short'),{cls:(dm.conversion||0)>=20?'up':'warn',text:(dm.conversion||0)>=20?T('ceo_txt_gut'):T('ceo_txt_low')})}
         </div>
         ${(dm.countries||[]).length===0
-          ? '<p style="color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen.</p>'
-          : `<div class="section-lbl">Top-Länder</div>
+          ? '<p style="color:var(--mc-muted);font-size:.875rem;">'+T('ceo_demo_none')+'</p>'
+          : `<div class="section-lbl">${T('ceo_demo_top_countries')}</div>
              <div style="display:flex;flex-wrap:wrap;gap:.375rem;">
                ${dm.countries.map(c=>`<span class="chip chip-blue" style="font-size:.8125rem;">${c.country||'—'} <strong style="margin-left:.25rem;">${c.count}</strong></span>`).join('')}
              </div>`}
@@ -330,38 +371,38 @@ async function loadCEO() {
     <div class="mgmt-grid mgmt-grid-3">
       <div>
         <div class="mc-card">
-          <div class="mc-card-header"><span class="mc-card-title">Wachstum – letzte 12 Monate</span></div>
+          <div class="mc-card-header"><span class="mc-card-title">${T('ceo_growth_12m')}</span></div>
           <div class="mc-card-body">${buildBar(d.growth,'month','count')}</div>
         </div>
         <div class="ai-panel">
-          <div class="ai-header"><span class="ai-header-title">AI Praxismanager</span><span class="ai-header-badge">Platform-Level</span></div>
-          <div class="ai-section-lbl">Tägliche Zusammenfassung</div>
+          <div class="ai-header"><span class="ai-header-title">${T('ceo_ai_pm')}</span><span class="ai-header-badge">${T('ceo_ai_pl')}</span></div>
+          <div class="ai-section-lbl">${T('ceo_ai_daily')}</div>
           <div class="summary-grid">
-            <div class="summary-item"><div class="summary-num">${ai.daily_summary.aptsToday}</div><div class="summary-lbl">Termine heute</div></div>
-            <div class="summary-item"><div class="summary-num">${ai.daily_summary.openInvoices}</div><div class="summary-lbl">Offene Rechnungen</div></div>
-            <div class="summary-item"><div class="summary-num">${ai.daily_summary.waitlistTotal}</div><div class="summary-lbl">Warteliste</div></div>
-            <div class="summary-item"><div class="summary-num">${ai.daily_summary.pendingReviews}</div><div class="summary-lbl">Bewertungen offen</div></div>
-            <div class="summary-item"><div class="summary-num">${ai.daily_summary.automationsToday}</div><div class="summary-lbl">Automationen heute</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.aptsToday}</div><div class="summary-lbl">${T('ceo_ai_apts_today')}</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.openInvoices}</div><div class="summary-lbl">${T('ceo_ai_open_inv')}</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.waitlistTotal}</div><div class="summary-lbl">${T('ceo_ai_wl')}</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.pendingReviews}</div><div class="summary-lbl">${T('ceo_ai_reviews_open')}</div></div>
+            <div class="summary-item"><div class="summary-num">${ai.daily_summary.automationsToday}</div><div class="summary-lbl">${T('ceo_ai_automations')}</div></div>
           </div>
-          <div class="ai-section-lbl">Aufgaben</div>
+          <div class="ai-section-lbl">${T('ceo_ai_tasks')}</div>
           ${ai.tasks.map(t=>`<div class="ai-task"><div class="ai-dot ${t.priority}"></div><span>${t.text}</span></div>`).join('')}
-          <div class="ai-section-lbl">Empfehlungen</div>
+          <div class="ai-section-lbl">${T('ceo_ai_recos')}</div>
           ${ai.recommendations.map(r=>`<div class="idea-item">${r}</div>`).join('')}
         </div>
       </div>
       <div>
         <div class="mc-card">
-          <div class="mc-card-header"><span class="mc-card-title">Risiken</span><span class="mc-card-sub">${d.risks.length} erkannt</span></div>
+          <div class="mc-card-header"><span class="mc-card-title">${T('ceo_card_risks')}</span><span class="mc-card-sub">${T('ceo_risks_count',{n:d.risks.length})}</span></div>
           <div class="mc-card-body">
             <ul class="risk-list">
               ${d.risks.length===0
-                ? '<li class="risk-item"><div class="risk-dot info"></div>Keine Risiken erkannt</li>'
+                ? '<li class="risk-item"><div class="risk-dot info"></div>'+T('ceo_no_risks')+'</li>'
                 : d.risks.map(r=>`<li class="risk-item"><div class="risk-dot ${r.level}"></div>${r.msg}</li>`).join('')}
             </ul>
           </div>
         </div>
         <div class="mc-card">
-          <div class="mc-card-header"><span class="mc-card-title">To-dos</span></div>
+          <div class="mc-card-header"><span class="mc-card-title">${T('ceo_card_todos')}</span></div>
           <div class="mc-card-body">
             <ul class="risk-list">
               ${d.todos.map(t=>`<li class="risk-item"><div style="flex-shrink:0;color:var(--mc-blue);">☐</div>${t}</li>`).join('')}
@@ -385,7 +426,7 @@ async function loadCFO() {
     const r = await fetch('/api/owner/tab/cfo');
     if (r.status===401) { location.href='/login.html'; return; }
     d = await r.json();
-  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+  } catch { loading.innerHTML='<div class="error-box">'+T('ceo_err_load')+'</div>'; return; }
 
   loaded.cfo = true;
   document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
@@ -398,22 +439,22 @@ async function loadCFO() {
 
   content.innerHTML = `
     <div class="kpi-row">
-      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.mrr)+'</span>','MRR (Monthly Recurring Revenue)',{cls:'up',text:'monatlich'})}
-      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.arr)+'</span>','ARR (Annual Recurring Revenue)',{cls:'up',text:'jährlich'})}
-      ${kpi(fmtNum(d.paying_practices),'Zahlende Praxen',{cls:'up',text:'bezahlt'})}
-      ${kpi(fmtNum(d.trial_practices),'Trial-Praxen',{cls:'neutral',text:'kostenlos'})}
+      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.mrr)+'</span>',T('cfo_mrr_kpi'),{cls:'up',text:T('cfo_badge_monthly')})}
+      ${kpi('<span style="font-size:1.25rem;">'+fmt(d.arr)+'</span>',T('cfo_arr_kpi'),{cls:'up',text:T('cfo_badge_yearly')})}
+      ${kpi(fmtNum(d.paying_practices),T('cfo_paying'),{cls:'up',text:T('cfo_badge_paid')})}
+      ${kpi(fmtNum(d.trial_practices),T('cfo_trial'),{cls:'neutral',text:T('cfo_badge_free')})}
     </div>
     <div class="kpi-row kpi-row-3">
-      ${kpi(fmt(d.total_revenue),'Gesamtumsatz (Zahlungen)')}
-      ${kpi(fmtNum(d.paid.count),'Bezahlte Rechnungen',{cls:'up',text:fmt(d.paid.amount)})}
-      ${kpi(fmtNum(d.overdue.count),'Überfällig',d.overdue.count>0?{cls:'danger',text:fmt(d.overdue.amount)}:{cls:'up',text:'keine'})}
+      ${kpi(fmt(d.total_revenue),T('cfo_total_revenue'))}
+      ${kpi(fmtNum(d.paid.count),T('cfo_paid_invoices'),{cls:'up',text:fmt(d.paid.amount)})}
+      ${kpi(fmtNum(d.overdue.count),T('cfo_overdue'),d.overdue.count>0?{cls:'danger',text:fmt(d.overdue.amount)}:{cls:'up',text:T('cfo_badge_none')})}
     </div>
     <div class="mgmt-grid">
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">MRR nach Paket</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('cfo_mrr_by_pkg')}</span></div>
         <div class="mc-card-body">
           ${mrrRows.length===0
-            ? '<p style="color:var(--mc-muted);font-size:.875rem;">Noch keine zahlenden Praxen</p>'
+            ? '<p style="color:var(--mc-muted);font-size:.875rem;">'+T('cfo_no_paying')+'</p>'
             : mrrRows.map(([pkg,v])=>`
               <div class="mrr-pkg-row">
                 <span class="chip ${pkgColors[pkg]||'chip-gray'}">${pkgLabels[pkg]||pkg}</span>
@@ -421,24 +462,24 @@ async function loadCFO() {
                 <strong>${fmt(v.revenue)}</strong>
               </div>`).join('')
           }
-          ${mrrRows.length>0?`<div class="mrr-pkg-row" style="border-top:1px solid var(--mc-border);margin-top:.25rem;font-weight:700;"><span>Gesamt MRR</span><span></span><span>${fmt(d.mrr)}</span></div>`:''}
+          ${mrrRows.length>0?`<div class="mrr-pkg-row" style="border-top:1px solid var(--mc-border);margin-top:.25rem;font-weight:700;"><span>${T('cfo_mrr_total')}</span><span></span><span>${fmt(d.mrr)}</span></div>`:''}
         </div>
       </div>
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Rechnungsübersicht</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('cfo_invoice_overview')}</span></div>
         <div class="mc-card-body">
-          <div class="inv-row"><span>Bezahlte Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-green">${d.paid.count} Stk.</span><strong>${fmt(d.paid.amount)}</strong></span></div>
-          <div class="inv-row"><span>Offene Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-yellow">${d.unpaid.count} Stk.</span><strong>${fmt(d.unpaid.amount)}</strong></span></div>
-          <div class="inv-row"><span>Überfällige Rechnungen</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-red">${d.overdue.count} Stk.</span><strong>${fmt(d.overdue.amount)}</strong></span></div>
+          <div class="inv-row"><span>${T('cfo_paid_row')}</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-green">${d.paid.count} ${T('cfo_pcs')}</span><strong>${fmt(d.paid.amount)}</strong></span></div>
+          <div class="inv-row"><span>${T('cfo_open_row')}</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-yellow">${d.unpaid.count} ${T('cfo_pcs')}</span><strong>${fmt(d.unpaid.amount)}</strong></span></div>
+          <div class="inv-row"><span>${T('cfo_overdue_row')}</span><span style="display:flex;align-items:center;gap:.5rem;"><span class="chip chip-red">${d.overdue.count} ${T('cfo_pcs')}</span><strong>${fmt(d.overdue.amount)}</strong></span></div>
         </div>
       </div>
     </div>
     <div class="mc-card">
-      <div class="mc-card-header"><span class="mc-card-title">Paket-Verteilung (alle Praxen)</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('cfo_pkg_dist')}</span></div>
       <div class="mc-card-body">
         <div class="pkg-row">
           ${Object.entries(d.packages).length===0
-            ? '<span style="color:var(--mc-muted);font-size:.875rem;">Keine Daten</span>'
+            ? '<span style="color:var(--mc-muted);font-size:.875rem;">'+T('ceo_no_data')+'</span>'
             : Object.entries(d.packages).map(([k,v])=>
                 `<span class="chip ${pkgColors[k]||'chip-gray'}" style="font-size:.8125rem;padding:.2rem .625rem;">${pkgLabels[k]||k}: <strong style="margin-left:.25rem;">${v}</strong></span>`
               ).join('')}
@@ -446,7 +487,7 @@ async function loadCFO() {
       </div>
     </div>
     <div class="mc-card">
-      <div class="mc-card-header"><span class="mc-card-title">Monatseinnahmen – letzte 12 Monate</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('cfo_monthly_rev')}</span></div>
       <div class="mc-card-body">${buildBar(d.monthly_revenue,'month','revenue','#16A34A')}</div>
     </div>`;
 
@@ -464,27 +505,27 @@ async function loadMarketing() {
     const r = await fetch('/api/owner/tab/marketing');
     if (r.status===401) { location.href='/login.html'; return; }
     d = await r.json();
-  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+  } catch { loading.innerHTML='<div class="error-box">'+T('ceo_err_load')+'</div>'; return; }
 
   loaded.marketing = true;
   document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
 
-  // Marketing-Ziele (Platzhalter – später konfigurierbar)
+  // Marketing goals (placeholder – configurable later)
   const ZIEL_REG_MONAT  = 10;
   const ZIEL_DEMO_MONAT = 20;
   const regProg  = Math.min(Math.round((d.new_this_month / ZIEL_REG_MONAT) * 100), 100);
   const demoProg = Math.min(Math.round((d.demo_this_month / ZIEL_DEMO_MONAT) * 100), 100);
 
-  // Top-Quellen (Platzhalter – später per UTM/Analytics)
+  // Top sources (placeholder – UTM/analytics later)
   const sources = [
     { name:'Google',    pct:45, color:'#4285f4' },
-    { name:'Direkt',    pct:25, color:'#6b7280' },
+    { name:T('mkt_src_direct'), pct:25, color:'#6b7280' },
     { name:'Facebook',  pct:15, color:'#1877f2' },
     { name:'Instagram', pct:10, color:'#e1306c' },
     { name:'LinkedIn',  pct:5,  color:'#0a66c2' },
   ];
 
-  // Länder: sicherstellen absteigend sortiert (Fallback für alte Daten)
+  // Countries: ensure descending sort (fallback for legacy data)
   const demoCountriesSorted = [...(d.demo_countries||[])].sort((a,b)=>b.count-a.count);
 
   const convCls = conversionCls(d.conversion_rate);
@@ -492,52 +533,53 @@ async function loadMarketing() {
   const convAmpelMap = { up:'var(--mc-green-bg)', warn:'var(--mc-yellow-bg)', danger:'var(--mc-red-bg)' };
   const convAmpelBorder = { up:'#a7f3d0', warn:'#fde68a', danger:'#fecaca' };
   const convAmpelText = { up:'#14532D', warn:'#92400e', danger:'#991b1b' };
+  const convLongText = convCls==='up' ? T('mkt_conv_gut') : convCls==='warn' ? T('mkt_conv_mittel') : T('mkt_conv_niedrig');
 
   content.innerHTML = `
     <div class="kpi-row">
-      ${kpi(fmtNum(d.total_practices),'Registrierungen gesamt')}
-      ${kpi(fmtNum(d.new_this_week),'Neu diese Woche')}
-      ${kpi(fmtNum(d.new_this_month),'Neu diesen Monat',d.new_this_month===0?{cls:'warn',text:'0 – prüfen'}:{cls:'up',text:'aktiv'})}
-      ${kpi(d.active_rate+'%','Aktivierungsrate',{cls:d.active_rate>=70?'up':'warn',text:d.active_rate>=70?'gut':'niedrig'})}
+      ${kpi(fmtNum(d.total_practices),T('mkt_registrations'))}
+      ${kpi(fmtNum(d.new_this_week),T('mkt_new_this_week'))}
+      ${kpi(fmtNum(d.new_this_month),T('mkt_new_this_month'),d.new_this_month===0?{cls:'warn',text:T('mkt_badge_zero_check')}:{cls:'up',text:T('mkt_badge_active')})}
+      ${kpi(d.active_rate+'%',T('mkt_activation_rate'),{cls:d.active_rate>=70?'up':'warn',text:d.active_rate>=70?T('mkt_badge_gut'):T('mkt_badge_low')})}
     </div>
     <div class="kpi-row kpi-row-3">
-      ${kpi(fmtNum(d.demo_total),'Demo-Anfragen gesamt')}
-      ${kpi(fmtNum(d.demo_this_month),'Demo-Anfragen diesen Monat')}
-      ${kpi(d.conversion_rate+'%','Conversion Demo→Registrierung',{cls:convCls,text:convTxt})}
+      ${kpi(fmtNum(d.demo_total),T('mkt_demo_total'))}
+      ${kpi(fmtNum(d.demo_this_month),T('mkt_demo_this_month'))}
+      ${kpi(d.conversion_rate+'%',T('mkt_conversion'),{cls:convCls,text:convTxt})}
     </div>
 
-    <!-- Diagramme mit echten Monatsnamen -->
+    <!-- Registrations charts with real month names -->
     <div class="mgmt-grid">
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 6 Monate</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_reg_last_6m')}</span></div>
         <div class="mc-card-body">${buildBar(d.registrations_by_month,'month','count','#3B82F6',monthLabel)}</div>
       </div>
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Neuanmeldungen – letzte 8 Wochen</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_reg_last_8w')}</span></div>
         <div class="mc-card-body">${buildBar(d.registrations_by_week,'week','count','#2563EB')}</div>
       </div>
     </div>
 
-    <!-- Demo-Anfragen pro Monat + Länder-Tabelle -->
+    <!-- Demo requests per month + country table -->
     <div class="mgmt-grid">
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Demo-Anfragen pro Monat</span><span class="mc-card-sub">letzte 6 Monate</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_demo_per_month')}</span><span class="mc-card-sub">${T('mkt_last_6m')}</span></div>
         <div class="mc-card-body">
           ${(d.demo_by_month||[]).length===0
-            ? '<span style="color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen</span>'
+            ? '<span style="color:var(--mc-muted);font-size:.875rem;">'+T('mkt_none_yet_demo')+'</span>'
             : buildBar(d.demo_by_month,'month','count','#f59e0b',monthLabel)}
         </div>
       </div>
       <div class="mc-card">
         <div class="mc-card-header">
-          <span class="mc-card-title">Demo-Anfragen nach Land</span>
-          <span class="mc-card-sub">absteigend sortiert</span>
+          <span class="mc-card-title">${T('mkt_demo_by_country')}</span>
+          <span class="mc-card-sub">${T('mkt_sorted_desc')}</span>
         </div>
         <div class="mc-card-body" style="padding:0;">
           ${demoCountriesSorted.length===0
-            ? '<p style="padding:1rem;color:var(--mc-muted);font-size:.875rem;">Noch keine Demo-Anfragen</p>'
+            ? '<p style="padding:1rem;color:var(--mc-muted);font-size:.875rem;">'+T('mkt_none_yet_demo')+'</p>'
             : `<table class="mc-table">
-                <thead><tr><th>#</th><th>Land</th><th style="text-align:right;">Anfragen</th></tr></thead>
+                <thead><tr><th>#</th><th>${T('mkt_th_country')}</th><th style="text-align:right;">${T('mkt_th_requests')}</th></tr></thead>
                 <tbody>
                   ${demoCountriesSorted.map((r,i)=>`
                     <tr>
@@ -551,78 +593,78 @@ async function loadMarketing() {
       </div>
     </div>
 
-    <!-- Conversion-Ampel -->
+    <!-- Conversion signal -->
     <div class="mgmt-grid">
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Conversion Demo → Registrierung</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_conv_title')}</span></div>
         <div class="mc-card-body">
           <div style="background:${convAmpelMap[convCls]};border:1px solid ${convAmpelBorder[convCls]};border-radius:10px;padding:1rem 1.125rem;display:flex;align-items:center;gap:1rem;margin-bottom:1rem;">
             <div style="width:10px;height:10px;border-radius:50%;background:${convAmpelText[convCls]};flex-shrink:0;box-shadow:0 0 0 3px ${convAmpelBorder[convCls]};"></div>
             <div>
               <div style="font-size:1.75rem;font-weight:700;color:${convAmpelText[convCls]};letter-spacing:-.04em;line-height:1;">${d.conversion_rate}%</div>
-              <div style="font-size:.8125rem;color:${convAmpelText[convCls]};margin-top:.125rem;">${convCls==='up'?'Sehr gut – über 50%':convCls==='warn'?'Mittel – zwischen 20% und 50%':'Niedrig – unter 20%'}</div>
+              <div style="font-size:.8125rem;color:${convAmpelText[convCls]};margin-top:.125rem;">${convLongText}</div>
             </div>
           </div>
           <div style="display:flex;align-items:center;gap:.625rem;margin-bottom:.5rem;font-size:.8125rem;">
-            <span style="width:100px;color:var(--mc-muted);">Demo-Anfragen</span>
+            <span style="width:100px;color:var(--mc-muted);">${T('mkt_conv_demo_row')}</span>
             <div style="flex:1;background:#f3f4f6;border-radius:4px;height:8px;"><div style="height:8px;border-radius:4px;background:#f59e0b;width:100%;"></div></div>
             <strong style="min-width:28px;text-align:right;">${fmtNum(d.demo_total)}</strong>
           </div>
           <div style="display:flex;align-items:center;gap:.625rem;font-size:.8125rem;">
-            <span style="width:100px;color:var(--mc-muted);">Registrierungen</span>
+            <span style="width:100px;color:var(--mc-muted);">${T('mkt_conv_reg_row')}</span>
             <div style="flex:1;background:#f3f4f6;border-radius:4px;height:8px;"><div style="height:8px;border-radius:4px;background:#16A34A;width:${d.demo_total>0?Math.min(Math.round((d.total_practices/d.demo_total)*100),100):0}%;"></div></div>
             <strong style="min-width:28px;text-align:right;">${fmtNum(d.total_practices)}</strong>
           </div>
         </div>
       </div>
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Märkte & Sprachen</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_markets_langs')}</span></div>
         <div class="mc-card-body">
           <div class="lang-wrap">
             ${(d.languages||[]).length===0
-              ? '<span style="color:var(--mc-muted);font-size:.875rem;">Keine Daten</span>'
+              ? '<span style="color:var(--mc-muted);font-size:.875rem;">'+T('ceo_no_data')+'</span>'
               : d.languages.map(r=>`<span class="chip chip-blue" style="font-size:.8125rem;">${LANG_FLAG[r.language]||'🌐'} ${(r.language||'').toUpperCase()} <strong style="margin-left:.25rem;">${r.count}</strong></span>`).join('')}
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Marketing-Ziele -->
+    <!-- Marketing goals -->
     <div class="mc-card" style="margin-bottom:1rem;">
       <div class="mc-card-header">
-        <span class="mc-card-title">Marketing-Ziele – Diesen Monat</span>
-        <span class="mc-card-sub">Ziele konfigurierbar</span>
+        <span class="mc-card-title">${T('mkt_goals')}</span>
+        <span class="mc-card-sub">${T('mkt_goals_sub')}</span>
       </div>
       <div class="mc-card-body">
         <div style="margin-bottom:1rem;">
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.375rem;">
-            <span style="font-size:.875rem;font-weight:500;">Neue Registrierungen</span>
-            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.new_this_month} / ${ZIEL_REG_MONAT} Ziel</span>
+            <span style="font-size:.875rem;font-weight:500;">${T('mkt_new_regs')}</span>
+            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.new_this_month} ${T('mkt_goal_of',{n:ZIEL_REG_MONAT})}</span>
           </div>
           <div style="background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;">
             <div style="height:10px;border-radius:6px;background:${regProg>=100?'#16A34A':regProg>=50?'#3B82F6':'#d97706'};width:${regProg}%;transition:width .4s;"></div>
           </div>
-          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${regProg}% des Monatsziels erreicht</div>
+          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${T('mkt_of_target',{n:regProg})}</div>
         </div>
         <div>
           <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.375rem;">
-            <span style="font-size:.875rem;font-weight:500;">Demo-Anfragen</span>
-            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.demo_this_month} / ${ZIEL_DEMO_MONAT} Ziel</span>
+            <span style="font-size:.875rem;font-weight:500;">${T('mkt_demo_reqs')}</span>
+            <span style="font-size:.8125rem;color:var(--mc-muted);">${d.demo_this_month} ${T('mkt_goal_of',{n:ZIEL_DEMO_MONAT})}</span>
           </div>
           <div style="background:#f3f4f6;border-radius:6px;height:10px;overflow:hidden;">
             <div style="height:10px;border-radius:6px;background:${demoProg>=100?'#16A34A':demoProg>=50?'#f59e0b':'#dc2626'};width:${demoProg}%;transition:width .4s;"></div>
           </div>
-          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${demoProg}% des Monatsziels erreicht</div>
+          <div style="font-size:.75rem;color:var(--mc-muted);margin-top:.25rem;">${T('mkt_of_target',{n:demoProg})}</div>
         </div>
       </div>
     </div>
 
-    <!-- Top-Quellen (Platzhalter) -->
+    <!-- Top sources (placeholder) -->
     <div class="mgmt-grid">
       <div class="mc-card">
         <div class="mc-card-header">
-          <span class="mc-card-title">Top-Quellen</span>
-          <span class="mc-card-sub" style="color:#d97706;">Platzhalter · UTM-Tracking geplant</span>
+          <span class="mc-card-title">${T('mkt_top_sources')}</span>
+          <span class="mc-card-sub" style="color:#d97706;">${T('mkt_utm_planned')}</span>
         </div>
         <div class="mc-card-body">
           ${sources.map(s=>`
@@ -638,12 +680,12 @@ async function loadMarketing() {
         </div>
       </div>
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">SEO-Hinweise</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('mkt_seo_hints')}</span></div>
         <div class="mc-card-body">${d.seo_hints.map(h=>`<div class="idea-item">${h}</div>`).join('')}</div>
       </div>
     </div>
     <div class="mc-card" style="margin-bottom:1rem;">
-      <div class="mc-card-header"><span class="mc-card-title">Social-Media-Ideen</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('mkt_social_ideas')}</span></div>
       <div class="mc-card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:.25rem;">
         ${d.social_ideas.map(i=>`<div class="idea-item">${i}</div>`).join('')}
       </div>
@@ -652,7 +694,7 @@ async function loadMarketing() {
   loading.style.display='none'; content.style.display='block';
 }
 
-// ── Demo-Anfragen Tab ──────────────────────────────────────────────────────────
+// ── Demo requests tab ──────────────────────────────────────────────────────────
 async function loadDemos() {
   if (loaded.demos) return;
   const loading = document.getElementById('loading-demos');
@@ -664,16 +706,14 @@ async function loadDemos() {
     if (r.status===401) { location.href='/login.html'; return; }
     if (r.status===403 || r.status===503) { showAccessError(); return; }
     if (!r.ok) {
-      loading.innerHTML = `<div class="error-box">Fehler beim Laden (HTTP ${r.status}).</div>`;
+      loading.innerHTML = `<div class="error-box">${T('ceo_err_load_http',{code:r.status})}</div>`;
       return;
     }
     d = await r.json();
-  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+  } catch { loading.innerHTML='<div class="error-box">'+T('ceo_err_load')+'</div>'; return; }
 
-  // Defensive: bei unerwartetem Shape (z. B. Error-Envelope) klare Meldung statt
-  // stilles Crashen im Template-String unten.
   if (!d || !d.stats || !Array.isArray(d.requests)) {
-    loading.innerHTML = '<div class="error-box">Unerwartete Server-Antwort beim Laden der Demo-Anfragen.</div>';
+    loading.innerHTML = '<div class="error-box">'+T('ceo_err_unexpected_shape')+'</div>';
     return;
   }
 
@@ -682,39 +722,38 @@ async function loadDemos() {
 
   const s = d.stats;
 
-  // Status-Konfiguration
-  const STATUS_LABEL = { neu:'neu', eingeladen:'eingeladen', aktiviert:'aktiviert', kontaktiert:'kontaktiert', erledigt:'erledigt' };
-  const STATUS_CLASS = { neu:'neu', eingeladen:'eingeladen', aktiviert:'aktiviert', kontaktiert:'kontaktiert', erledigt:'erledigt' };
-  // Manuelle Cycle-Schritte (nur kontaktiert ↔ erledigt per Hand)
-  const MANUAL_NEXT  = { neu:'kontaktiert', eingeladen:'kontaktiert', aktiviert:'kontaktiert', kontaktiert:'erledigt', erledigt:'kontaktiert' };
-
-  const statusBadge = st => {
-    const cls = STATUS_CLASS[st] || 'neu';
-    return `<button class="status-btn ${cls}" data-id="" data-status="${st}" title="Klicken zum Weitersetzen">${STATUS_LABEL[st]||st}</button>`;
+  const STATUS_LABEL = {
+    neu:         T('demo_status_neu'),
+    eingeladen:  T('demo_status_eingeladen'),
+    aktiviert:   T('demo_status_aktiviert'),
+    kontaktiert: T('demo_status_kontaktiert'),
+    erledigt:    T('demo_status_erledigt'),
   };
+  const STATUS_CLASS = { neu:'neu', eingeladen:'eingeladen', aktiviert:'aktiviert', kontaktiert:'kontaktiert', erledigt:'erledigt' };
+  const MANUAL_NEXT  = { neu:'kontaktiert', eingeladen:'kontaktiert', aktiviert:'kontaktiert', kontaktiert:'erledigt', erledigt:'kontaktiert' };
 
   content.innerHTML = `
     <div class="kpi-row" style="grid-template-columns:repeat(3,1fr);">
-      ${kpi(fmtNum(s.total),'Anfragen gesamt')}
-      ${kpi(fmtNum(s.this_month),'Diesen Monat')}
-      ${kpi(fmtNum(s.neu),'Neu',s.neu>0?{cls:'warn',text:'offen'}:{cls:'up',text:'keine offenen'})}
+      ${kpi(fmtNum(s.total),T('ceo_demo_total'))}
+      ${kpi(fmtNum(s.this_month),T('demo_this_month'))}
+      ${kpi(fmtNum(s.neu),T('demo_new'),s.neu>0?{cls:'warn',text:T('demo_new_open')}:{cls:'up',text:T('demo_new_none')})}
     </div>
     <div class="kpi-row" style="grid-template-columns:repeat(4,1fr);">
-      ${kpi(fmtNum(s.eingeladen||0),'Eingeladen',{cls:'neutral',text:'wartet auf Passwort'})}
-      ${kpi(fmtNum(s.aktiviert||0),'Aktiviert',{cls:'up',text:'Konto aktiv'})}
-      ${kpi(fmtNum(s.kontaktiert||0),'Kontaktiert',{cls:'neutral',text:'in Bearbeitung'})}
-      ${kpi(fmtNum(s.erledigt||0),'Erledigt',{cls:'neutral',text:'abgeschlossen'})}
+      ${kpi(fmtNum(s.eingeladen||0),T('demo_invited'),{cls:'neutral',text:T('demo_invited_desc')})}
+      ${kpi(fmtNum(s.aktiviert||0),T('demo_activated'),{cls:'up',text:T('demo_activated_desc')})}
+      ${kpi(fmtNum(s.kontaktiert||0),T('demo_contacted'),{cls:'neutral',text:T('demo_contacted_desc')})}
+      ${kpi(fmtNum(s.erledigt||0),T('demo_done'),{cls:'neutral',text:T('demo_done_desc')})}
     </div>
     <div class="mc-card">
       <div class="mc-card-header">
-        <span class="mc-card-title">Alle Demo-Anfragen</span>
-        <span class="mc-card-sub">Einladung automatisch versendet · Status per Klick anpassen</span>
+        <span class="mc-card-title">${T('demo_all_requests')}</span>
+        <span class="mc-card-sub">${T('demo_all_sub')}</span>
       </div>
       <div class="mc-card-body" style="padding:0;overflow-x:auto;">
         ${d.requests.length===0
-          ? '<p style="padding:1.25rem;color:var(--mc-muted);">Noch keine Demo-Anfragen.</p>'
+          ? '<p style="padding:1.25rem;color:var(--mc-muted);">'+T('demo_no_requests_yet')+'</p>'
           : `<table class="mc-table">
-              <thead><tr><th>Datum</th><th>Praxis</th><th>Kontaktperson</th><th>E-Mail</th><th>Telefon</th><th>Land</th><th>Sprache</th><th>Status</th><th></th></tr></thead>
+              <thead><tr><th>${T('demo_th_date')}</th><th>${T('demo_th_practice')}</th><th>${T('demo_th_contact')}</th><th>${T('demo_th_email')}</th><th>${T('demo_th_phone')}</th><th>${T('demo_th_country')}</th><th>${T('demo_th_language')}</th><th>${T('demo_th_status')}</th><th></th></tr></thead>
               <tbody>
                 ${d.requests.map(req=>{
                   const st = req.status||'neu';
@@ -730,14 +769,14 @@ async function loadDemos() {
                     <td style="color:var(--mc-muted);">${req.language?(LANG_FLAG[req.language]||'🌐')+' '+(req.language||'').toUpperCase():'—'}</td>
                     <td style="white-space:nowrap;">
                       <button class="status-btn ${STATUS_CLASS[st]}" data-id="${req.id}" data-status="${st}"
-                              title="Klicken: manuell auf nächsten Status setzen">
+                              title="${T('demo_status_next_title')}">
                         ${STATUS_LABEL[st]||st}
                       </button>
-                      ${canResend ? `<button class="resend-btn" data-id="${req.id}" data-email="${req.email}" title="Einladung erneut senden">↻ erneut</button>` : ''}
+                      ${canResend ? `<button class="resend-btn" data-id="${req.id}" data-email="${req.email}" title="${T('demo_resend_title')}">${T('demo_resend_lbl')}</button>` : ''}
                     </td>
                     <td>
                       <button class="delete-btn" data-id="${req.id}" data-practice="${req.practice||''}"
-                              title="Löschen"
+                              title="${T('demo_del_title')}"
                               style="background:none;border:none;cursor:pointer;color:var(--mc-muted);font-size:.875rem;padding:.125rem .25rem;border-radius:4px;"
                               onmouseover="this.style.color='var(--mc-red)'" onmouseout="this.style.color='var(--mc-muted)'">✕</button>
                     </td>
@@ -748,7 +787,6 @@ async function loadDemos() {
       </div>
     </div>`;
 
-  // Status-Cycle per Klick (manuell)
   document.querySelectorAll('.status-btn').forEach(btn => {
     btn.addEventListener('click', async function() {
       const id = this.dataset.id;
@@ -769,41 +807,39 @@ async function loadDemos() {
     });
   });
 
-  // Einladung erneut senden
   document.querySelectorAll('.resend-btn').forEach(btn => {
     btn.addEventListener('click', async function() {
       const id = this.dataset.id;
       const email = this.dataset.email || '';
-      if (!confirm(`Einladung erneut senden an:\n${email}\n\nEin neuer Passwort-Link wird generiert (24h gültig).`)) return;
+      if (!confirm(T('demo_confirm_resend',{email}))) return;
       this.disabled = true;
       this.textContent = '…';
       try {
         const r = await fetch(`/api/owner/demo-requests/${id}/resend-invite`, { method: 'POST' });
         const json = await r.json().catch(()=>({}));
         if (r.ok) {
-          this.textContent = '✓ gesendet';
+          this.textContent = T('demo_resend_sent');
           this.style.color = '#14532D';
           this.style.background = '#DCFCE7';
           this.style.borderColor = '#a7f3d0';
         } else {
-          alert('Fehler: ' + (json.error || 'Unbekannter Fehler'));
+          alert(T('demo_err_prefix',{error: json.error || T('demo_err_unknown')}));
           this.disabled = false;
-          this.textContent = '↻ erneut';
+          this.textContent = T('demo_resend_lbl');
         }
       } catch {
-        alert('Netzwerkfehler');
+        alert(T('demo_err_network'));
         this.disabled = false;
-        this.textContent = '↻ erneut';
+        this.textContent = T('demo_resend_lbl');
       }
     });
   });
 
-  // Löschen per ✕-Button
   document.querySelectorAll('.delete-btn').forEach(btn => {
     btn.addEventListener('click', async function() {
       const id = this.dataset.id;
       const practice = this.dataset.practice || id;
-      if (!confirm(`Demo-Anfrage löschen?\n\n„${practice}"\n\nDieser Vorgang kann nicht rückgängig gemacht werden.`)) return;
+      if (!confirm(T('demo_confirm_delete',{practice}))) return;
       try {
         const r = await fetch(`/api/owner/demo-requests/${id}`, { method: 'DELETE' });
         if (r.ok) {
@@ -829,82 +865,87 @@ async function loadCTO() {
     const r = await fetch('/api/owner/tab/cto');
     if (r.status===401) { location.href='/login.html'; return; }
     d = await r.json();
-  } catch { loading.innerHTML='<div class="error-box">Fehler beim Laden.</div>'; return; }
+  } catch { loading.innerHTML='<div class="error-box">'+T('ceo_err_load')+'</div>'; return; }
 
   loaded.cto = true;
   document.getElementById('ts-active').textContent = fmtTs(d.generated_at);
 
   const ds  = d.db_stats;
   const sec = d.security_status;
+  const SL  = d.security_labels || {};
 
   const secRows = [
-    { ok: sec.session_secret_configured, warn:!sec.session_secret_configured, label:'SESSION_SECRET konfiguriert' },
-    { ok: sec.owner_email_configured,    warn:false,                           label:'OWNER_EMAIL konfiguriert' },
-    { ok: sec.smtp_configured,           warn:!sec.smtp_configured,            label:`SMTP konfiguriert${!sec.smtp_configured?' – E-Mails werden nicht versendet':''}` },
-    { ok: !sec.setup_token_active,       warn:sec.setup_token_active,          label:`OWNER_SETUP_TOKEN: ${sec.setup_token_active?'AKTIV – bitte entfernen!':'inaktiv (sicher)'}` },
-    { ok: sec.node_env==='production',   warn:sec.node_env!=='production',     label:`NODE_ENV: ${sec.node_env}` },
-    { ok: !sec.email_dev_mode,           warn:sec.email_dev_mode,              label:`E-Mail Dev-Mode: ${sec.email_dev_mode?'AN':'AUS'}` },
+    { ok: sec.session_secret_configured, warn:!sec.session_secret_configured, label: SL.session_secret || T('cto_no_data') },
+    { ok: sec.owner_email_configured,    warn:false,                          label: SL.owner_email    || T('cto_no_data') },
+    { ok: sec.smtp_configured,           warn:!sec.smtp_configured,           label: sec.smtp_configured ? (SL.smtp_ok || '') : (SL.smtp_missing || '') },
+    { ok: !sec.setup_token_active,       warn:sec.setup_token_active,         label: sec.setup_token_active ? (SL.setup_token_active || '') : (SL.setup_token_inactive || '') },
+    { ok: sec.node_env==='production',   warn:sec.node_env!=='production',    label: SL.node_env       || `NODE_ENV: ${sec.node_env}` },
+    { ok: !sec.email_dev_mode,           warn:sec.email_dev_mode,             label: sec.email_dev_mode ? (SL.email_dev_on || '') : (SL.email_dev_off || '') },
   ];
+
+  const backupsTxt = d.backups && d.backups.length>0
+    ? T('cto_backups_have', { n: d.backups.length, latest: d.backups[0] })
+    : T('cto_backups_none');
 
   content.innerHTML = `
     <div class="kpi-row">
-      ${kpi(fmtNum(ds.total_practices),'Praxen')}
-      ${kpi(fmtNum(ds.total_users),'Benutzer')}
-      ${kpi(fmtNum(ds.total_appointments),'Termine')}
-      ${kpi(fmtNum(ds.total_invoices),'Rechnungen')}
-      ${kpi(fmtNum(ds.total_payments),'Zahlungen')}
-      ${kpi(fmtNum(ds.total_reviews),'Bewertungen')}
-      ${kpi(fmtNum(ds.total_waitlist),'Warteliste')}
-      ${kpi(fmtNum(ds.total_demo_requests),'Demo-Anfragen')}
+      ${kpi(fmtNum(ds.total_practices),T('cto_kpi_practices'))}
+      ${kpi(fmtNum(ds.total_users),T('cto_kpi_users'))}
+      ${kpi(fmtNum(ds.total_appointments),T('cto_kpi_appointments'))}
+      ${kpi(fmtNum(ds.total_invoices),T('cto_kpi_invoices'))}
+      ${kpi(fmtNum(ds.total_payments),T('cto_kpi_payments'))}
+      ${kpi(fmtNum(ds.total_reviews),T('cto_kpi_reviews'))}
+      ${kpi(fmtNum(ds.total_waitlist),T('cto_kpi_waitlist'))}
+      ${kpi(fmtNum(ds.total_demo_requests),T('cto_kpi_demo'))}
     </div>
     <div class="mgmt-grid">
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Sicherheitsstatus</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('cto_security')}</span></div>
         <div class="mc-card-body">
           ${secRows.map(s=>`<div class="sec-row"><div class="sec-dot ${s.ok?'sec-ok':s.warn?'sec-warn':'sec-err'}"></div><span>${s.label}</span></div>`).join('')}
         </div>
       </div>
       <div class="mc-card">
-        <div class="mc-card-header"><span class="mc-card-title">Server & Datenbank</span></div>
+        <div class="mc-card-header"><span class="mc-card-title">${T('cto_server_db')}</span></div>
         <div class="mc-card-body">
-          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Server: online</span></div>
-          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>API: erreichbar</span></div>
-          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Uptime: ${d.uptime}</span></div>
-          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>Datenbankgröße: ${d.db_size}</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>${T('cto_server_online')}</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>${T('cto_api_reachable')}</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>${T('cto_uptime_lbl',{v:d.uptime})}</span></div>
+          <div class="sec-row"><div class="sec-dot sec-ok"></div><span>${T('cto_dbsize_lbl',{v:d.db_size})}</span></div>
           <div class="sec-row"><div class="sec-dot ${d.backups&&d.backups.length>0?'sec-ok':'sec-warn'}"></div>
-            <span>Backups: ${d.backups&&d.backups.length>0?d.backups.length+' vorhanden (aktuellstes: '+d.backups[0]+')':'keine gefunden'}</span>
+            <span>${T('cto_backups_lbl',{v: backupsTxt})}</span>
           </div>
           <div class="sec-row"><div class="sec-dot ${d.last_automation?'sec-ok':'sec-warn'}"></div>
-            <span>Letzte Automation: ${fmtDt(d.last_automation)}</span>
+            <span>${T('cto_last_auto',{date: fmtDt(d.last_automation)})}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="mc-card">
-      <div class="mc-card-header"><span class="mc-card-title">Update-Hinweise</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('cto_update_hints')}</span></div>
       <div class="mc-card-body">${d.update_hints.map(h=>`<div class="idea-item" style="font-size:.8125rem;">${h}</div>`).join('')}</div>
     </div>
     <div class="mc-card">
-      <div class="mc-card-header"><span class="mc-card-title">Letzte Aktivitäten</span><span class="mc-card-sub">Nur Aktionstypen – keine Patientendaten</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('cto_last_activity')}</span><span class="mc-card-sub">${T('cto_activity_sub')}</span></div>
       <div class="mc-card-body" style="padding:0;">
         <table class="mc-table">
-          <thead><tr><th>Aktion</th><th>Typ</th><th>Zeit</th></tr></thead>
+          <thead><tr><th>${T('cto_th_action')}</th><th>${T('cto_th_type')}</th><th>${T('cto_th_time')}</th></tr></thead>
           <tbody>
             ${(d.recent_activity||[]).length===0
-              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">Keine Einträge</td></tr>'
+              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">'+T('cto_no_entries')+'</td></tr>'
               : d.recent_activity.map(a=>`<tr><td>${a.action||'—'}</td><td>${a.entity_type||'—'}</td><td style="white-space:nowrap;color:var(--mc-muted);">${fmtDt(a.created_at)}</td></tr>`).join('')}
           </tbody>
         </table>
       </div>
     </div>
     <div class="mc-card">
-      <div class="mc-card-header"><span class="mc-card-title">Automation-Log</span></div>
+      <div class="mc-card-header"><span class="mc-card-title">${T('cto_auto_log')}</span></div>
       <div class="mc-card-body" style="padding:0;">
         <table class="mc-table">
-          <thead><tr><th>Typ</th><th>Details</th><th>Zeitpunkt</th></tr></thead>
+          <thead><tr><th>${T('cto_th_type')}</th><th>${T('cto_th_details')}</th><th>${T('cto_th_timestamp')}</th></tr></thead>
           <tbody>
             ${(d.automation_log||[]).length===0
-              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">Keine Einträge</td></tr>'
+              ? '<tr><td colspan="3" style="color:var(--mc-muted);padding:.75rem .625rem;">'+T('cto_no_entries')+'</td></tr>'
               : d.automation_log.map(a=>`<tr><td>${a.type||'—'}</td><td style="color:var(--mc-muted);">${a.details||'—'}</td><td style="white-space:nowrap;color:var(--mc-muted);">${fmtDt(a.ran_at)}</td></tr>`).join('')}
           </tbody>
         </table>

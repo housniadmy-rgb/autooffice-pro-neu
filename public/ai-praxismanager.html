@@ -866,7 +866,8 @@
       .catch(err => {
         document.getElementById('ai-loading').style.display = 'none';
         const errEl = document.getElementById('ai-error');
-        errEl.textContent = err && err.message ? err.message : 'Fehler beim Laden der Daten.';
+        const t = window.dT || ((k) => k);
+        errEl.textContent = err && err.message ? err.message : t('err_load_data');
         errEl.style.display = 'block';
       });
   }
