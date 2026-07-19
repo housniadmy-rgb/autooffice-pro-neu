@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -26,7 +27,7 @@ router.get('/:id', requireAuth, (req, res) => {
     WHERE p.id = ? AND i.practice_id = ?
   `).get(req.params.id, req.session.practiceId);
 
-  if (!payment) return res.status(404).json({ error: 'Zahlung nicht gefunden' });
+  if (!payment) return res.status(404).json({ error: t('err_payment_not_found', getLang(req)) });
   res.json(payment);
 });
 
@@ -34,11 +35,11 @@ router.post('/', requireAuth, (req, res) => {
   const { invoice_id, amount, payment_date, payment_method, transaction_id, notes } = req.body;
 
   if (!invoice_id || !amount || !payment_date) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const invoice = db.prepare('SELECT * FROM invoices WHERE id = ? AND practice_id = ?').get(invoice_id, req.session.practiceId);
-  if (!invoice) return res.status(404).json({ error: 'Rechnung nicht gefunden' });
+  if (!invoice) return res.status(404).json({ error: t('err_invoice_not_found', getLang(req)) });
 
   const id = uuidv4();
   db.prepare(`

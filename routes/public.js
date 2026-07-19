@@ -2,13 +2,14 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { sendAppointmentConfirmation } = require('../utils/email');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
 
 router.get('/practices/:id', (req, res) => {
   const practice = db.prepare('SELECT id, name, address, zip, city, phone, email, website, description, opening_hours FROM practices WHERE id = ?').get(req.params.id);
-  if (!practice) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practice) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
 
   const practitioners = db.prepare('SELECT id, first_name, last_name, title, specialty, bio FROM practitioners WHERE practice_id = ? AND active = 1').all(req.params.id);
   const avgRating = db.prepare('SELECT AVG(rating) as avg, COUNT(*) as count FROM reviews WHERE practice_id = ? AND visible = 1').get(req.params.id);
@@ -37,7 +38,7 @@ function generateSlotsFromWindows(windows) {
 
 router.get('/slots', (req, res) => {
   const { practitioner_id, date } = req.query;
-  if (!practitioner_id || !date) return res.status(400).json({ error: 'practitioner_id und date erforderlich' });
+  if (!practitioner_id || !date) return res.status(400).json({ error: t('err_practitioner_date_required', getLang(req)) });
 
   const booked = db.prepare(`
     SELECT appointment_time FROM appointments
@@ -68,13 +69,13 @@ router.post('/book', async (req, res) => {
   const { practice_id, practitioner_id, patient_first_name, patient_last_name, patient_email, patient_phone, appointment_date, appointment_time, appointment_type, patient_language } = req.body;
 
   if (!practice_id || !practitioner_id || !patient_first_name || !patient_last_name || !patient_email || !appointment_date || !appointment_time) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const practiceExists = db.prepare('SELECT id, account_status FROM practices WHERE id = ?').get(practice_id);
-  if (!practiceExists) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practiceExists) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
   if (practiceExists.account_status === 'paused') {
-    return res.status(402).json({ error: 'Diese Praxis nimmt derzeit keine Online-Buchungen an.' });
+    return res.status(402).json({ error: t('err_no_online_booking', getLang(req)) });
   }
 
   const conflict = db.prepare(`
@@ -82,7 +83,7 @@ router.post('/book', async (req, res) => {
     WHERE practitioner_id = ? AND appointment_date = ? AND appointment_time = ? AND status = 'scheduled'
   `).get(practitioner_id, appointment_date, appointment_time);
 
-  if (conflict) return res.status(409).json({ error: 'Dieser Zeitslot ist nicht mehr verfügbar' });
+  if (conflict) return res.status(409).json({ error: t('err_slot_no_longer_available', getLang(req)) });
 
   const id = uuidv4();
   const cancelToken = uuidv4();
@@ -114,8 +115,8 @@ router.get('/cancel/:token', (req, res) => {
     WHERE a.cancel_token = ?
   `).get(req.params.token);
 
-  if (!appointment) return res.status(404).json({ error: 'Termin nicht gefunden' });
-  if (appointment.status === 'cancelled') return res.status(410).json({ error: 'Termin bereits abgesagt' });
+  if (!appointment) return res.status(404).json({ error: t('err_appointment_not_found', getLang(req)) });
+  if (appointment.status === 'cancelled') return res.status(410).json({ error: t('err_appointment_already_cancelled', getLang(req)) });
 
   res.json({
     id: appointment.id,
@@ -129,8 +130,8 @@ router.get('/cancel/:token', (req, res) => {
 
 router.post('/cancel/:token', async (req, res) => {
   const appointment = db.prepare('SELECT * FROM appointments WHERE cancel_token = ?').get(req.params.token);
-  if (!appointment) return res.status(404).json({ error: 'Termin nicht gefunden' });
-  if (appointment.status === 'cancelled') return res.status(410).json({ error: 'Termin bereits abgesagt' });
+  if (!appointment) return res.status(404).json({ error: t('err_appointment_not_found', getLang(req)) });
+  if (appointment.status === 'cancelled') return res.status(410).json({ error: t('err_appointment_already_cancelled', getLang(req)) });
 
   db.prepare("UPDATE appointments SET status = 'cancelled' WHERE cancel_token = ?").run(req.params.token);
 
@@ -157,7 +158,7 @@ router.post('/cancel/:token', async (req, res) => {
 router.get('/available-days', (req, res) => {
   const { practitioner_id, year, month } = req.query;
   if (!practitioner_id || !year || !month) {
-    return res.status(400).json({ error: 'practitioner_id, year und month erforderlich' });
+    return res.status(400).json({ error: t('err_practitioner_year_month_required', getLang(req)) });
   }
 
   const y = parseInt(year);
@@ -205,11 +206,11 @@ router.get('/available-days', (req, res) => {
 router.get('/my-appointments', (req, res) => {
   const { email, practice_id } = req.query;
   if (!email || !practice_id) {
-    return res.status(400).json({ error: 'email und practice_id erforderlich' });
+    return res.status(400).json({ error: t('err_email_practice_required', getLang(req)) });
   }
 
   const practice = db.prepare('SELECT id FROM practices WHERE id = ?').get(practice_id);
-  if (!practice) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practice) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
 
   const appointments = db.prepare(`
     SELECT a.id, a.appointment_date, a.appointment_time, a.duration_minutes,
@@ -273,7 +274,7 @@ router.get('/practice/:id', (req, res) => {
   const practice = db.prepare(
     'SELECT id, name, address, zip, city, phone, email, website, description, opening_hours FROM practices WHERE id = ?'
   ).get(req.params.id);
-  if (!practice) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practice) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
   res.json(practice);
 });
 

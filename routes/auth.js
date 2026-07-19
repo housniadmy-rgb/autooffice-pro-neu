@@ -5,40 +5,41 @@ const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
 const { logActivity } = require('../utils/activity');
-const { SUPPORTED_LANGS } = require('../utils/language');
+const { t, getLang, SUPPORTED_LANGS } = require('../utils/language');
 const { rateLimit } = require('../utils/rateLimit');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const loginLimiter = rateLimit({
   windowMs: 60_000, max: 5,
-  message: 'Zu viele Anmeldeversuche. Bitte nach 1 Minute erneut versuchen.',
+  messageKey: 'err_too_many_logins',
 });
 const registerLimiter = rateLimit({
   windowMs: 60_000, max: 3,
-  message: 'Zu viele Registrierungsversuche. Bitte warte einen Moment.',
+  messageKey: 'err_too_many_registers',
 });
 const forgotLimiter = rateLimit({
   windowMs: 60_000, max: 3,
-  message: 'Zu viele Passwort-Zurücksetzen-Versuche. Bitte warte einen Moment.',
+  messageKey: 'err_too_many_forgots',
 });
 
 const router = express.Router();
 
 router.post('/login', loginLimiter, async (req, res) => {
   const { email, password } = req.body;
+  const lang = getLang(req);
 
   if (!email || !password) {
-    return res.status(400).json({ error: 'E-Mail und Passwort erforderlich' });
+    return res.status(400).json({ error: t('err_email_password_required', lang) });
   }
 
   const user = db.prepare('SELECT * FROM users WHERE email = ? AND active = 1').get(email.toLowerCase());
   if (!user) {
-    return res.status(401).json({ error: 'E-Mail oder Passwort falsch' });
+    return res.status(401).json({ error: t('err_invalid_credentials', lang) });
   }
 
   const match = await bcrypt.compare(password, user.password_hash);
   if (!match) {
-    return res.status(401).json({ error: 'E-Mail oder Passwort falsch' });
+    return res.status(401).json({ error: t('err_invalid_credentials', lang) });
   }
 
   req.session.userId = user.id;
@@ -49,8 +50,8 @@ router.post('/login', loginLimiter, async (req, res) => {
   logActivity(getDb(), user.practice_id, user.email, 'login', 'user', user.id, null);
 
   const practice = db.prepare('SELECT language FROM practices WHERE id = ?').get(user.practice_id);
-  const lang = (practice && practice.language) || 'en';
-  res.cookie('lang', lang, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false, sameSite: 'lax' });
+  const practiceLang = (practice && practice.language) || 'en';
+  res.cookie('lang', practiceLang, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false, sameSite: 'lax' });
 
   res.json({
     success: true,
@@ -78,12 +79,13 @@ router.post('/register', registerLimiter, async (req, res) => {
     language, package: pkg,
   } = req.body;
 
+  const regLang = getLang(req);
   if (!email || !password || !first_name || !last_name || !practice_name) {
-    return res.status(400).json({ error: 'Alle Pflichtfelder ausfüllen' });
+    return res.status(400).json({ error: t('err_all_fields_required', regLang) });
   }
 
   if (password.length < 8) {
-    return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen lang sein' });
+    return res.status(400).json({ error: t('err_password_min_8', regLang) });
   }
 
   const VALID_PACKAGES = ['BASIC', 'PROFESSIONAL', 'UNLIMITED'];
@@ -96,7 +98,7 @@ router.post('/register', registerLimiter, async (req, res) => {
 
   const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email.toLowerCase());
   if (existing) {
-    return res.status(409).json({ error: 'E-Mail bereits registriert' });
+    return res.status(409).json({ error: t('err_email_already_registered', regLang) });
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
@@ -144,19 +146,20 @@ router.post('/register', registerLimiter, async (req, res) => {
 
 router.put('/password', requireAuth, async (req, res) => {
   const { current_password, new_password } = req.body;
+  const pwLang = getLang(req);
 
   if (!current_password || !new_password) {
-    return res.status(400).json({ error: 'Aktuelles und neues Passwort erforderlich' });
+    return res.status(400).json({ error: t('err_current_new_password_required', pwLang) });
   }
   if (new_password.length < 8) {
-    return res.status(400).json({ error: 'Neues Passwort muss mindestens 8 Zeichen lang sein' });
+    return res.status(400).json({ error: t('err_new_password_min_8', pwLang) });
   }
 
   const user = db.prepare('SELECT * FROM users WHERE id = ?').get(req.session.userId);
-  if (!user) return res.status(404).json({ error: 'Benutzer nicht gefunden' });
+  if (!user) return res.status(404).json({ error: t('err_user_not_found', pwLang) });
 
   const match = await bcrypt.compare(current_password, user.password_hash);
-  if (!match) return res.status(401).json({ error: 'Aktuelles Passwort ist falsch' });
+  if (!match) return res.status(401).json({ error: t('err_current_password_wrong', pwLang) });
 
   const hash = await bcrypt.hash(new_password, 12);
   db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, req.session.userId);
@@ -173,7 +176,7 @@ router.put('/password', requireAuth, async (req, res) => {
 
 router.post('/forgot-password', forgotLimiter, async (req, res) => {
   const { email } = req.body;
-  if (!email) return res.status(400).json({ error: 'E-Mail erforderlich' });
+  if (!email) return res.status(400).json({ error: t('err_email_required', getLang(req)) });
 
   const user = db.prepare('SELECT * FROM users WHERE email = ? AND active = 1').get(email.toLowerCase());
 
@@ -206,8 +209,9 @@ router.post('/forgot-password', forgotLimiter, async (req, res) => {
 
 router.post('/reset-password', async (req, res) => {
   const { token, new_password } = req.body;
-  if (!token || !new_password) return res.status(400).json({ error: 'Token und neues Passwort erforderlich' });
-  if (new_password.length < 8) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen lang sein' });
+  const rpLang = getLang(req);
+  if (!token || !new_password) return res.status(400).json({ error: t('err_token_password_required', rpLang) });
+  if (new_password.length < 8) return res.status(400).json({ error: t('err_password_min_8', rpLang) });
 
   const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
   const row = db.prepare(`
@@ -217,7 +221,7 @@ router.post('/reset-password', async (req, res) => {
     WHERE t.token = ? AND t.used = 0 AND t.expires_at > ?
   `).get(token, now);
 
-  if (!row) return res.status(400).json({ error: 'Token ungültig oder abgelaufen' });
+  if (!row) return res.status(400).json({ error: t('err_token_invalid_expired', rpLang) });
 
   const hash = await bcrypt.hash(new_password, 12);
   db.prepare('UPDATE users SET password_hash = ? WHERE id = ?').run(hash, row.user_id);
@@ -237,10 +241,11 @@ router.post('/reset-password', async (req, res) => {
 // ── Einladungs-Token validieren ────────────────────────────
 
 router.get('/invite/validate', (req, res) => {
-  const { token } = req.query;
-  if (!token) return res.status(400).json({ error: 'Token fehlt' });
+  const { token: tok } = req.query;
+  const invLang = getLang(req);
+  if (!tok) return res.status(400).json({ error: t('err_token_missing', invLang) });
 
-  const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
+  const tokenHash = crypto.createHash('sha256').update(tok).digest('hex');
   const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
 
   const row = db.prepare(`
@@ -250,9 +255,9 @@ router.get('/invite/validate', (req, res) => {
     WHERE t.token_hash = ?
   `).get(tokenHash);
 
-  if (!row) return res.status(400).json({ error: 'Token ungültig' });
-  if (row.used) return res.status(400).json({ error: 'Token wurde bereits verwendet' });
-  if (row.expires_at < now) return res.status(400).json({ error: 'Token abgelaufen' });
+  if (!row) return res.status(400).json({ error: t('err_token_invalid', invLang) });
+  if (row.used) return res.status(400).json({ error: t('err_token_used', invLang) });
+  if (row.expires_at < now) return res.status(400).json({ error: t('err_token_expired', invLang) });
 
   const practice = db.prepare('SELECT name FROM practices WHERE id = ?').get(row.practice_id);
   res.json({
@@ -266,8 +271,9 @@ router.get('/invite/validate', (req, res) => {
 
 router.post('/invite/activate', async (req, res) => {
   const { token, new_password } = req.body;
-  if (!token || !new_password) return res.status(400).json({ error: 'Token und Passwort erforderlich' });
-  if (new_password.length < 8) return res.status(400).json({ error: 'Passwort muss mindestens 8 Zeichen lang sein' });
+  const actLang = getLang(req);
+  if (!token || !new_password) return res.status(400).json({ error: t('err_token_and_password_required', actLang) });
+  if (new_password.length < 8) return res.status(400).json({ error: t('err_password_min_8', actLang) });
 
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
   const now = new Date().toISOString().replace('T', ' ').slice(0, 19);
@@ -278,9 +284,9 @@ router.post('/invite/activate', async (req, res) => {
     WHERE t.token_hash = ?
   `).get(tokenHash);
 
-  if (!row) return res.status(400).json({ error: 'Token ungültig' });
-  if (row.used) return res.status(400).json({ error: 'Token wurde bereits verwendet' });
-  if (row.expires_at < now) return res.status(400).json({ error: 'Token abgelaufen – bitte erneut einladen lassen' });
+  if (!row) return res.status(400).json({ error: t('err_token_invalid', actLang) });
+  if (row.used) return res.status(400).json({ error: t('err_token_used', actLang) });
+  if (row.expires_at < now) return res.status(400).json({ error: t('err_token_expired_reinvite', actLang) });
 
   const hash = await bcrypt.hash(new_password, 12);
   db.prepare('UPDATE users SET password_hash = ?, active = 1 WHERE id = ?').run(hash, row.user_id);
@@ -302,13 +308,14 @@ router.post('/invite/activate', async (req, res) => {
 });
 
 router.get('/me', (req, res) => {
+  const meLang = getLang(req);
   if (!req.session.userId) {
-    return res.status(401).json({ error: 'Nicht angemeldet' });
+    return res.status(401).json({ error: t('err_not_logged_in', meLang) });
   }
 
   const user = db.prepare('SELECT id, email, first_name, last_name, role, practice_id FROM users WHERE id = ?').get(req.session.userId);
   if (!user) {
-    return res.status(404).json({ error: 'Benutzer nicht gefunden' });
+    return res.status(404).json({ error: t('err_user_not_found', meLang) });
   }
 
   res.json(user);

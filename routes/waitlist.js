@@ -3,6 +3,7 @@ const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -26,11 +27,11 @@ router.post('/', (req, res) => {
   const { practice_id, practitioner_id, patient_first_name, patient_last_name, patient_email, patient_phone, language, preferred_period } = req.body;
 
   if (!practice_id || !patient_first_name || !patient_last_name || !patient_email) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const practiceExists = db.prepare('SELECT id FROM practices WHERE id = ?').get(practice_id);
-  if (!practiceExists) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practiceExists) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
 
   const id = uuidv4();
   db.prepare(`
@@ -53,7 +54,7 @@ router.post('/', (req, res) => {
 
 router.delete('/:id', requireAuth, (req, res) => {
   const entry = db.prepare('SELECT * FROM waitlist WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!entry) return res.status(404).json({ error: 'Eintrag nicht gefunden' });
+  if (!entry) return res.status(404).json({ error: t('err_entry_not_found', getLang(req)) });
 
   db.prepare('DELETE FROM waitlist_offers WHERE waitlist_id = ?').run(req.params.id);
   db.prepare('DELETE FROM waitlist WHERE id = ? AND practice_id = ?').run(req.params.id, req.session.practiceId);
@@ -64,7 +65,7 @@ router.delete('/:id', requireAuth, (req, res) => {
 
 router.get('/accept', (req, res) => {
   const { token } = req.query;
-  if (!token) return res.status(400).json({ error: 'Token fehlt' });
+  if (!token) return res.status(400).json({ error: t('err_token_missing', getLang(req)) });
 
   const offer = db.prepare(`
     SELECT wo.*, w.practice_id, w.patient_first_name, w.patient_last_name, w.patient_email, w.patient_phone, w.language
@@ -73,17 +74,17 @@ router.get('/accept', (req, res) => {
     WHERE wo.token = ?
   `).get(token);
 
-  if (!offer) return res.status(404).json({ error: 'Angebot nicht gefunden' });
-  if (offer.status === 'accepted') return res.status(409).json({ error: 'Angebot bereits angenommen' });
+  if (!offer) return res.status(404).json({ error: t('err_offer_not_found', getLang(req)) });
+  if (offer.status === 'accepted') return res.status(409).json({ error: t('err_offer_already_accepted', getLang(req)) });
   if (offer.status === 'expired' || offer.expires_at < moment().format('YYYY-MM-DD HH:mm:ss')) {
     if (offer.status !== 'expired') {
       db.prepare("UPDATE waitlist_offers SET status = 'expired' WHERE id = ?").run(offer.id);
     }
-    return res.status(410).json({ error: 'Angebot abgelaufen' });
+    return res.status(410).json({ error: t('err_offer_expired', getLang(req)) });
   }
 
   const original = db.prepare('SELECT * FROM appointments WHERE id = ?').get(offer.appointment_id);
-  if (!original) return res.status(404).json({ error: 'Ursprünglicher Termin nicht mehr vorhanden' });
+  if (!original) return res.status(404).json({ error: t('err_original_appointment_gone', getLang(req)) });
 
   // Prüfen ob Slot noch frei
   const conflict = db.prepare(`
@@ -91,7 +92,7 @@ router.get('/accept', (req, res) => {
     WHERE practitioner_id = ? AND appointment_date = ? AND appointment_time = ? AND status = 'scheduled'
   `).get(original.practitioner_id, original.appointment_date, original.appointment_time);
 
-  if (conflict) return res.status(409).json({ error: 'Zeitslot ist inzwischen wieder belegt' });
+  if (conflict) return res.status(409).json({ error: t('err_slot_taken', getLang(req)) });
 
   const newId = uuidv4();
   const cancelToken = uuidv4();

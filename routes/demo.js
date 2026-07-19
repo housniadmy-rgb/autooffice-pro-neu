@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const { v4: uuidv4 } = require('uuid');
 const { sendDemoRequest, sendInviteEmail, sendContactConfirmation } = require('../utils/email');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 
 const router = express.Router();
 
@@ -44,10 +45,10 @@ router.post('/', async (req, res) => {
   const { practice, contact, email, phone, country, language, message } = req.body;
 
   if (!practice || !contact || !email || !country) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: 'Ungültige E-Mail-Adresse' });
+    return res.status(400).json({ error: t('err_invalid_email_address', getLang(req)) });
   }
 
   const db = getDb();
@@ -65,7 +66,7 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.error('[demo] DB-Fehler beim Speichern – Anfrage NICHT gespeichert:',
       err && err.stack ? err.stack : err);
-    return res.status(500).json({ error: 'Anfrage konnte nicht gespeichert werden. Bitte später erneut versuchen.' });
+    return res.status(500).json({ error: t('err_request_save_failed', getLang(req)) });
   }
 
   // 2) Auto-Onboarding (DB-Operationen) – synchron, damit der Invite-Link existiert.

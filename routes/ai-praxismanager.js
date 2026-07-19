@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { getAiLocale } = require('../utils/aiLocales');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -353,8 +354,10 @@ router.get('/', requireAuth, (req, res) => {
   `).get(practiceId);
 
   // ── 6. Intelligente Hinweise (legacy) ───────────────────────────────────────
-  const lang = (practice && practice.language) || 'de';
+  const cookieLang = req.cookies && req.cookies.lang;
+  const lang = HINT_TEXTS[cookieLang] ? cookieLang : ((practice && practice.language) || 'de');
   const H = HINT_TEXTS[lang] || HINT_TEXTS.de;
+  const AI = getAiLocale(lang);
   const hinweise = [];
 
   if (termineHeute.count === 0) {
@@ -439,7 +442,7 @@ router.get('/', requireAuth, (req, res) => {
   `).get(practiceId).avg || 1;
 
   const auslastungPrognose7d = [];
-  const dayNames = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
+  const dayNames = [AI.wd_sun, AI.wd_mon, AI.wd_tue, AI.wd_wed, AI.wd_thu, AI.wd_fri, AI.wd_sat];
   for (let i = 0; i < 7; i++) {
     const d = new Date(now.getTime() + i * 86400000);
     const dateStr = d.toISOString().slice(0, 10);
@@ -456,41 +459,41 @@ router.get('/', requireAuth, (req, res) => {
   const warnungen = [];
 
   if (rechnungenUeberfaellig.count > 0)
-    warnungen.push({ level: 'rot', text: `${rechnungenUeberfaellig.count} Rechnung(en) überfällig – Zahlungserinnerung senden`, link: '/invoices.html', action: 'Rechnungen öffnen' });
+    warnungen.push({ level: 'rot', text: AI.warn_overdue_invoices(rechnungenUeberfaellig.count), link: '/invoices.html', action: AI.act_open_invoices });
   if (negativeNichtGeloest.count > 0)
-    warnungen.push({ level: 'rot', text: `${negativeNichtGeloest.count} negative Bewertung(en) noch nicht beantwortet`, link: '/reviews.html', action: 'Bewertungen öffnen' });
+    warnungen.push({ level: 'rot', text: AI.warn_neg_reviews(negativeNichtGeloest.count), link: '/reviews.html', action: AI.act_open_reviews });
   if (bewertungAvg.avg && bewertungAvg.avg < 3 && bewertungAvg.total >= 3)
-    warnungen.push({ level: 'rot', text: `Kritische Durchschnittsbewertung: Ø ${bewertungAvg.avg}/5 – sofort reagieren`, link: '/reviews.html', action: 'Bewertungen öffnen' });
+    warnungen.push({ level: 'rot', text: AI.warn_low_avg_rating(bewertungAvg.avg), link: '/reviews.html', action: AI.act_open_reviews });
   if (practice && practice.trial_end_date && practice.trial_end_date <= trialWarnDate)
-    warnungen.push({ level: 'gelb', text: `Testphase läuft am ${practice.trial_end_date} ab – rechtzeitig upgraden`, link: '/subscription.html', action: 'Konto upgraden' });
+    warnungen.push({ level: 'gelb', text: AI.warn_trial_expiring(practice.trial_end_date), link: '/subscription.html', action: AI.act_upgrade });
   if (wartelisteCount.count > 10)
-    warnungen.push({ level: 'gelb', text: `${wartelisteCount.count} Patienten auf der Warteliste – Kapazität prüfen`, link: '/waitlist-admin.html', action: 'Warteliste öffnen' });
+    warnungen.push({ level: 'gelb', text: AI.warn_waitlist_high(wartelisteCount.count), link: '/waitlist-admin.html', action: AI.act_open_waitlist });
   if (auslastung < 35 && gesamtTermine.count > 5)
-    warnungen.push({ level: 'gelb', text: `Niedrige Auslastung (${auslastung}%) diesen Monat – Zeitslots prüfen`, link: '/appointments.html', action: 'Kalender öffnen' });
+    warnungen.push({ level: 'gelb', text: AI.warn_low_utilization(auslastung), link: '/appointments.html', action: AI.act_open_calendar });
   if (offeneAngebote.count > 0)
-    warnungen.push({ level: 'gelb', text: `${offeneAngebote.count} Wartelisten-Angebot(e) noch nicht beantwortet`, link: '/waitlist-admin.html', action: 'Warteliste öffnen' });
+    warnungen.push({ level: 'gelb', text: AI.warn_open_offers(offeneAngebote.count), link: '/waitlist-admin.html', action: AI.act_open_waitlist });
   if (offeneRechnungen.count > 5)
-    warnungen.push({ level: 'gelb', text: `${offeneRechnungen.count} offene Rechnungen ausstehend – Routine-Check empfohlen`, link: '/invoices.html', action: 'Rechnungen öffnen' });
+    warnungen.push({ level: 'gelb', text: AI.warn_open_invoices(offeneRechnungen.count), link: '/invoices.html', action: AI.act_open_invoices });
   if (warnungen.length === 0)
-    warnungen.push({ level: 'gruen', text: 'Keine aktiven Warnungen – Praxis läuft stabil', link: null, action: null });
+    warnungen.push({ level: 'gruen', text: AI.warn_all_ok, link: null, action: null });
 
   // ── 10. Prioritäten heute ────────────────────────────────────────────────────
   const prioritaetenHeute = [];
 
   if (rechnungenUeberfaellig.count > 0)
-    prioritaetenHeute.push({ level: 'kritisch', text: `${rechnungenUeberfaellig.count} überfällige Rechnung(en) – sofort handeln`, link: '/invoices.html' });
+    prioritaetenHeute.push({ level: 'kritisch', text: AI.prio_overdue_invoices(rechnungenUeberfaellig.count), link: '/invoices.html' });
   if (negativeNichtGeloest.count > 0)
-    prioritaetenHeute.push({ level: 'dringend', text: `${negativeNichtGeloest.count} negative Bewertung(en) beantworten`, link: '/reviews.html' });
+    prioritaetenHeute.push({ level: 'dringend', text: AI.prio_neg_reviews(negativeNichtGeloest.count), link: '/reviews.html' });
   if (offeneAngebote.count > 0)
-    prioritaetenHeute.push({ level: 'dringend', text: `${offeneAngebote.count} Wartelisten-Angebot(e) ausstehend`, link: '/waitlist-admin.html' });
+    prioritaetenHeute.push({ level: 'dringend', text: AI.prio_open_offers(offeneAngebote.count), link: '/waitlist-admin.html' });
   if (termineHeute.count > 0)
-    prioritaetenHeute.push({ level: 'heute', text: `${termineHeute.count} Termin(e) heute – Unterlagen vorbereiten`, link: '/appointments.html' });
+    prioritaetenHeute.push({ level: 'heute', text: AI.prio_today_apts(termineHeute.count), link: '/appointments.html' });
   if (neueBewertungen.count > 0)
-    prioritaetenHeute.push({ level: 'info', text: `${neueBewertungen.count} neue Bewertung(en) zur Freigabe`, link: '/reviews.html' });
+    prioritaetenHeute.push({ level: 'info', text: AI.prio_new_reviews(neueBewertungen.count), link: '/reviews.html' });
   if (wartelisteCount.count > 0 && moeglicheSlots.count > 0)
-    prioritaetenHeute.push({ level: 'info', text: `${moeglicheSlots.count} freie Slots – Warteliste jetzt benachrichtigen`, link: '/waitlist-admin.html' });
+    prioritaetenHeute.push({ level: 'info', text: AI.prio_free_slots(moeglicheSlots.count), link: '/waitlist-admin.html' });
   if (prioritaetenHeute.length === 0)
-    prioritaetenHeute.push({ level: 'ok', text: 'Keine dringenden Aufgaben heute – Praxis läuft optimal', link: null });
+    prioritaetenHeute.push({ level: 'ok', text: AI.prio_all_ok, link: null });
 
   // ── 11. KI-Empfehlungen ──────────────────────────────────────────────────────
   const kiEmpfehlungen = [];
@@ -499,24 +502,24 @@ router.get('/', requireAuth, (req, res) => {
     : 0;
 
   if (stornierungsrate > 20)
-    kiEmpfehlungen.push({ impact: 'hoch', text: `Stornierungsrate ${stornierungsrate}%: Automatische Terminerinnerungs-E-Mail 24h vorher einrichten, um No-Shows zu reduzieren.` });
+    kiEmpfehlungen.push({ impact: 'hoch', text: AI.ki_cancel_rate(stornierungsrate) });
   if (wartelisteCount.count > 0 && moeglicheSlots.count > 0)
-    kiEmpfehlungen.push({ impact: 'hoch', text: `${moeglicheSlots.count} stornierte Slot(s) können sofort aus der Warteliste (${wartelisteCount.count} wartend) gefüllt werden.` });
+    kiEmpfehlungen.push({ impact: 'hoch', text: AI.ki_fill_slots(moeglicheSlots.count, wartelisteCount.count) });
   if (auslastung < 60 && gesamtTermine.count > 3)
-    kiEmpfehlungen.push({ impact: 'mittel', text: `Auslastung ${auslastung}%: Zusätzliche Zeitslots anbieten oder Öffnungszeiten auf der Buchungsseite kommunizieren.` });
+    kiEmpfehlungen.push({ impact: 'mittel', text: AI.ki_low_util(auslastung) });
   if (bewertungAvg.avg && bewertungAvg.avg >= 4 && bewertungAvg.total < 10)
-    kiEmpfehlungen.push({ impact: 'mittel', text: `Sehr gute Bewertung (Ø ${bewertungAvg.avg}/5): Patienten nach dem Termin aktiv um eine Bewertung bitten – steigert Sichtbarkeit.` });
+    kiEmpfehlungen.push({ impact: 'mittel', text: AI.ki_good_reviews(bewertungAvg.avg) });
   if (offeneRechnungen.count > 3)
-    kiEmpfehlungen.push({ impact: 'mittel', text: `${offeneRechnungen.count} offene Rechnungen: Wöchentliche Rechnungsroutine (z.B. Dienstag 10 Uhr) einführen.` });
+    kiEmpfehlungen.push({ impact: 'mittel', text: AI.ki_open_invoices(offeneRechnungen.count) });
   if (termineMorgen.count > 3)
-    kiEmpfehlungen.push({ impact: 'niedrig', text: `Morgen ${termineMorgen.count} Termine – Unterlagen und Räume noch heute vorbereiten.` });
+    kiEmpfehlungen.push({ impact: 'niedrig', text: AI.ki_apts_tomorrow(termineMorgen.count) });
   if (negativeNichtGeloest.count === 0 && bewertungAvg.avg && bewertungAvg.avg >= 4)
-    kiEmpfehlungen.push({ impact: 'niedrig', text: 'Bewertungsmanagement vorbildlich: Alle negativen Bewertungen beantwortet. Weiter so!' });
+    kiEmpfehlungen.push({ impact: 'niedrig', text: AI.ki_reviews_managed });
   if (kiEmpfehlungen.length === 0) {
     const isNewPractice = gesamtTermine.count < 3 && totalInvoicesEver === 0;
     kiEmpfehlungen.push(isNewPractice
-      ? { impact: 'setup', text: 'Vervollständigen Sie Ihr Praxisprofil, um personalisierte KI-Empfehlungen zu erhalten.', link: '/settings.html' }
-      : { impact: 'gut',   text: 'Ihre Praxis läuft sehr gut. Keine spezifischen Handlungsempfehlungen erforderlich.' }
+      ? { impact: 'setup', text: AI.ki_setup_profile, link: '/settings.html' }
+      : { impact: 'gut',   text: AI.ki_gut }
     );
   }
 
@@ -524,133 +527,126 @@ router.get('/', requireAuth, (req, res) => {
   const todos = [];
 
   if (rechnungenUeberfaellig.count > 0)
-    todos.push({ priority: 'kritisch', text: `${rechnungenUeberfaellig.count} überfällige Rechnung(en) nachfassen`, link: '/invoices.html' });
+    todos.push({ priority: 'kritisch', text: AI.todo_overdue_invoices(rechnungenUeberfaellig.count), link: '/invoices.html' });
   if (negativeNichtGeloest.count > 0)
-    todos.push({ priority: 'hoch', text: `${negativeNichtGeloest.count} negative Bewertung(en) beantworten`, link: '/reviews.html' });
+    todos.push({ priority: 'hoch', text: AI.todo_neg_reviews(negativeNichtGeloest.count), link: '/reviews.html' });
   if (offeneRechnungen.count > 0)
-    todos.push({ priority: 'hoch', text: `${offeneRechnungen.count} offene Rechnung(en) prüfen und versenden`, link: '/invoices.html' });
+    todos.push({ priority: 'hoch', text: AI.todo_open_invoices(offeneRechnungen.count), link: '/invoices.html' });
   if (neueBewertungen.count > 0)
-    todos.push({ priority: 'mittel', text: `${neueBewertungen.count} neue Bewertung(en) prüfen und freigeben`, link: '/reviews.html' });
+    todos.push({ priority: 'mittel', text: AI.todo_new_reviews(neueBewertungen.count), link: '/reviews.html' });
   if (wartelisteCount.count > 0 && moeglicheSlots.count > 0)
-    todos.push({ priority: 'mittel', text: `${Math.min(wartelisteCount.count, moeglicheSlots.count)} Wartelisten-Patient(en) freie Slots anbieten`, link: '/waitlist-admin.html' });
+    todos.push({ priority: 'mittel', text: AI.todo_waitlist_slots(Math.min(wartelisteCount.count, moeglicheSlots.count)), link: '/waitlist-admin.html' });
   if (termineHeute.count > 0)
-    todos.push({ priority: 'heute', text: `${termineHeute.count} heutige Termin(e) vorbereiten`, link: '/appointments.html' });
+    todos.push({ priority: 'heute', text: AI.todo_today_apts(termineHeute.count), link: '/appointments.html' });
   if (termineMorgen.count > 0)
-    todos.push({ priority: 'niedrig', text: `${termineMorgen.count} morgige Termin(e) vorbereiten`, link: '/appointments.html' });
-  todos.push({ priority: 'niedrig', text: 'Praxis-Profil auf Vollständigkeit prüfen', link: '/practice.html' });
+    todos.push({ priority: 'niedrig', text: AI.todo_tomorrow_apts(termineMorgen.count), link: '/appointments.html' });
+  todos.push({ priority: 'niedrig', text: AI.todo_profile_check, link: '/practice.html' });
 
   // ── 13. Ampel-Handlungsempfehlungen ─────────────────────────────────────────
   const avgRating = bewertungAvg.avg || 0;
   const ampelEmpfehlungen = [
     {
-      bereich: 'Finanzen',
+      bereich: AI.bereich_finanzen,
       status: rechnungenUeberfaellig.count === 0 ? 'gruen'
         : rechnungenUeberfaellig.count <= 2 ? 'gelb' : 'rot',
       text: rechnungenUeberfaellig.count === 0
-        ? 'Alle Rechnungen im grünen Bereich – keine Maßnahmen nötig.'
+        ? AI.ampel_fin_ok
         : rechnungenUeberfaellig.count <= 2
-        ? `${rechnungenUeberfaellig.count} überfällige Rechnung(en) – Zahlungserinnerung senden.`
-        : `${rechnungenUeberfaellig.count} Rechnungen überfällig – dringend Mahnlauf starten.`,
-      detail: `Offen: ${offeneRechnungen.count} | Bezahlt: ${bezahlteRechnungen.count}`,
+        ? AI.ampel_fin_warn(rechnungenUeberfaellig.count)
+        : AI.ampel_fin_bad(rechnungenUeberfaellig.count),
+      detail: AI.ampel_fin_detail(offeneRechnungen.count, bezahlteRechnungen.count),
       link: '/invoices.html',
-      action: rechnungenUeberfaellig.count > 0 ? 'Rechnungen öffnen' : null,
+      action: rechnungenUeberfaellig.count > 0 ? AI.act_open_invoices : null,
     },
     {
-      bereich: 'Auslastung',
+      bereich: AI.bereich_auslastung,
       status: gesamtTermine.count < 3 ? 'gruen'
         : auslastung >= 70 ? 'gruen' : auslastung >= 40 ? 'gelb' : 'rot',
       text: gesamtTermine.count < 3
-        ? 'Noch keine Termindaten vorhanden. Die Auslastungsanalyse wird automatisch aktiviert, sobald Termine gebucht werden.'
+        ? AI.ampel_util_none
         : auslastung >= 70
-        ? `Gute Auslastung: ${auslastung}% diesen Monat – weiter so!`
+        ? AI.ampel_util_ok(auslastung)
         : auslastung >= 40
-        ? `Auslastung ${auslastung}%: Optimierungspotenzial vorhanden.`
-        : `Niedrige Auslastung (${auslastung}%): Warteliste aktivieren oder Termine bewerben.`,
+        ? AI.ampel_util_warn(auslastung)
+        : AI.ampel_util_bad(auslastung),
       detail: gesamtTermine.count < 3
-        ? 'Noch keine auswertbaren Termine'
-        : `Gesamt: ${gesamtTermine.count} | Abgeschlossen: ${abgeschlossen.count} | Storniert: ${stornierungen.count}`,
+        ? AI.ampel_util_detail_none
+        : AI.ampel_util_detail(gesamtTermine.count, abgeschlossen.count, stornierungen.count),
       link: '/appointments.html',
-      action: gesamtTermine.count >= 3 && auslastung < 70 ? 'Kalender öffnen' : null,
+      action: gesamtTermine.count >= 3 && auslastung < 70 ? AI.act_open_calendar : null,
     },
     {
-      bereich: 'Bewertungen',
+      bereich: AI.bereich_bewertungen,
       status: !avgRating || bewertungAvg.total < 2 ? 'gruen'
         : avgRating >= 4 ? 'gruen'
         : avgRating >= 3 ? 'gelb' : 'rot',
       text: bewertungAvg.total < 2
-        ? 'Noch keine aussagekräftigen Bewertungen – Patienten um Feedback bitten.'
+        ? AI.ampel_rev_none
         : avgRating >= 4
-        ? `Sehr gut: Ø ${avgRating}/5 Sterne aus ${bewertungAvg.total} Bewertungen.`
+        ? AI.ampel_rev_ok(avgRating, bewertungAvg.total)
         : avgRating >= 3
-        ? `Verbesserungspotenzial: Ø ${avgRating}/5 – auf Kritik eingehen.`
-        : `Kritisch: Ø ${avgRating}/5 – sofortige Maßnahmen erforderlich.`,
-      detail: `Positiv: ${positiveBewertungen.count} | Negativ: ${negativeBewertungen.count} | Ungelöst: ${negativeNichtGeloest.count}`,
+        ? AI.ampel_rev_warn(avgRating)
+        : AI.ampel_rev_bad(avgRating),
+      detail: AI.ampel_rev_detail(positiveBewertungen.count, negativeBewertungen.count, negativeNichtGeloest.count),
       link: '/reviews.html',
-      action: avgRating && avgRating < 4 && bewertungAvg.total >= 2 ? 'Bewertungen öffnen' : null,
+      action: avgRating && avgRating < 4 && bewertungAvg.total >= 2 ? AI.act_open_reviews : null,
     },
     {
-      bereich: 'Warteliste',
+      bereich: AI.bereich_warteliste,
       status: wartelisteCount.count === 0 ? 'gruen'
         : wartelisteCount.count < 5 ? 'gruen'
         : wartelisteCount.count < 15 ? 'gelb' : 'rot',
       text: wartelisteCount.count === 0
-        ? 'Keine wartenden Patienten – alles verwaltet.'
+        ? AI.ampel_wl_none
         : wartelisteCount.count < 5
-        ? `${wartelisteCount.count} Patient(en) warten – überschaubar.`
+        ? AI.ampel_wl_ok(wartelisteCount.count)
         : wartelisteCount.count < 15
-        ? `${wartelisteCount.count} Patient(en) auf der Warteliste – prüfen.`
-        : `${wartelisteCount.count} Patient(en) warten – sofortige Aufmerksamkeit erforderlich!`,
-      detail: `Wartend: ${wartelisteCount.count} | Freie Slots: ${moeglicheSlots.count} | Offene Angebote: ${offeneAngebote.count}`,
+        ? AI.ampel_wl_warn(wartelisteCount.count)
+        : AI.ampel_wl_bad(wartelisteCount.count),
+      detail: AI.ampel_wl_detail(wartelisteCount.count, moeglicheSlots.count, offeneAngebote.count),
       link: '/waitlist-admin.html',
-      action: wartelisteCount.count > 0 ? 'Warteliste öffnen' : null,
+      action: wartelisteCount.count > 0 ? AI.act_open_waitlist : null,
     },
   ];
 
   // ── 14. Auto-generierte Setup & Optimierungs-Todos ───────────────────────────
   const setupTodos = [];
 
-  // 1. Kritisch: Kein Behandler vorhanden
   if (practitionerCount === 0)
-    setupTodos.push({ category: 'behandler', priority: 'kritisch', icon: '👨‍⚕️', text: 'Ersten Behandler anlegen – Terminbuchungen sind ohne Behandler nicht möglich', link: '/practitioners.html' });
+    setupTodos.push({ category: 'behandler', priority: 'kritisch', icon: '👨‍⚕️', text: AI.setup_first_practitioner, link: '/practitioners.html' });
 
-  // 2. Kritisch: Keine Verfügbarkeit → keine Online-Buchungen möglich
   if (practitionerCount > 0 && hasAvailability === 0)
-    setupTodos.push({ category: 'oeffnungszeiten', priority: 'kritisch', icon: '🕒', text: 'Verfügbarkeit für Behandler eintragen – ohne Zeitfenster sind keine Online-Buchungen möglich', link: '/practitioners.html' });
+    setupTodos.push({ category: 'oeffnungszeiten', priority: 'kritisch', icon: '🕒', text: AI.setup_availability, link: '/practitioners.html' });
 
-  // 3. Wichtig: Fehlende Kontaktdaten (orange)
   if (practice && (!practice.phone || !practice.phone.trim()))
-    setupTodos.push({ category: 'profil', priority: 'hoch', icon: '📞', text: 'Telefonnummer in den Praxisdaten ergänzen', link: '/settings.html' });
+    setupTodos.push({ category: 'profil', priority: 'hoch', icon: '📞', text: AI.setup_phone, link: '/settings.html' });
   if (practice && (!practice.address || !practice.address.trim()))
-    setupTodos.push({ category: 'profil', priority: 'hoch', icon: '📍', text: 'Praxisadresse vervollständigen', link: '/settings.html' });
+    setupTodos.push({ category: 'profil', priority: 'hoch', icon: '📍', text: AI.setup_address, link: '/settings.html' });
 
-  // 4. Empfohlen: Profil-Vervollständigung (gelb)
   if (practice && (!practice.website || !practice.website.trim()))
-    setupTodos.push({ category: 'profil', priority: 'mittel', icon: '🌐', text: 'Website-URL hinterlegen – steigert Vertrauen bei Patienten', link: '/settings.html' });
+    setupTodos.push({ category: 'profil', priority: 'mittel', icon: '🌐', text: AI.setup_website, link: '/settings.html' });
   if (practice && (!practice.description || !practice.description.trim()))
-    setupTodos.push({ category: 'profil', priority: 'mittel', icon: '📝', text: 'Praxisbeschreibung hinzufügen – sichtbar für Patienten auf der Buchungsseite', link: '/settings.html' });
+    setupTodos.push({ category: 'profil', priority: 'mittel', icon: '📝', text: AI.setup_description, link: '/settings.html' });
   if (practitionerCount > 0 && hasAvailability > 0 && hasAvailability < 5)
-    setupTodos.push({ category: 'oeffnungszeiten', priority: 'mittel', icon: '🕒', text: `Öffnungszeiten vervollständigen – nur ${hasAvailability} Zeitfenster hinterlegt`, link: '/practitioners.html' });
+    setupTodos.push({ category: 'oeffnungszeiten', priority: 'mittel', icon: '🕒', text: AI.setup_hours_incomplete(hasAvailability), link: '/practitioners.html' });
 
-  // 5. Empfohlen: Bewertungen sammeln
   const totalReviews = (bewertungAvg && bewertungAvg.total) || 0;
   if (totalReviews === 0)
-    setupTodos.push({ category: 'bewertungen', priority: 'mittel', icon: '⭐', text: 'Erste Bewertungen sammeln – Patienten nach dem Termin aktiv um Feedback bitten', link: '/reviews.html' });
+    setupTodos.push({ category: 'bewertungen', priority: 'mittel', icon: '⭐', text: AI.setup_reviews_none, link: '/reviews.html' });
   else if (totalReviews < 5)
-    setupTodos.push({ category: 'bewertungen', priority: 'mittel', icon: '⭐', text: `Mehr Bewertungen sammeln (aktuell: ${totalReviews}) – Ziel: 10+ für bessere Online-Sichtbarkeit`, link: '/reviews.html' });
+    setupTodos.push({ category: 'bewertungen', priority: 'mittel', icon: '⭐', text: AI.setup_reviews_few(totalReviews), link: '/reviews.html' });
 
-  // 6. Niedrig: Zweiter Behandler, Fachgebiet, Bio
   if (practitionerCount === 1)
-    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '👨‍⚕️', text: 'Zweiten Behandler anlegen – mehr Kapazität und Flexibilität', link: '/practitioners.html' });
+    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '👨‍⚕️', text: AI.setup_second_practitioner, link: '/practitioners.html' });
   if (practitionerCount > 0 && practitionersNoSpecialty > 0)
-    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '🏷️', text: `Fachgebiet für ${practitionersNoSpecialty} Behandler ergänzen`, link: '/practitioners.html' });
+    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '🏷️', text: AI.setup_no_specialty(practitionersNoSpecialty), link: '/practitioners.html' });
   if (practitionerCount > 0 && practitionersNoBio > 0 && practitionersNoBio <= 2)
-    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '📄', text: `Bio/Beschreibung für ${practitionersNoBio} Behandler hinzufügen`, link: '/practitioners.html' });
+    setupTodos.push({ category: 'behandler', priority: 'niedrig', icon: '📄', text: AI.setup_no_bio(practitionersNoBio), link: '/practitioners.html' });
 
-  // 7. Warteliste / Auslastung
   if (wartelisteCount.count === 0 && stornierungen.count > 2)
-    setupTodos.push({ category: 'warteliste', priority: 'mittel', icon: '📋', text: 'Warteliste aktivieren – stornierte Termine automatisch nachbesetzen', link: '/waitlist-admin.html' });
+    setupTodos.push({ category: 'warteliste', priority: 'mittel', icon: '📋', text: AI.setup_waitlist_activate, link: '/waitlist-admin.html' });
   if (practitionerCount > 0 && avgTagesTermine < 2 && gesamtTermine.count >= 3)
-    setupTodos.push({ category: 'auslastung', priority: 'hoch', icon: '📊', text: `Terminauslastung niedrig (ø ${(Math.round(avgTagesTermine * 10) / 10).toFixed(1)} Termine/Tag) – Buchungsseite aktiver bewerben`, link: '/appointments.html' });
+    setupTodos.push({ category: 'auslastung', priority: 'hoch', icon: '📊', text: AI.setup_low_apts_per_day((Math.round(avgTagesTermine * 10) / 10).toFixed(1)), link: '/appointments.html' });
 
   res.json({
     generated_at: new Date().toISOString(),

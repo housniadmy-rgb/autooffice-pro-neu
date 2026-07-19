@@ -15,9 +15,13 @@ const locales = { de, en, fr, es, pt, ar, tr, id, ru, zh, hi, th };
 
 const SUPPORTED_LANGS = Object.keys(locales);
 
-function t(key, lang = 'de') {
+function t(key, lang = 'de', params) {
   const locale = locales[lang] || locales.de;
-  return locale[key] || de[key] || key;
+  const raw = locale[key] != null ? locale[key] : (de[key] != null ? de[key] : key);
+  if (!params) return raw;
+  return String(raw).replace(/\{(\w+)\}/g, (_, name) =>
+    Object.prototype.hasOwnProperty.call(params, name) ? String(params[name]) : `{${name}}`
+  );
 }
 
 function getLang(req) {

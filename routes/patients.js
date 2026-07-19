@@ -1,6 +1,7 @@
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -25,7 +26,7 @@ router.get('/', requireAuth, (req, res) => {
 
 router.get('/history', requireAuth, (req, res) => {
   const { email } = req.query;
-  if (!email) return res.status(400).json({ error: 'E-Mail erforderlich' });
+  if (!email) return res.status(400).json({ error: t('err_email_required', getLang(req)) });
 
   const appointments = db.prepare(`
     SELECT

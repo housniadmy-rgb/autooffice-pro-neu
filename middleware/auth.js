@@ -1,4 +1,5 @@
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 
 // Role hierarchy: admin > doctor > staff > patient
 const ROLE_LEVEL = { admin: 40, doctor: 30, staff: 20, patient: 10 };
@@ -9,7 +10,7 @@ function requireAuth(req, res, next) {
   }
   // API routes always get 401 — never redirect
   if (req.originalUrl.startsWith('/api') || req.xhr || req.headers.accept?.includes('application/json')) {
-    return res.status(401).json({ error: 'Nicht angemeldet' });
+    return res.status(401).json({ error: t('err_not_logged_in', getLang(req)) });
   }
   return res.redirect('/login.html');
 }
@@ -21,14 +22,14 @@ function requireRole(role) {
     if (!req.session || !req.session.userId) {
       // API routes always get 401 — never redirect
       if (req.originalUrl.startsWith('/api') || req.xhr || req.headers.accept?.includes('application/json')) {
-        return res.status(401).json({ error: 'Nicht angemeldet' });
+        return res.status(401).json({ error: t('err_not_logged_in', getLang(req)) });
       }
       return res.redirect('/login.html');
     }
     const userLevel = ROLE_LEVEL[req.session.userRole] || 0;
     const requiredLevel = ROLE_LEVEL[role] || 0;
     if (userLevel < requiredLevel) {
-      return res.status(403).json({ error: 'Keine Berechtigung – unzureichende Rolle' });
+      return res.status(403).json({ error: t('err_not_authorized_role', getLang(req)) });
     }
     next();
   };
@@ -46,7 +47,7 @@ function requireActiveAccount(req, res, next) {
 
   if (practice && practice.account_status === 'paused') {
     return res.status(402).json({
-      error: 'Ihr Konto ist pausiert. Bitte kontaktieren Sie uns, um Ihr Abonnement zu erneuern.',
+      error: t('err_account_paused', getLang(req)),
       account_status: 'paused',
     });
   }

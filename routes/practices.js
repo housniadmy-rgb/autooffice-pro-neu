@@ -2,14 +2,14 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const { getDb } = require('../database');
-const { SUPPORTED_LANGS } = require('../utils/language');
+const { t, getLang, SUPPORTED_LANGS } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
 
 router.get('/', requireAuth, (req, res) => {
   const practice = db.prepare('SELECT * FROM practices WHERE id = ?').get(req.session.practiceId);
-  if (!practice) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practice) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
   res.json(practice);
 });
 
@@ -17,7 +17,7 @@ router.put('/', requireAdmin, (req, res) => {
   const allowed = ['name', 'address', 'zip', 'city', 'phone', 'email', 'website', 'description', 'opening_hours', 'account_status'];
 
   if ('account_status' in req.body && !['active', 'paused'].includes(req.body.account_status)) {
-    return res.status(400).json({ error: 'account_status muss "active" oder "paused" sein' });
+    return res.status(400).json({ error: t('err_invalid_account_status', getLang(req)) });
   }
   const setClauses = [];
   const values = [];
@@ -43,7 +43,7 @@ router.put('/', requireAdmin, (req, res) => {
 router.put('/language', requireAdmin, (req, res) => {
   const { language } = req.body;
   if (!SUPPORTED_LANGS.includes(language)) {
-    return res.status(400).json({ error: 'Nicht unterstützte Sprache' });
+    return res.status(400).json({ error: t('err_invalid_language', getLang(req)) });
   }
   db.prepare('UPDATE practices SET language = ? WHERE id = ?').run(language, req.session.practiceId);
   res.cookie('lang', language, { maxAge: 365 * 24 * 60 * 60 * 1000, httpOnly: false, sameSite: 'lax' });
@@ -54,7 +54,7 @@ router.get('/subscription', requireAuth, (req, res) => {
   const practice = db.prepare(
     'SELECT package, language, trial_end_date, account_status FROM practices WHERE id = ?'
   ).get(req.session.practiceId);
-  if (!practice) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practice) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
 
   const today = new Date().toISOString().slice(0, 10);
   const trialEnd = practice.trial_end_date;

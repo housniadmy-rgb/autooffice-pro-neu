@@ -1,5 +1,7 @@
 // Simple in-memory rate limiter — no external dependencies
 
+const { t, getLang } = require('./language');
+
 const store = new Map();
 
 // Cleanup expired entries every 5 minutes
@@ -10,7 +12,7 @@ setInterval(() => {
   }
 }, 5 * 60 * 1000).unref();
 
-function rateLimit({ windowMs = 60_000, max = 5, message = 'Zu viele Anfragen. Bitte warte einen Moment.' } = {}) {
+function rateLimit({ windowMs = 60_000, max = 5, messageKey = 'err_too_many_requests' } = {}) {
   return (req, res, next) => {
     const forwarded = req.headers['x-forwarded-for'];
     const ip = (forwarded ? forwarded.split(',')[0] : req.ip || 'unknown').trim();
@@ -26,7 +28,7 @@ function rateLimit({ windowMs = 60_000, max = 5, message = 'Zu viele Anfragen. B
     entry.count++;
     if (entry.count > max) {
       res.setHeader('Retry-After', Math.ceil((entry.resetAt - now) / 1000));
-      return res.status(429).json({ error: message });
+      return res.status(429).json({ error: t(messageKey, getLang(req)) });
     }
     next();
   };

@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -14,11 +15,11 @@ router.get('/', requireAuth, (req, res) => {
 router.post('/', (req, res) => {
   const { practice_id, practitioner_id, appointment_id, rating, comment, author_name } = req.body;
 
-  if (!practice_id || !rating) return res.status(400).json({ error: 'practice_id und rating erforderlich' });
-  if (rating < 1 || rating > 5) return res.status(400).json({ error: 'Bewertung muss zwischen 1 und 5 liegen' });
+  if (!practice_id || !rating) return res.status(400).json({ error: t('err_practice_rating_required', getLang(req)) });
+  if (rating < 1 || rating > 5) return res.status(400).json({ error: t('err_rating_range', getLang(req)) });
 
   const practiceExists = db.prepare('SELECT id FROM practices WHERE id = ?').get(practice_id);
-  if (!practiceExists) return res.status(404).json({ error: 'Praxis nicht gefunden' });
+  if (!practiceExists) return res.status(404).json({ error: t('err_practice_not_found', getLang(req)) });
 
   const id = uuidv4();
   db.prepare(`
@@ -31,7 +32,7 @@ router.post('/', (req, res) => {
 
 router.put('/:id/approve', requireAuth, (req, res) => {
   const review = db.prepare('SELECT * FROM reviews WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!review) return res.status(404).json({ error: 'Bewertung nicht gefunden' });
+  if (!review) return res.status(404).json({ error: t('err_review_not_found', getLang(req)) });
 
   db.prepare('UPDATE reviews SET visible = 1 WHERE id = ? AND practice_id = ?').run(req.params.id, req.session.practiceId);
   res.json({ success: true });
@@ -39,7 +40,7 @@ router.put('/:id/approve', requireAuth, (req, res) => {
 
 router.put('/:id/hide', requireAuth, (req, res) => {
   const review = db.prepare('SELECT * FROM reviews WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!review) return res.status(404).json({ error: 'Bewertung nicht gefunden' });
+  if (!review) return res.status(404).json({ error: t('err_review_not_found', getLang(req)) });
 
   db.prepare('UPDATE reviews SET visible = 0 WHERE id = ? AND practice_id = ?').run(req.params.id, req.session.practiceId);
   res.json({ success: true });
@@ -47,7 +48,7 @@ router.put('/:id/hide', requireAuth, (req, res) => {
 
 router.delete('/:id', requireAuth, (req, res) => {
   const review = db.prepare('SELECT * FROM reviews WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!review) return res.status(404).json({ error: 'Bewertung nicht gefunden' });
+  if (!review) return res.status(404).json({ error: t('err_review_not_found', getLang(req)) });
 
   db.prepare('DELETE FROM reviews WHERE id = ? AND practice_id = ?').run(req.params.id, req.session.practiceId);
   res.json({ success: true });

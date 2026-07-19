@@ -1,21 +1,25 @@
 const PDFDocument = require('pdfkit');
 const moment = require('moment');
+const { t } = require('./language');
 
-function generateInvoicePDF(invoice, practice, res) {
+function generateInvoicePDF(invoice, practice, res, options = {}) {
+  const lang = options.lang || (practice && practice.language) || 'de';
+  const L = (key) => t(key, lang);
+
   const doc = new PDFDocument({ margin: 50, size: 'A4' });
 
   res.setHeader('Content-Type', 'application/pdf');
-  res.setHeader('Content-Disposition', `attachment; filename="Rechnung_${invoice.invoice_number || invoice.id}.pdf"`);
+  res.setHeader('Content-Disposition', `attachment; filename="${L('pdf_filename_invoice')}_${invoice.invoice_number || invoice.id}.pdf"`);
   doc.pipe(res);
 
-  doc.fontSize(20).font('Helvetica-Bold').text('RECHNUNG', { align: 'right' });
+  doc.fontSize(20).font('Helvetica-Bold').text(L('pdf_invoice_title'), { align: 'right' });
   doc.moveDown(0.5);
 
   doc.fontSize(10).font('Helvetica');
-  doc.text(`Rechnungsnummer: ${invoice.invoice_number || invoice.id}`, { align: 'right' });
-  doc.text(`Datum: ${moment(invoice.invoice_date).format('DD.MM.YYYY')}`, { align: 'right' });
+  doc.text(`${L('pdf_invoice_number')}: ${invoice.invoice_number || invoice.id}`, { align: 'right' });
+  doc.text(`${L('pdf_date')}: ${moment(invoice.invoice_date).format('DD.MM.YYYY')}`, { align: 'right' });
   if (invoice.due_date) {
-    doc.text(`Fällig am: ${moment(invoice.due_date).format('DD.MM.YYYY')}`, { align: 'right' });
+    doc.text(`${L('pdf_due_date')}: ${moment(invoice.due_date).format('DD.MM.YYYY')}`, { align: 'right' });
   }
 
   doc.moveDown(1);
@@ -23,11 +27,11 @@ function generateInvoicePDF(invoice, practice, res) {
   doc.fontSize(10).font('Helvetica');
   if (practice.address) doc.text(practice.address);
   if (practice.zip || practice.city) doc.text(`${practice.zip || ''} ${practice.city || ''}`.trim());
-  if (practice.phone) doc.text(`Tel.: ${practice.phone}`);
+  if (practice.phone) doc.text(`${L('pdf_tel')}: ${practice.phone}`);
   if (practice.email) doc.text(practice.email);
 
   doc.moveDown(1.5);
-  doc.fontSize(12).font('Helvetica-Bold').text('Empfänger:');
+  doc.fontSize(12).font('Helvetica-Bold').text(`${L('pdf_recipient')}:`);
   doc.fontSize(10).font('Helvetica');
   doc.text(`${invoice.patient_first_name} ${invoice.patient_last_name}`);
   if (invoice.patient_address) doc.text(invoice.patient_address);
@@ -38,8 +42,8 @@ function generateInvoicePDF(invoice, practice, res) {
   const colPos = [50, 300, 400, 480];
 
   doc.fontSize(10).font('Helvetica-Bold');
-  doc.text('Leistung', colPos[0], tableTop);
-  doc.text('Betrag', colPos[2], tableTop, { width: 80, align: 'right' });
+  doc.text(L('pdf_service'), colPos[0], tableTop);
+  doc.text(L('pdf_amount'), colPos[2], tableTop, { width: 80, align: 'right' });
 
   doc.moveTo(50, tableTop + 15).lineTo(545, tableTop + 15).stroke();
 
@@ -60,7 +64,7 @@ function generateInvoicePDF(invoice, practice, res) {
       currentY += 20;
     });
   } else {
-    doc.text('Arztleistungen', colPos[0], currentY, { width: 240 });
+    doc.text(L('pdf_medical_service'), colPos[0], currentY, { width: 240 });
     doc.text(`${parseFloat(invoice.amount).toFixed(2)} €`, colPos[2], currentY, { width: 80, align: 'right' });
     currentY += 20;
   }
@@ -70,28 +74,28 @@ function generateInvoicePDF(invoice, practice, res) {
 
   doc.font('Helvetica-Bold');
   if (invoice.tax_rate > 0) {
-    doc.text('Netto:', 380, currentY);
+    doc.text(`${L('pdf_net')}:`, 380, currentY);
     doc.text(`${parseFloat(invoice.amount).toFixed(2)} €`, colPos[2], currentY, { width: 80, align: 'right' });
     currentY += 18;
     doc.font('Helvetica');
-    doc.text(`MwSt. ${invoice.tax_rate}%:`, 380, currentY);
+    doc.text(`${L('pdf_vat')} ${invoice.tax_rate}%:`, 380, currentY);
     doc.text(`${parseFloat(invoice.tax_amount).toFixed(2)} €`, colPos[2], currentY, { width: 80, align: 'right' });
     currentY += 18;
     doc.font('Helvetica-Bold');
   }
 
-  doc.text('Gesamt:', 380, currentY);
+  doc.text(`${L('pdf_total')}:`, 380, currentY);
   doc.text(`${parseFloat(invoice.total_amount).toFixed(2)} €`, colPos[2], currentY, { width: 80, align: 'right' });
 
   if (invoice.notes) {
     doc.moveDown(2);
-    doc.font('Helvetica').fontSize(10).text(`Hinweis: ${invoice.notes}`);
+    doc.font('Helvetica').fontSize(10).text(`${L('pdf_note')}: ${invoice.notes}`);
   }
 
   doc.moveDown(3);
   doc.fontSize(8).font('Helvetica').fillColor('#888888');
   doc.text(
-    'PraxisOnline24 ist ein Terminverwaltungs-Werkzeug. Die Praxis ist allein verantwortlich für Patientendaten, medizinische Entscheidungen, Rechnungsinhalte und Rezeptangaben.',
+    L('pdf_disclaimer'),
     50,
     doc.page.height - 80,
     { width: 495, align: 'center' }

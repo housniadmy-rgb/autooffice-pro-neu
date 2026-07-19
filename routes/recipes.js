@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -10,11 +11,11 @@ router.post('/log', requireAuth, (req, res) => {
   const { practitioner_id, patient_first_name, patient_last_name } = req.body;
 
   if (!practitioner_id || !patient_first_name || !patient_last_name) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const practitioner = db.prepare('SELECT id FROM practitioners WHERE id = ? AND practice_id = ?').get(practitioner_id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
 
   const id = uuidv4();
   db.prepare(`

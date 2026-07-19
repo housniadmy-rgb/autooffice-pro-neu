@@ -6,6 +6,7 @@ const { sendAppointmentCancellation } = require('../utils/email');
 const { triggerWaitlistForCancelledAppointment } = require('../utils/cron');
 const { getDb } = require('../database');
 const { logActivity } = require('../utils/activity');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -50,7 +51,7 @@ router.get('/:id', requireAuth, (req, res) => {
     WHERE a.id = ? AND a.practice_id = ?
   `).get(req.params.id, req.session.practiceId);
 
-  if (!appointment) return res.status(404).json({ error: 'Termin nicht gefunden' });
+  if (!appointment) return res.status(404).json({ error: t('err_appointment_not_found', getLang(req)) });
   res.json(appointment);
 });
 
@@ -58,7 +59,7 @@ router.post('/', requireAuth, (req, res) => {
   const { practitioner_id, patient_first_name, patient_last_name, patient_email, patient_phone, appointment_date, appointment_time, duration_minutes, appointment_type, notes } = req.body;
 
   if (!practitioner_id || !patient_first_name || !patient_last_name || !patient_email || !appointment_date || !appointment_time) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const conflict = db.prepare(`
@@ -67,7 +68,7 @@ router.post('/', requireAuth, (req, res) => {
   `).get(practitioner_id, appointment_date, appointment_time);
 
   if (conflict) {
-    return res.status(409).json({ error: 'Zu diesem Zeitpunkt ist bereits ein Termin vorhanden' });
+    return res.status(409).json({ error: t('err_time_conflict', getLang(req)) });
   }
 
   const id = uuidv4();
@@ -85,7 +86,7 @@ router.post('/', requireAuth, (req, res) => {
 
 router.put('/:id', requireAuth, (req, res) => {
   const appointment = db.prepare('SELECT * FROM appointments WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!appointment) return res.status(404).json({ error: 'Termin nicht gefunden' });
+  if (!appointment) return res.status(404).json({ error: t('err_appointment_not_found', getLang(req)) });
 
   const { patient_first_name, patient_last_name, patient_email, patient_phone, appointment_date, appointment_time, duration_minutes, appointment_type, status, notes } = req.body;
 
@@ -111,7 +112,7 @@ router.put('/:id', requireAuth, (req, res) => {
 
 router.delete('/:id', requireAuth, async (req, res) => {
   const appointment = db.prepare('SELECT * FROM appointments WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!appointment) return res.status(404).json({ error: 'Termin nicht gefunden' });
+  if (!appointment) return res.status(404).json({ error: t('err_appointment_not_found', getLang(req)) });
 
   db.prepare("UPDATE appointments SET status = 'cancelled' WHERE id = ? AND practice_id = ?").run(req.params.id, req.session.practiceId);
   logActivity(getDb(), req.session.practiceId, req.session.userEmail, 'appointment.cancelled', 'appointment', req.params.id, {});
@@ -134,7 +135,7 @@ router.delete('/:id', requireAuth, async (req, res) => {
 
 router.get('/public/available-slots', (req, res) => {
   const { practitioner_id, date } = req.query;
-  if (!practitioner_id || !date) return res.status(400).json({ error: 'practitioner_id und date erforderlich' });
+  if (!practitioner_id || !date) return res.status(400).json({ error: t('err_practitioner_date_required', getLang(req)) });
 
   const booked = db.prepare(`
     SELECT appointment_time FROM appointments

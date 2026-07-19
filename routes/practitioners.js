@@ -2,6 +2,7 @@ const express = require('express');
 const { v4: uuidv4 } = require('uuid');
 const { requireAuth, requireAdmin } = require('../middleware/auth');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -13,7 +14,7 @@ router.get('/', requireAuth, (req, res) => {
 
 router.get('/:id', requireAuth, (req, res) => {
   const practitioner = db.prepare('SELECT * FROM practitioners WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
   res.json(practitioner);
 });
 
@@ -21,7 +22,7 @@ router.post('/', requireAuth, (req, res) => {
   const { first_name, last_name, title, specialty, email, phone, bio } = req.body;
 
   if (!first_name || !last_name) {
-    return res.status(400).json({ error: 'Vor- und Nachname erforderlich' });
+    return res.status(400).json({ error: t('err_first_last_name_required', getLang(req)) });
   }
 
   const practice = db.prepare('SELECT package FROM practices WHERE id = ?').get(req.session.practiceId);
@@ -30,7 +31,7 @@ router.post('/', requireAuth, (req, res) => {
       'SELECT COUNT(*) as count FROM practitioners WHERE practice_id = ? AND active = 1'
     ).get(req.session.practiceId);
     if (activeCount.count >= 3) {
-      return res.status(403).json({ error: 'Behandlerlimit von 3 aktiven Behandlern (BASIC) erreicht. Bitte auf UNLIMITED upgraden.' });
+      return res.status(403).json({ error: t('err_practitioner_limit_basic', getLang(req)) });
     }
   }
 
@@ -45,7 +46,7 @@ router.post('/', requireAuth, (req, res) => {
 
 router.put('/:id', requireAuth, (req, res) => {
   const practitioner = db.prepare('SELECT * FROM practitioners WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
 
   const { first_name, last_name, title, specialty, email, phone, bio, active } = req.body;
 
@@ -67,7 +68,7 @@ router.put('/:id', requireAuth, (req, res) => {
 
 router.delete('/:id', requireAdmin, (req, res) => {
   const practitioner = db.prepare('SELECT * FROM practitioners WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
 
   db.prepare('UPDATE practitioners SET active = 0 WHERE id = ? AND practice_id = ?').run(req.params.id, req.session.practiceId);
   res.json({ success: true });
@@ -77,7 +78,7 @@ router.delete('/:id', requireAdmin, (req, res) => {
 
 router.get('/:id/availability', requireAuth, (req, res) => {
   const practitioner = db.prepare('SELECT id FROM practitioners WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
 
   const slots = db.prepare('SELECT * FROM practitioner_availability WHERE practitioner_id = ? ORDER BY day_of_week ASC, start_time ASC').all(req.params.id);
   res.json(slots);
@@ -85,17 +86,17 @@ router.get('/:id/availability', requireAuth, (req, res) => {
 
 router.put('/:id/availability', requireAuth, (req, res) => {
   const practitioner = db.prepare('SELECT id FROM practitioners WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!practitioner) return res.status(404).json({ error: 'Behandler nicht gefunden' });
+  if (!practitioner) return res.status(404).json({ error: t('err_practitioner_not_found', getLang(req)) });
 
   const { slots } = req.body;
-  if (!Array.isArray(slots)) return res.status(400).json({ error: 'slots muss ein Array sein' });
+  if (!Array.isArray(slots)) return res.status(400).json({ error: t('err_slots_must_be_array', getLang(req)) });
 
   for (const s of slots) {
     if (typeof s.day_of_week !== 'number' || s.day_of_week < 0 || s.day_of_week > 6) {
-      return res.status(400).json({ error: 'day_of_week muss zwischen 0 (Mo) und 6 (So) liegen' });
+      return res.status(400).json({ error: t('err_day_of_week_range', getLang(req)) });
     }
     if (!s.start_time || !s.end_time || s.start_time >= s.end_time) {
-      return res.status(400).json({ error: 'Ungültige start_time / end_time' });
+      return res.status(400).json({ error: t('err_invalid_start_end_time', getLang(req)) });
     }
   }
 

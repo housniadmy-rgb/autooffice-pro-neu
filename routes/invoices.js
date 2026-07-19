@@ -4,6 +4,7 @@ const moment = require('moment');
 const { requireAuth } = require('../middleware/auth');
 const { generateInvoicePDF } = require('../utils/pdf');
 const { getDb } = require('../database');
+const { t, getLang } = require('../utils/language');
 const db = new Proxy({}, { get: (_, p) => (...args) => getDb()[p](...args) });
 
 const router = express.Router();
@@ -21,23 +22,24 @@ router.get('/', requireAuth, (req, res) => {
 
 router.get('/:id', requireAuth, (req, res) => {
   const invoice = db.prepare('SELECT * FROM invoices WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!invoice) return res.status(404).json({ error: 'Rechnung nicht gefunden' });
+  if (!invoice) return res.status(404).json({ error: t('err_invoice_not_found', getLang(req)) });
   res.json(invoice);
 });
 
 router.get('/:id/pdf', requireAuth, (req, res) => {
   const invoice = db.prepare('SELECT * FROM invoices WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!invoice) return res.status(404).json({ error: 'Rechnung nicht gefunden' });
+  if (!invoice) return res.status(404).json({ error: t('err_invoice_not_found', getLang(req)) });
 
   const practice = db.prepare('SELECT * FROM practices WHERE id = ?').get(req.session.practiceId);
-  generateInvoicePDF(invoice, practice, res);
+  const cookieLang = req.cookies && req.cookies.lang;
+  generateInvoicePDF(invoice, practice, res, { lang: cookieLang });
 });
 
 router.post('/', requireAuth, (req, res) => {
   const { appointment_id, patient_first_name, patient_last_name, patient_address, items, amount, tax_rate, invoice_date, due_date, notes } = req.body;
 
   if (!patient_first_name || !patient_last_name || !amount || !invoice_date) {
-    return res.status(400).json({ error: 'Pflichtfelder fehlen' });
+    return res.status(400).json({ error: t('err_required_fields_missing', getLang(req)) });
   }
 
   const id = uuidv4();
@@ -59,7 +61,7 @@ router.post('/', requireAuth, (req, res) => {
 
 router.put('/:id', requireAuth, (req, res) => {
   const invoice = db.prepare('SELECT * FROM invoices WHERE id = ? AND practice_id = ?').get(req.params.id, req.session.practiceId);
-  if (!invoice) return res.status(404).json({ error: 'Rechnung nicht gefunden' });
+  if (!invoice) return res.status(404).json({ error: t('err_invoice_not_found', getLang(req)) });
 
   const { status, notes, due_date } = req.body;
 
